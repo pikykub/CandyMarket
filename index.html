@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CandyMarket</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#0F172A;
+color:white;
+}
+
+/* Header */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px 24px;
+background:#020617;
+}
+
+.logo{
+font-size:20px;
+font-weight:bold;
+color:#7DD3FC;
+}
+
+.nav button{
+background:#2563EB;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+color:white;
+cursor:pointer;
+}
+
+/* Banner */
+
+.banner{
+margin:20px;
+background:#1E293B;
+padding:30px;
+border-radius:12px;
+}
+
+.banner h1{
+margin:0;
+}
+
+/* Products */
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:16px;
+padding:20px;
+}
+
+.card{
+background:#1E293B;
+border-radius:12px;
+padding:14px;
+position:relative;
+}
+
+.badge{
+position:absolute;
+top:8px;
+left:8px;
+background:#2563EB;
+padding:4px 8px;
+font-size:12px;
+border-radius:6px;
+}
+
+.price-old{
+text-decoration:line-through;
+color:#94A3B8;
+font-size:12px;
+}
+
+.price-new{
+color:#7DD3FC;
+font-weight:bold;
+}
+
+button.buy{
+width:100%;
+margin-top:8px;
+padding:8px;
+border:none;
+border-radius:8px;
+background:#2563EB;
+color:white;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+CandyMarket
+</div>
+
+<div class="nav">
+<button>เข้าสู่ระบบ</button>
+</div>
+
+</header>
+
+
+<div class="banner">
+
+<h1>ร้านแอพพรีเมียม</h1>
+<p>Netflix / Spotify / Canva ราคาถูก</p>
+
+</div>
+
+
+<div class="products">
+
+<div class="card">
+
+<div class="badge">
+โปรเด็ด
+</div>
+
+<img src="https://via.placeholder.com/150" width="100%">
+
+<h3>Netflix Premium</h3>
+
+<div class="price-old">
+฿199
+</div>
+
+<div class="price-new">
+฿99
+</div>
+
+<button class="buy">
+สั่งซื้อ
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="badge">
+ขายดี
+</div>
+
+<img src="https://via.placeholder.com/150" width="100%">
+
+<h3>Spotify Premium</h3>
+
+<div class="price-old">
+฿120
+</div>
+
+<div class="price-new">
+฿59
+</div>
+
+<button class="buy">
+สั่งซื้อ
+</button>
+
+</div>
+
+
+</div>
+
+</body>
+</html>
