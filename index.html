@@ -1,54 +1,181 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PeachWeb Store</title>
-<link rel="stylesheet" href="style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeachWeb - Digital Store Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 🎨 การตั้งค่าสีพื้นฐาน (โหมดสว่างคือค่าเริ่มต้น) */
+        :root { 
+            --bg: #ffffff; 
+            --card-bg: #f8f9fa;
+            --card-border: #eeeeee;
+            --text-main: #000000; /* โหมดสว่างข้อความสีดำ */
+            --text-sub: #666666;
+            --primary: #00f2fe; 
+            --danger: #ef4444;
+        }
 
+        /* 🌙 การตั้งค่าเมื่อเปลี่ยนเป็นโหมดมืด */
+        [data-theme="dark"] {
+            --bg: #0a0a0a; 
+            --card-bg: #111111;
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff; /* โหมดมืดข้อความสีขาวทุกข้อความ */
+            --text-sub: #9ca3af;
+        }
+
+        * { box-sizing: border-box; transition: background 0.3s, color 0.3s; }
+        body { background: var(--bg); color: var(--text-main); font-family: 'Kanit', sans-serif; margin: 0; padding-bottom: 50px; }
+
+        /* 🔘 ระบบสลับโหมด (Toggle Theme) */
+        .theme-toggle { background: none; border: 1px solid var(--card-border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+        nav { background: var(--bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--card-border); }
+        .logo { font-size: 22px; font-weight: 800; text-decoration: none; color: var(--text-main); }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .user-btn { background: var(--text-main); color: var(--bg); padding: 8px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: 700; }
+
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+
+        /* 🖼️ แบนเนอร์ */
+        .hero-banner { width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 25px; border: 1px solid var(--card-border); }
+        .hero-banner img { width: 100%; height: auto; display: block; }
+
+        /* 📢 ประกาศ */
+        .ann-box { border: 1px solid var(--card-border); border-radius: 12px; padding: 10px 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 30px; background: var(--card-bg); overflow: hidden; }
+        .ann-btn { background: var(--text-main); color: var(--bg); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; }
+        .ann-text p { margin: 0; font-size: 13px; color: var(--text-main); }
+
+        /* 📊 สถิติ */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 18px; text-align: left; }
+        .stat-card h2 { font-size: 26px; margin: 0; font-weight: 800; color: var(--text-main); }
+        .stat-card p { font-size: 11px; color: var(--text-main); margin-top: 5px; opacity: 0.7; }
+
+        /* 🔘 Quick Menu */
+        .quick-menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
+        .menu-card { background: var(--card-bg); border-radius: 15px; padding: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--card-border); text-decoration: none; color: var(--text-main); transition: 0.3s; }
+        .menu-card h3 { font-size: 18px; margin: 0; font-weight: 800; color: var(--text-main); }
+        .menu-circle { width: 40px; height: 40px; background: var(--text-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--bg); }
+
+        /* 🛒 สินค้า */
+        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .p-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 12px; }
+        .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 12px; }
+        .p-name { color: var(--text-main); font-weight: 700; margin-bottom: 5px; }
+        .p-price { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; }
+        .btn-rent { background: var(--text-main); color: var(--bg); border: none; padding: 10px; border-radius: 10px; font-weight: 700; width: 100%; cursor: pointer; font-family: 'Kanit'; }
+
+        @media (max-width: 900px) { .product-grid, .stats-grid, .quick-menu-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
 <body>
 
-<header>
-  <h1>PeachWeb Rental</h1>
-  <p>ร้านปล่อยเช่าของลูกพีช</p>
-</header>
+    <nav>
+        <a href="index.html" class="logo">PeachWeb.</a>
+        <div class="nav-actions">
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+                <i class="fas fa-moon"></i>
+            </div>
+            <div id="navActions"></div>
+        </div>
+    </nav>
 
-<nav>
-  <a href="#">หน้าแรก</a>
-  <a href="#">สินค้า</a>
-  <a href="#">ติดต่อ</a>
-</nav>
+    <div class="container">
+        <div class="hero-banner"><img id="mainBanner" src=""></div>
 
-<section class="products">
+        <div class="welcome-sec">
+            <h1 id="disp-welcome" style="color: var(--text-main);">กำลังโหลด...</h1>
+        </div>
 
-  <div class="card">
-    <img src="https://via.placeholder.com/200">
-    <h3>iPhone 15</h3>
-    <p>ค่าเช่า 200 บาท / วัน</p>
-    <button onclick="rentItem('iPhone 15')">เช่าเลย</button>
-  </div>
+        <div class="ann-box">
+            <div class="ann-btn">ประกาศ</div>
+            <div class="ann-text"><p id="disp-marquee">ยินดีต้อนรับสู่ PeachWeb!</p></div>
+        </div>
 
-  <div class="card">
-    <img src="https://via.placeholder.com/200">
-    <h3>กล้อง Canon</h3>
-    <p>ค่าเช่า 300 บาท / วัน</p>
-    <button onclick="rentItem('Canon Camera')">เช่าเลย</button>
-  </div>
+        <div class="stats-grid">
+            <div class="stat-card"><h2 id="sUsers">0</h2><p>ผู้ใช้ทั้งหมด</p></div>
+            <div class="stat-card"><h2 id="sProds">0</h2><p>สินค้าทั้งหมด</p></div>
+            <div class="stat-card"><h2 id="sCats">0</h2><p>หมวดหมู่</p></div>
+            <div class="stat-card"><h2 id="sSold">0</h2><p>รายการสำเร็จ</p></div>
+        </div>
 
-  <div class="card">
-    <img src="https://via.placeholder.com/200">
-    <h3>MacBook</h3>
-    <p>ค่าเช่า 500 บาท / วัน</p>
-    <button onclick="rentItem('MacBook')">เช่าเลย</button>
-  </div>
+        <div class="quick-menu-grid">
+            <div onclick="toggleChat()" class="menu-card"><div class="menu-text"><span>สอบถาม</span><h3>ADMIN</h3></div><div class="menu-circle"><i class="fas fa-headset"></i></div></div>
+            <a href="topup.html" class="menu-card"><div class="menu-text"><span>เติมเงิน</span><h3>WALLET</h3></div><div class="menu-circle"><i class="fas fa-wallet"></i></div></a>
+            <a href="topup.html" class="menu-card"><div class="menu-text"><span>ซองของขวัญ</span><h3>GIFT</h3></div><div class="menu-circle"><i class="fas fa-envelope-open-text"></i></div></a>
+            <a href="#shop" class="menu-card"><div class="menu-text"><span>เลือกซื้อ</span><h3>SHOP</h3></div><div class="menu-circle"><i class="fas fa-shopping-cart"></i></div></a>
+        </div>
 
-</section>
+        <div id="shop" class="product-grid"></div>
+    </div>
 
-<footer>
-  <p>© 2026 PeachWeb Rental</p>
-</footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        
+        const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        const app = initializeApp(firebaseConfig); const db = getDatabase(app); const auth = getAuth(app);
 
-<script src="script.js"></script>
+        // 🌗 ระบบเปลี่ยนโหมด (เริ่มต้นที่สว่าง)
+        window.toggleTheme = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', targetTheme);
+            document.getElementById('themeBtn').innerHTML = targetTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', targetTheme);
+        };
+
+        // ตรวจเช็คค่า Theme ที่เซฟไว้
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+
+        // 🟢 โหลดข้อมูลต่างๆ
+        onAuthStateChanged(auth, user => {
+            const nav = document.getElementById('navActions');
+            if(user) {
+                onValue(ref(db, `users/${user.uid}`), s => {
+                    const d = s.val()||{};
+                    nav.innerHTML = `<div style="font-weight:700; margin-right:15px; color:var(--text-main);">฿${(d.balance||0).toFixed(2)}</div><a href="profile.html" class="user-btn">โปรไฟล์</a>`;
+                });
+            } else { nav.innerHTML = `<a href="login.html" class="user-btn">เข้าสู่ระบบ</a>`; }
+        });
+
+        onValue(ref(db, 'settings'), s => {
+            const d = s.val()||{};
+            if(d.webImages) document.getElementById('mainBanner').src = d.webImages.main;
+            if(d.announcement) {
+                document.getElementById('disp-welcome').innerText = d.announcement.welcome;
+                document.getElementById('disp-marquee').innerText = d.announcement.marquee;
+            }
+        });
+
+        onValue(ref(db, 'stats'), s => {
+            const d = s.val()||{};
+            document.getElementById('sUsers').innerText = d.users||0;
+            document.getElementById('sProds').innerText = d.prods||0;
+            document.getElementById('sCats').innerText = d.cats||0;
+            document.getElementById('sSold').innerText = d.sold||0;
+        });
+
+        onValue(ref(db, 'products'), s => {
+            const d = document.getElementById('shop'); d.innerHTML = "";
+            s.forEach(c => {
+                const p = c.val();
+                d.innerHTML += `
+                    <div class="p-card">
+                        <img src="${p.image}" class="p-img">
+                        <div class="p-name">${p.name}</div>
+                        <div class="p-price">฿${parseFloat(p.price).toLocaleString()}</div>
+                        <button class="btn-rent" onclick="location.href='product_detail.html?id=${c.key}'">เช่าเว็บ</button>
+                    </div>`;
+            });
+        });
+    </script>
 </body>
 </html>
