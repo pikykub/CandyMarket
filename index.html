@@ -1,39 +1,56 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CandyMarket | ระบบเช่าเว็บอัตโนมัติ</title>
+<title>CandyMarket</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
 
 body{
 font-family:'Kanit',sans-serif;
-background:#f8fbff;
+background:linear-gradient(135deg,#0f172a,#1e293b,#1e3a8a,#9333ea);
+background-size:400% 400%;
+animation:bgmove 12s ease infinite;
+color:white;
 }
 
-:root{
---blue:#60a5fa;
---pink:#f472b6;
+@keyframes bgmove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
 }
+
+/* glass cards */
+
+.glass{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.15);
+border-radius:18px;
+}
+
+/* button */
 
 .btn{
-background:linear-gradient(90deg,#60a5fa,#f472b6);
-color:white;
+background:linear-gradient(90deg,#38bdf8,#f472b6);
+padding:10px 18px;
+border-radius:10px;
 font-weight:600;
-border-radius:8px;
-padding:8px 14px;
+transition:.2s;
 }
+
+.btn:hover{
+transform:scale(1.05);
+}
+
+/* page */
 
 .page{
 display:none;
@@ -43,26 +60,23 @@ display:none;
 display:block;
 }
 
-.banner{
-background:linear-gradient(135deg,#60a5fa,#f472b6);
-}
+/* chat */
 
 .chat-bubble{
-max-width:80%;
 padding:8px 12px;
 border-radius:10px;
+max-width:70%;
 margin-bottom:6px;
 font-size:13px;
 }
 
 .chat-me{
-background:#60a5fa;
-color:white;
+background:#38bdf8;
 margin-left:auto;
 }
 
 .chat-other{
-background:#f1f5f9;
+background:rgba(255,255,255,0.15);
 }
 
 #chat-window{
@@ -71,12 +85,12 @@ bottom:90px;
 left:20px;
 width:320px;
 height:420px;
-background:white;
-border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,.2);
+background:#0f172a;
+border-radius:18px;
 display:none;
 flex-direction:column;
 overflow:hidden;
+box-shadow:0 10px 40px rgba(0,0,0,.5);
 }
 
 </style>
@@ -85,64 +99,223 @@ overflow:hidden;
 
 <body>
 
-<!-- NAV -->
+<!-- NAVBAR -->
 
-<nav class="bg-white shadow">
+<nav class="flex justify-between items-center px-6 py-4">
 
-<div class="max-w-6xl mx-auto flex justify-between items-center h-16 px-4">
+<div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')">
 
-<div onclick="showPage('home')" class="flex items-center gap-2 cursor-pointer">
-
-<div class="w-9 h-9 rounded bg-gradient-to-r from-blue-400 to-pink-400 flex items-center justify-center text-white font-bold">
+<div class="w-9 h-9 rounded bg-gradient-to-r from-sky-400 to-pink-400 flex items-center justify-center font-bold">
 C
 </div>
 
-<b class="text-xl">Candy<span class="text-pink-500">Market</span></b>
+<span class="text-xl font-extrabold">CandyMarket</span>
 
 </div>
 
-<div class="flex gap-4 text-sm font-bold">
+<div class="flex gap-6 text-sm font-semibold">
 
-<button onclick="showPage('home')">หน้าหลัก</button>
-<button onclick="showPage('shop')">สินค้า</button>
-<button onclick="showPage('topup')">เติมเงิน</button>
-<button onclick="showPage('admin')">หลังบ้าน</button>
-
-</div>
+<button onclick="showPage('home')">หน้าแรก</button>
+<button onclick="showPage('packages')">แพ็กเกจ</button>
+<button onclick="showPage('login')">เข้าสู่ระบบ</button>
 
 </div>
 
 </nav>
 
+<!-- HOME -->
+
+<div id="page-home" class="page active">
+
+<div class="max-w-6xl mx-auto px-6 mt-16">
+
+<h1 class="text-5xl md:text-6xl font-extrabold mb-6">
+
+สร้างเว็บขายของ  
+ใน 30 วินาที
+
+</h1>
+
+<p class="text-white/70 mb-10 max-w-xl">
+
+CandyMarket คือแพลตฟอร์มปล่อยเช่าเว็บไซต์สำหรับแม่ค้าออนไลน์
+เปิดร้านได้ทันที ไม่ต้องเขียนโค้ด
+
+</p>
+
+<button onclick="showPage('packages')" class="btn">
+ดูแพ็กเกจ
+</button>
+
+</div>
+
+</div>
+
+<!-- PACKAGES -->
+
+<div id="page-packages" class="page">
+
+<div class="max-w-6xl mx-auto px-6 mt-12">
+
+<h2 class="text-3xl font-bold mb-10">
+แพ็กเกจเว็บไซต์
+</h2>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="glass p-6">
+
+<h3 class="text-xl font-bold mb-2">
+Starter
+</h3>
+
+<p class="text-white/70 mb-4">
+เว็บร้านค้าพื้นฐาน
+</p>
+
+<div class="text-3xl font-black mb-4">
+฿199
+</div>
+
+<button class="btn w-full">
+เช่าเว็บ
+</button>
+
+</div>
+
+<div class="glass p-6 border-2 border-pink-400">
+
+<h3 class="text-xl font-bold mb-2">
+Pro
+</h3>
+
+<p class="text-white/70 mb-4">
+เว็บ + ระบบเติมเงิน
+</p>
+
+<div class="text-3xl font-black mb-4">
+฿399
+</div>
+
+<button class="btn w-full">
+เช่าเว็บ
+</button>
+
+</div>
+
+<div class="glass p-6">
+
+<h3 class="text-xl font-bold mb-2">
+Business
+</h3>
+
+<p class="text-white/70 mb-4">
+เว็บ + แอดมินเต็มระบบ
+</p>
+
+<div class="text-3xl font-black mb-4">
+฿699
+</div>
+
+<button class="btn w-full">
+เช่าเว็บ
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div id="page-login" class="page">
+
+<div class="max-w-md mx-auto mt-16 glass p-8">
+
+<h2 class="text-2xl font-bold mb-6 text-center">
+เข้าสู่ระบบ
+</h2>
+
+<input id="login-user"
+class="w-full p-3 rounded bg-black/30 mb-3"
+placeholder="Username">
+
+<input type="password"
+id="login-pass"
+class="w-full p-3 rounded bg-black/30 mb-4"
+placeholder="Password">
+
+<button onclick="login()" class="btn w-full">
+เข้าสู่ระบบ
+</button>
+
+<p class="text-center mt-4 text-sm text-white/70">
+
+ยังไม่มีบัญชี ?
+
+<span onclick="showPage('register')" class="text-pink-400 cursor-pointer">
+สมัครสมาชิก
+</span>
+
+</p>
+
+</div>
+
+</div>
+
+<!-- REGISTER -->
+
+<div id="page-register" class="page">
+
+<div class="max-w-md mx-auto mt-16 glass p-8">
+
+<h2 class="text-2xl font-bold mb-6 text-center">
+สมัครสมาชิก
+</h2>
+
+<input id="reg-user"
+class="w-full p-3 rounded bg-black/30 mb-3"
+placeholder="Username">
+
+<input type="password"
+id="reg-pass"
+class="w-full p-3 rounded bg-black/30 mb-4"
+placeholder="Password">
+
+<button onclick="register()" class="btn w-full">
+สมัครสมาชิก
+</button>
+
+</div>
+
+</div>
+
 <!-- CHAT BUTTON -->
 
 <button onclick="toggleChat()"
-class="fixed bottom-6 left-6 w-14 h-14 bg-pink-500 text-white rounded-full shadow">
+class="fixed bottom-6 left-6 w-14 h-14 rounded-full bg-gradient-to-r from-sky-400 to-pink-400 shadow-lg">
 
-<i class="fa-solid fa-comments"></i>
+Chat
 
 </button>
 
 <div id="chat-window">
 
-<div class="bg-blue-500 text-white p-3 flex justify-between">
-
-<b>แชทลูกค้า</b>
-
-<button onclick="toggleChat()">✕</button>
-
+<div class="p-3 border-b border-white/10">
+Community Chat
 </div>
 
-<div id="chat-box"
-class="flex-1 p-3 overflow-y-auto bg-slate-50"></div>
+<div id="chat-box" class="flex-1 p-3 overflow-y-auto"></div>
 
-<div class="p-2 flex gap-2 border-t">
+<div class="p-2 flex gap-2">
 
 <input id="chat-input"
-class="flex-1 border rounded px-2 py-1"
-placeholder="พิมพ์ข้อความ">
+class="flex-1 p-2 rounded bg-black/30">
 
-<button onclick="sendChat()" class="btn">
+<button onclick="sendChat()" class="btn text-sm">
 ส่ง
 </button>
 
@@ -150,234 +323,36 @@ placeholder="พิมพ์ข้อความ">
 
 </div>
 
-<!-- HOME -->
-
-<div id="page-home" class="page active">
-
-<div class="banner h-64 flex flex-col justify-center items-center text-white">
-
-<h1 class="text-5xl font-black">
-CandyMarket
-</h1>
-
-<p class="mt-2">
-แพลตฟอร์มปล่อยเช่าเว็บไซต์
-</p>
-
-</div>
-
-<div class="max-w-6xl mx-auto px-4 mt-8">
-
-<h2 class="font-bold mb-4">
-แพ็กเกจเว็บไซต์
-</h2>
-
-<div id="product-grid"
-class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-
-</div>
-
-</div>
-
-<!-- SHOP -->
-
-<div id="page-shop" class="page">
-
-<div class="max-w-6xl mx-auto px-4 mt-8">
-
-<h2 class="font-bold mb-4">
-สินค้าทั้งหมด
-</h2>
-
-<div id="shop-grid"
-class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-
-</div>
-
-</div>
-
-<!-- TOPUP -->
-
-<div id="page-topup" class="page">
-
-<div class="max-w-md mx-auto bg-white shadow rounded-xl p-6 mt-10">
-
-<h2 class="text-center font-bold mb-4">
-เติมเงิน
-</h2>
-
-<div class="text-center">
-
-<div class="w-40 h-40 bg-gray-100 mx-auto flex items-center justify-center">
-QR
-</div>
-
-<p class="mt-2 text-sm">
-เลขบัญชี
-</p>
-
-<b id="bank-number">
-000-0-00000
-</b>
-
-</div>
-
-<label class="block mt-4">
-
-<input type="file"
-class="hidden"
-onchange="topup()">
-
-<div class="btn text-center cursor-pointer">
-แนบสลิป
-</div>
-
-</label>
-
-</div>
-
-</div>
-
-<!-- ADMIN -->
-
-<div id="page-admin" class="page">
-
-<div class="max-w-5xl mx-auto mt-8 px-4">
-
-<h2 class="font-bold text-xl mb-6">
-ระบบหลังบ้าน
-</h2>
-
-<div class="grid md:grid-cols-2 gap-6">
-
-<!-- DASHBOARD -->
-
-<div class="bg-white p-4 rounded shadow">
-
-<h3 class="font-bold mb-2">
-สถิติ
-</h3>
-
-<p>ยอดผู้ใช้: <b id="stat-user">120</b></p>
-<p>ยอดเว็บ: <b id="stat-site">20</b></p>
-
-</div>
-
-<!-- PRODUCT -->
-
-<div class="bg-white p-4 rounded shadow">
-
-<h3 class="font-bold mb-2">
-เพิ่มแพ็กเกจ
-</h3>
-
-<input id="p-name"
-class="border p-2 w-full mb-2"
-placeholder="ชื่อแพ็กเกจ">
-
-<input id="p-price"
-class="border p-2 w-full mb-2"
-placeholder="ราคา">
-
-<button onclick="addProduct()" class="btn w-full">
-เพิ่มสินค้า
-</button>
-
-</div>
-
-<!-- BANK -->
-
-<div class="bg-white p-4 rounded shadow">
-
-<h3 class="font-bold mb-2">
-เปลี่ยนเลขบัญชี
-</h3>
-
-<input id="bank-input"
-class="border p-2 w-full mb-2">
-
-<button onclick="saveBank()" class="btn w-full">
-บันทึก
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 <script>
 
-let products=[
-{name:"เว็บร้านค้า",price:199},
-{name:"เว็บขายแอพพรีเมียม",price:299},
-{name:"เว็บเติมเกม",price:399},
-{name:"เว็บขายไอดี",price:499}
-]
+function showPage(id){
 
-function renderProducts(){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
 
-let grid=document.getElementById("product-grid")
-let shop=document.getElementById("shop-grid")
-
-grid.innerHTML=""
-shop.innerHTML=""
-
-products.forEach(p=>{
-
-let html=`
-<div class="bg-white p-3 rounded shadow">
-
-<div class="h-32 bg-slate-100 flex items-center justify-center text-xs">
-IMAGE
-</div>
-
-<h3 class="font-bold mt-2">${p.name}</h3>
-
-<div class="flex justify-between mt-2">
-
-<b class="text-pink-500">฿${p.price}</b>
-
-<button class="btn text-xs">เช่า</button>
-
-</div>
-
-</div>
-`
-
-grid.innerHTML+=html
-shop.innerHTML+=html
-
-})
+document.getElementById("page-"+id).classList.add("active")
 
 }
 
-function addProduct(){
+let users=[]
 
-let name=document.getElementById("p-name").value
-let price=document.getElementById("p-price").value
+function register(){
 
-products.push({name,price})
+let u=document.getElementById("reg-user").value
+let p=document.getElementById("reg-pass").value
 
-renderProducts()
+users.push({u,p})
 
-}
+alert("สมัครสำเร็จ")
 
-function saveBank(){
-
-let val=document.getElementById("bank-input").value
-
-document.getElementById("bank-number").innerText=val
-
-alert("บันทึกแล้ว")
+showPage("login")
 
 }
 
-function topup(){
+function login(){
 
-alert("เติมเงินสำเร็จ +100")
+alert("เข้าสู่ระบบสำเร็จ")
+
+showPage("home")
 
 }
 
@@ -402,16 +377,6 @@ box.innerHTML+=`<div class="chat-bubble chat-me">${input.value}</div>`
 input.value=""
 
 }
-
-function showPage(id){
-
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
-
-document.getElementById("page-"+id).classList.add("active")
-
-}
-
-renderProducts()
 
 </script>
 
