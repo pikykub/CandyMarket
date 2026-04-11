@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
 
 <meta charset="UTF-8">
@@ -9,92 +10,70 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
 
 body{
 font-family:'Kanit',sans-serif;
 background:#f8fbff;
-color:#334155;
 }
-
-/* Candy Theme */
 
 :root{
 --blue:#60a5fa;
 --pink:#f472b6;
 }
 
-.btn-primary{
+.btn{
 background:linear-gradient(90deg,#60a5fa,#f472b6);
 color:white;
-border-radius:8px;
 font-weight:600;
-transition:0.2s;
+border-radius:8px;
+padding:8px 14px;
 }
 
-.btn-primary:active{
-transform:scale(.97);
-}
-
-/* Banner */
-
-.candy-banner{
-background:linear-gradient(135deg,#60a5fa,#f472b6);
-border-bottom:4px solid #f472b6;
-}
-
-/* Page */
-
-.page-section{
+.page{
 display:none;
 }
 
-.page-section.active{
+.page.active{
 display:block;
 }
 
-/* Chat */
+.banner{
+background:linear-gradient(135deg,#60a5fa,#f472b6);
+}
 
 .chat-bubble{
-max-width:85%;
+max-width:80%;
 padding:8px 12px;
-border-radius:12px;
-font-size:13px;
+border-radius:10px;
 margin-bottom:6px;
+font-size:13px;
 }
 
 .chat-me{
 background:#60a5fa;
 color:white;
-align-self:flex-end;
+margin-left:auto;
 }
 
 .chat-other{
 background:#f1f5f9;
 }
 
-/* Floating Chat */
-
-#floating-chat-btn{
-position:fixed;
-bottom:20px;
-left:20px;
-z-index:100;
-}
-
 #chat-window{
 position:fixed;
-bottom:85px;
+bottom:90px;
 left:20px;
 width:320px;
-height:450px;
+height:420px;
 background:white;
 border-radius:16px;
-box-shadow:0 10px 40px rgba(0,0,0,.2);
+box-shadow:0 10px 30px rgba(0,0,0,.2);
 display:none;
 flex-direction:column;
 overflow:hidden;
@@ -104,33 +83,30 @@ overflow:hidden;
 
 </head>
 
-<body class="flex flex-col min-h-screen">
+<body>
 
 <!-- NAV -->
 
-<nav class="bg-white shadow sticky top-0 z-50">
+<nav class="bg-white shadow">
 
-<div class="max-w-7xl mx-auto px-4">
+<div class="max-w-6xl mx-auto flex justify-between items-center h-16 px-4">
 
-<div class="flex justify-between items-center h-16">
+<div onclick="showPage('home')" class="flex items-center gap-2 cursor-pointer">
 
-<div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')">
+<div class="w-9 h-9 rounded bg-gradient-to-r from-blue-400 to-pink-400 flex items-center justify-center text-white font-bold">
+C
+</div>
 
-<div class="w-10 h-10 rounded bg-gradient-to-r from-blue-400 to-pink-400 flex items-center justify-center text-white font-black">C</div>
-
-<span class="font-extrabold text-xl">
-Candy<span class="text-pink-500">Market</span>
-</span>
+<b class="text-xl">Candy<span class="text-pink-500">Market</span></b>
 
 </div>
 
-<div class="flex items-center gap-4 text-sm font-bold text-slate-600">
+<div class="flex gap-4 text-sm font-bold">
 
-<a onclick="showPage('home')" class="cursor-pointer hover:text-pink-500">หน้าหลัก</a>
-<a onclick="showPage('shop')" class="cursor-pointer hover:text-pink-500">สินค้า</a>
-<a onclick="showPage('topup')" class="cursor-pointer hover:text-pink-500">เติมเงิน</a>
-
-</div>
+<button onclick="showPage('home')">หน้าหลัก</button>
+<button onclick="showPage('shop')">สินค้า</button>
+<button onclick="showPage('topup')">เติมเงิน</button>
+<button onclick="showPage('admin')">หลังบ้าน</button>
 
 </div>
 
@@ -140,17 +116,16 @@ Candy<span class="text-pink-500">Market</span>
 
 <!-- CHAT BUTTON -->
 
-<button id="floating-chat-btn"
-onclick="toggleChat()"
-class="w-14 h-14 bg-pink-500 rounded-full text-white shadow-xl flex items-center justify-center">
+<button onclick="toggleChat()"
+class="fixed bottom-6 left-6 w-14 h-14 bg-pink-500 text-white rounded-full shadow">
 
-<i class="fa-solid fa-comments text-2xl"></i>
+<i class="fa-solid fa-comments"></i>
 
 </button>
 
 <div id="chat-window">
 
-<div class="bg-blue-500 p-3 text-white flex justify-between">
+<div class="bg-blue-500 text-white p-3 flex justify-between">
 
 <b>แชทลูกค้า</b>
 
@@ -158,23 +133,17 @@ class="w-14 h-14 bg-pink-500 rounded-full text-white shadow-xl flex items-center
 
 </div>
 
-<div id="chat-group"
-class="flex-1 overflow-y-auto p-3 bg-slate-50"></div>
+<div id="chat-box"
+class="flex-1 p-3 overflow-y-auto bg-slate-50"></div>
 
-<div class="p-2 border-t flex gap-2">
+<div class="p-2 flex gap-2 border-t">
 
-<input
-type="text"
-id="chat-input"
+<input id="chat-input"
 class="flex-1 border rounded px-2 py-1"
-placeholder="พิมพ์ข้อความ...">
+placeholder="พิมพ์ข้อความ">
 
-<button
-onclick="sendChat()"
-class="btn-primary px-3">
-
+<button onclick="sendChat()" class="btn">
 ส่ง
-
 </button>
 
 </div>
@@ -183,23 +152,23 @@ class="btn-primary px-3">
 
 <!-- HOME -->
 
-<div id="page-home" class="page-section active">
+<div id="page-home" class="page active">
 
-<div class="candy-banner h-[260px] flex flex-col items-center justify-center text-white text-center">
+<div class="banner h-64 flex flex-col justify-center items-center text-white">
 
 <h1 class="text-5xl font-black">
 CandyMarket
 </h1>
 
-<p class="mt-2 text-lg">
-แพลตฟอร์มปล่อยเช่าเว็บไซต์อัตโนมัติ
+<p class="mt-2">
+แพลตฟอร์มปล่อยเช่าเว็บไซต์
 </p>
 
 </div>
 
-<div class="max-w-7xl mx-auto px-4 mt-10">
+<div class="max-w-6xl mx-auto px-4 mt-8">
 
-<h2 class="text-xl font-bold mb-4">
+<h2 class="font-bold mb-4">
 แพ็กเกจเว็บไซต์
 </h2>
 
@@ -212,11 +181,11 @@ class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
 
 <!-- SHOP -->
 
-<div id="page-shop" class="page-section">
+<div id="page-shop" class="page">
 
-<div class="max-w-7xl mx-auto px-4 mt-10">
+<div class="max-w-6xl mx-auto px-4 mt-8">
 
-<h2 class="text-xl font-bold mb-4">
+<h2 class="font-bold mb-4">
 สินค้าทั้งหมด
 </h2>
 
@@ -229,33 +198,27 @@ class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
 
 <!-- TOPUP -->
 
-<div id="page-topup" class="page-section">
+<div id="page-topup" class="page">
 
-<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-xl shadow">
+<div class="max-w-md mx-auto bg-white shadow rounded-xl p-6 mt-10">
 
-<h2 class="text-xl font-bold text-center mb-4">
+<h2 class="text-center font-bold mb-4">
 เติมเงิน
 </h2>
 
 <div class="text-center">
 
-<div class="w-40 h-40 bg-gray-100 mx-auto flex items-center justify-center text-xs">
-
-QR CODE
-
+<div class="w-40 h-40 bg-gray-100 mx-auto flex items-center justify-center">
+QR
 </div>
 
-<p class="mt-3 text-sm text-slate-500">
-
+<p class="mt-2 text-sm">
 เลขบัญชี
-
 </p>
 
-<p class="font-bold text-blue-500">
-
+<b id="bank-number">
 000-0-00000
-
-</p>
+</b>
 
 </div>
 
@@ -263,12 +226,10 @@ QR CODE
 
 <input type="file"
 class="hidden"
-onchange="autoTopup(this)">
+onchange="topup()">
 
-<div class="btn-primary py-3 text-center cursor-pointer">
-
+<div class="btn text-center cursor-pointer">
 แนบสลิป
-
 </div>
 
 </label>
@@ -277,52 +238,109 @@ onchange="autoTopup(this)">
 
 </div>
 
+<!-- ADMIN -->
+
+<div id="page-admin" class="page">
+
+<div class="max-w-5xl mx-auto mt-8 px-4">
+
+<h2 class="font-bold text-xl mb-6">
+ระบบหลังบ้าน
+</h2>
+
+<div class="grid md:grid-cols-2 gap-6">
+
+<!-- DASHBOARD -->
+
+<div class="bg-white p-4 rounded shadow">
+
+<h3 class="font-bold mb-2">
+สถิติ
+</h3>
+
+<p>ยอดผู้ใช้: <b id="stat-user">120</b></p>
+<p>ยอดเว็บ: <b id="stat-site">20</b></p>
+
+</div>
+
+<!-- PRODUCT -->
+
+<div class="bg-white p-4 rounded shadow">
+
+<h3 class="font-bold mb-2">
+เพิ่มแพ็กเกจ
+</h3>
+
+<input id="p-name"
+class="border p-2 w-full mb-2"
+placeholder="ชื่อแพ็กเกจ">
+
+<input id="p-price"
+class="border p-2 w-full mb-2"
+placeholder="ราคา">
+
+<button onclick="addProduct()" class="btn w-full">
+เพิ่มสินค้า
+</button>
+
+</div>
+
+<!-- BANK -->
+
+<div class="bg-white p-4 rounded shadow">
+
+<h3 class="font-bold mb-2">
+เปลี่ยนเลขบัญชี
+</h3>
+
+<input id="bank-input"
+class="border p-2 w-full mb-2">
+
+<button onclick="saveBank()" class="btn w-full">
+บันทึก
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <script>
 
-/* Products */
+let products=[
+{name:"เว็บร้านค้า",price:199},
+{name:"เว็บขายแอพพรีเมียม",price:299},
+{name:"เว็บเติมเกม",price:399},
+{name:"เว็บขายไอดี",price:499}
+]
 
-function generateProducts(){
+function renderProducts(){
 
 let grid=document.getElementById("product-grid")
 let shop=document.getElementById("shop-grid")
 
-for(let i=1;i<=8;i++){
+grid.innerHTML=""
+shop.innerHTML=""
+
+products.forEach(p=>{
 
 let html=`
+<div class="bg-white p-3 rounded shadow">
 
-<div class="bg-white rounded-xl shadow border overflow-hidden">
-
-<div class="aspect-square bg-slate-100 flex items-center justify-center text-xs">
-
+<div class="h-32 bg-slate-100 flex items-center justify-center text-xs">
 IMAGE
-
 </div>
 
-<div class="p-3">
-
-<h3 class="font-bold text-sm">
-
-แพ็กเกจเว็บ ${i}
-
-</h3>
+<h3 class="font-bold mt-2">${p.name}</h3>
 
 <div class="flex justify-between mt-2">
 
-<span class="text-pink-500 font-black">
+<b class="text-pink-500">฿${p.price}</b>
 
-฿${(i*100)}
-
-</span>
-
-<button
-onclick="alert('สั่งซื้อสำเร็จ')"
-class="bg-blue-50 text-blue-500 w-8 h-8 rounded-full">
-
-<i class="fa-solid fa-cart-shopping text-xs"></i>
-
-</button>
-
-</div>
+<button class="btn text-xs">เช่า</button>
 
 </div>
 
@@ -332,17 +350,42 @@ class="bg-blue-50 text-blue-500 w-8 h-8 rounded-full">
 grid.innerHTML+=html
 shop.innerHTML+=html
 
-}
+})
 
 }
 
-/* Chat */
+function addProduct(){
+
+let name=document.getElementById("p-name").value
+let price=document.getElementById("p-price").value
+
+products.push({name,price})
+
+renderProducts()
+
+}
+
+function saveBank(){
+
+let val=document.getElementById("bank-input").value
+
+document.getElementById("bank-number").innerText=val
+
+alert("บันทึกแล้ว")
+
+}
+
+function topup(){
+
+alert("เติมเงินสำเร็จ +100")
+
+}
 
 function toggleChat(){
 
-let win=document.getElementById("chat-window")
+let c=document.getElementById("chat-window")
 
-win.style.display=win.style.display==="flex"?"none":"flex"
+c.style.display=c.style.display==="flex"?"none":"flex"
 
 }
 
@@ -352,58 +395,23 @@ let input=document.getElementById("chat-input")
 
 if(!input.value)return
 
-let box=document.getElementById("chat-group")
+let box=document.getElementById("chat-box")
 
-box.innerHTML+=`
-
-<div class="chat-bubble chat-me">
-
-${input.value}
-
-</div>
-`
+box.innerHTML+=`<div class="chat-bubble chat-me">${input.value}</div>`
 
 input.value=""
 
 }
 
-/* Topup */
-
-let balance=0
-
-function autoTopup(input){
-
-if(input.files.length){
-
-setTimeout(()=>{
-
-balance+=100
-
-alert("เติมเงินสำเร็จ +100")
-
-},1000)
-
-}
-
-}
-
-/* Page */
-
 function showPage(id){
 
-document
-.querySelectorAll(".page-section")
-.forEach(p=>p.classList.remove("active"))
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
 
-document
-.getElementById("page-"+id)
-.classList.add("active")
-
-window.scrollTo(0,0)
+document.getElementById("page-"+id).classList.add("active")
 
 }
 
-generateProducts()
+renderProducts()
 
 </script>
 
