@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
 
 <meta charset="UTF-8">
@@ -12,8 +11,8 @@
 
 body{
 margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#F0F9FF;
+font-family:Arial;
+background:#F8FBFF;
 }
 
 /* HEADER */
@@ -22,143 +21,128 @@ header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:16px 24px;
+padding:16px 20px;
 background:white;
 box-shadow:0 4px 10px rgba(0,0,0,0.05);
 }
 
 .logo{
-font-size:24px;
+font-size:22px;
 font-weight:bold;
 background:linear-gradient(90deg,#60A5FA,#F9A8D4);
 -webkit-background-clip:text;
 color:transparent;
 }
 
-.login{
-background:linear-gradient(90deg,#60A5FA,#F9A8D4);
-color:white;
-padding:10px 18px;
-border-radius:10px;
-cursor:pointer;
+.menu{
+display:flex;
+gap:12px;
+}
+
+.menu div{
+width:36px;
+height:36px;
+background:#EFF6FF;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 /* HERO */
 
 .hero{
-padding:60px 20px;
-text-align:center;
+padding:40px 20px;
+background:linear-gradient(90deg,#60A5FA,#F9A8D4);
+color:white;
 }
 
 .hero h1{
-font-size:30px;
-color:#1E293B;
+margin:0;
+font-size:24px;
 }
 
 .hero p{
-color:#64748B;
-font-size:16px;
+margin-top:6px;
+opacity:0.9;
 }
 
 .hero button{
-margin-top:16px;
-padding:12px 20px;
-border:none;
-border-radius:10px;
-background:linear-gradient(90deg,#60A5FA,#F9A8D4);
-color:white;
-font-size:16px;
-}
-
-/* BANNER */
-
-.banner-row{
-display:flex;
-gap:16px;
-padding:20px;
-}
-
-.banner{
-flex:1;
+margin-top:12px;
 background:white;
-padding:20px;
+color:#2563EB;
+border:none;
+padding:10px 16px;
+border-radius:10px;
+}
+
+/* PROMO BANNER */
+
+.promo{
+margin:20px;
+background:white;
+padding:16px;
 border-radius:16px;
 box-shadow:0 10px 20px rgba(0,0,0,0.05);
 }
 
-.banner h3{
-margin-top:0;
-}
-
-/* ANNOUNCEMENT */
+/* ANNOUNCE */
 
 .announce{
 display:flex;
-gap:12px;
-padding:10px 20px;
+gap:10px;
+padding:12px 20px;
 overflow:auto;
 }
 
 .notice{
-background:#E0F2FE;
+background:#DBEAFE;
 padding:8px 12px;
 border-radius:10px;
-font-size:14px;
 }
 
 /* STATS */
 
 .stats{
 display:flex;
-gap:16px;
+gap:14px;
 padding:20px;
 }
 
 .stat{
 flex:1;
 background:white;
-padding:20px;
-border-radius:16px;
+padding:16px;
+border-radius:14px;
 text-align:center;
 box-shadow:0 10px 20px rgba(0,0,0,0.05);
 }
 
 .stat h2{
 margin:0;
-font-size:30px;
 color:#60A5FA;
 }
 
-.stat p{
-margin-top:4px;
-color:#64748B;
-}
+/* MENU GRID */
 
-/* FEATURES */
-
-.features{
+.grid{
 padding:20px;
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+grid-template-columns:repeat(2,1fr);
 gap:16px;
 }
 
-.feature{
+.card{
 background:white;
-padding:18px;
+padding:20px;
 border-radius:14px;
 text-align:center;
 box-shadow:0 10px 20px rgba(0,0,0,0.05);
 }
 
-.feature h4{
-margin:8px 0;
-color:#1E293B;
-}
-
-.feature p{
-font-size:14px;
-color:#64748B;
+.card h3{
+margin-top:10px;
+font-size:16px;
 }
 
 </style>
@@ -173,59 +157,50 @@ color:#64748B;
 CandyMarket
 </div>
 
-<div class="login">
-เข้าสู่ระบบ
+<div class="menu">
+
+<div>🔍</div>
+<div>⚙️</div>
+<div>👤</div>
+
 </div>
 
 </header>
 
+
 <section class="hero">
 
-<h1>แพลตฟอร์มปล่อยเช่าเว็บไซต์</h1>
+<h1>ยินดีต้อนรับสู่ CandyMarket</h1>
 
 <p>
-สร้างเว็บไซต์ร้านค้า เติมเกม หรือขายสินค้าออนไลน์ได้ในไม่กี่วินาที
+แพลตฟอร์มปล่อยเช่าเว็บไซต์ร้านค้าออนไลน์
 </p>
 
 <button>
-เริ่มสร้างเว็บไซต์
+เลือกแพ็กเกจ
 </button>
 
 </section>
 
 
-<div class="banner-row">
+<div class="promo">
 
-<div class="banner">
-
-<h3>สร้างเว็บอัตโนมัติ</h3>
+<h3>เปิดร้านออนไลน์ง่าย ๆ</h3>
 
 <p>
-ระบบสร้างเว็บไซต์ทันที พร้อมใช้งาน
+สร้างเว็บไซต์ร้านค้าของคุณได้ในไม่กี่วินาที
 </p>
-
-</div>
-
-<div class="banner">
-
-<h3>ระบบหลังบ้านครบ</h3>
-
-<p>
-สินค้า ลูกทีม แชท และคำสั่งซื้อ
-</p>
-
-</div>
 
 </div>
 
 
 <div class="announce">
 
-<div class="notice">เปิดระบบ CandyMarket</div>
+<div class="notice">📢 เปิดระบบ CandyMarket</div>
 
-<div class="notice">รองรับระบบลูกทีม</div>
+<div class="notice">🚀 สร้างเว็บได้ทันที</div>
 
-<div class="notice">มีระบบแชทลูกค้า</div>
+<div class="notice">💬 มีระบบแชทลูกค้า</div>
 
 </div>
 
@@ -235,64 +210,40 @@ CandyMarket
 <div class="stat">
 
 <h2>212</h2>
-<p>ผู้ใช้งาน</p>
+<p>ผู้ใช้ทั้งหมด</p>
 
 </div>
 
 <div class="stat">
 
 <h2>239</h2>
-<p>เว็บไซต์</p>
+<p>เว็บไซต์ทั้งหมด</p>
 
 </div>
 
 </div>
 
 
-<section class="features">
+<div class="grid">
 
-<div class="feature">
+<div class="card">
+<h3>แพ็กเกจเว็บ</h3>
+</div>
 
-<h4>สร้างเว็บทันที</h4>
+<div class="card">
+<h3>สร้างเว็บไซต์</h3>
+</div>
 
-<p>
-เปิดร้านออนไลน์ใน 30 วินาที
-</p>
+<div class="card">
+<h3>ตัวอย่างเว็บ</h3>
+</div>
+
+<div class="card">
+<h3>ติดต่อแอดมิน</h3>
+</div>
 
 </div>
 
-<div class="feature">
-
-<h4>ระบบแชท</h4>
-
-<p>
-ลูกค้าทักหาแอดมินได้ทันที
-</p>
-
-</div>
-
-<div class="feature">
-
-<h4>ระบบลูกทีม</h4>
-
-<p>
-สร้างเว็บให้ตัวแทนได้
-</p>
-
-</div>
-
-<div class="feature">
-
-<h4>ระบบสินค้า</h4>
-
-<p>
-เพิ่มสินค้าและจัดการได้ง่าย
-</p>
-
-</div>
-
-</section>
 
 </body>
-
 </html>
