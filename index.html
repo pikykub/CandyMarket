@@ -1,316 +1,54 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CandyMarket</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-
-body{
-font-family:'Kanit',sans-serif;
-background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6);
-min-height:100vh;
-color:white;
-}
-
-/* glass card */
-
-.glass{
-background:rgba(255,255,255,0.12);
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,0.25);
-border-radius:18px;
-}
-
-/* button */
-
-.btn{
-background:linear-gradient(90deg,#38bdf8,#f472b6);
-padding:10px 20px;
-border-radius:12px;
-font-weight:600;
-transition:.2s;
-}
-
-.btn:hover{
-transform:scale(1.05);
-}
-
-.banner{
-background:linear-gradient(90deg,#38bdf8,#f472b6);
-}
-
-</style>
-
+<title>PeachWeb Store</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- TOP BANNER -->
+<header>
+  <h1>PeachWeb Rental</h1>
+  <p>ร้านปล่อยเช่าของลูกพีช</p>
+</header>
 
-<div class="banner text-center py-2 text-sm font-semibold shadow">
-
-🍬 CandyMarket เปิดให้เช่าเว็บไซต์สำหรับร้านค้าออนไลน์
-
-</div>
-
-<!-- NAV -->
-
-<nav class="flex justify-between items-center px-6 py-4">
-
-<div class="flex items-center gap-2">
-
-<div class="w-9 h-9 rounded-full bg-white text-pink-500 flex items-center justify-center font-bold">
-C
-</div>
-
-<b class="text-xl">CandyMarket</b>
-
-</div>
-
-<div class="flex gap-6 text-sm">
-
-<button>หน้าหลัก</button>
-<button>แพ็กเกจ</button>
-<button>สมัครสมาชิก</button>
-
-</div>
-
+<nav>
+  <a href="#">หน้าแรก</a>
+  <a href="#">สินค้า</a>
+  <a href="#">ติดต่อ</a>
 </nav>
 
-<!-- HERO -->
+<section class="products">
 
-<section class="max-w-6xl mx-auto px-6 mt-16 grid md:grid-cols-2 gap-10 items-center">
+  <div class="card">
+    <img src="https://via.placeholder.com/200">
+    <h3>iPhone 15</h3>
+    <p>ค่าเช่า 200 บาท / วัน</p>
+    <button onclick="rentItem('iPhone 15')">เช่าเลย</button>
+  </div>
 
-<div>
+  <div class="card">
+    <img src="https://via.placeholder.com/200">
+    <h3>กล้อง Canon</h3>
+    <p>ค่าเช่า 300 บาท / วัน</p>
+    <button onclick="rentItem('Canon Camera')">เช่าเลย</button>
+  </div>
 
-<h1 class="text-5xl font-extrabold mb-6">
-
-สร้างเว็บขายของ  
-ง่ายเหมือนกินลูกอม 🍬
-
-</h1>
-
-<p class="text-white/80 mb-6">
-
-CandyMarket คือแพลตฟอร์มปล่อยเช่าเว็บไซต์
-สำหรับแม่ค้าออนไลน์ เปิดร้านได้ทันที
-ไม่ต้องเขียนโค้ด
-
-</p>
-
-<button class="btn">
-
-เริ่มสร้างร้านของฉัน
-
-</button>
-
-</div>
-
-<div class="glass p-8 text-center">
-
-<h3 class="text-lg font-bold mb-3">
-ตัวอย่างร้านลูกค้า
-</h3>
-
-<div class="h-40 bg-white/20 rounded-lg flex items-center justify-center">
-
-Preview Store
-
-</div>
-
-</div>
+  <div class="card">
+    <img src="https://via.placeholder.com/200">
+    <h3>MacBook</h3>
+    <p>ค่าเช่า 500 บาท / วัน</p>
+    <button onclick="rentItem('MacBook')">เช่าเลย</button>
+  </div>
 
 </section>
 
-<!-- PACKAGES -->
-
-<section class="max-w-6xl mx-auto px-6 mt-20">
-
-<h2 class="text-3xl font-bold mb-10 text-center">
-
-แพ็กเกจเช่าเว็บไซต์
-
-</h2>
-
-<div class="grid md:grid-cols-3 gap-6">
-
-<div class="glass p-6 text-center">
-
-<h3 class="text-xl font-bold mb-3">
-
-Starter
-
-</h3>
-
-<p class="text-white/80 mb-4">
-
-เว็บร้านค้าพื้นฐาน
-
-</p>
-
-<div class="text-3xl font-black mb-4">
-
-฿199
-
-</div>
-
-<button class="btn w-full">
-
-เช่าเว็บ
-
-</button>
-
-</div>
-
-<div class="glass p-6 text-center border-2 border-pink-300">
-
-<h3 class="text-xl font-bold mb-3">
-
-Pro
-
-</h3>
-
-<p class="text-white/80 mb-4">
-
-เว็บ + ระบบเติมเงิน
-
-</p>
-
-<div class="text-3xl font-black mb-4">
-
-฿399
-
-</div>
-
-<button class="btn w-full">
-
-เช่าเว็บ
-
-</button>
-
-</div>
-
-<div class="glass p-6 text-center">
-
-<h3 class="text-xl font-bold mb-3">
-
-Business
-
-</h3>
-
-<p class="text-white/80 mb-4">
-
-เว็บ + แอดมินเต็มระบบ
-
-</p>
-
-<div class="text-3xl font-black mb-4">
-
-฿699
-
-</div>
-
-<button class="btn w-full">
-
-เช่าเว็บ
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- FEATURES -->
-
-<section class="max-w-6xl mx-auto px-6 mt-20">
-
-<h2 class="text-3xl font-bold mb-10 text-center">
-
-ทำไมต้อง CandyMarket
-
-</h2>
-
-<div class="grid md:grid-cols-3 gap-6">
-
-<div class="glass p-6 text-center">
-
-⚡
-
-<h3 class="font-bold mt-2">
-สร้างเว็บทันที
-</h3>
-
-<p class="text-white/80 text-sm">
-
-สมัครแล้วได้เว็บทันที
-
-</p>
-
-</div>
-
-<div class="glass p-6 text-center">
-
-💬
-
-<h3 class="font-bold mt-2">
-มีระบบแชท
-</h3>
-
-<p class="text-white/80 text-sm">
-
-ลูกค้าติดต่อแอดมินได้
-
-</p>
-
-</div>
-
-<div class="glass p-6 text-center">
-
-🔒
-
-<h3 class="font-bold mt-2">
-ปลอดภัย
-</h3>
-
-<p class="text-white/80 text-sm">
-
-ระบบจัดการครบ
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- CTA -->
-
-<section class="text-center mt-24 mb-20">
-
-<h2 class="text-4xl font-extrabold mb-6">
-
-เริ่มเปิดร้านวันนี้
-
-</h2>
-
-<button class="btn text-lg">
-
-สมัครใช้งานฟรี
-
-</button>
-
-</section>
-
+<footer>
+  <p>© 2026 PeachWeb Rental</p>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
