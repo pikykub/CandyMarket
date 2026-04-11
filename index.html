@@ -3,179 +3,838 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PeachWeb - Digital Store Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Peachweb-store - ร้านค้าเกม</title>
     <style>
-        /* 🎨 การตั้งค่าสีพื้นฐาน (โหมดสว่างคือค่าเริ่มต้น) */
-        :root { 
-            --bg: #ffffff; 
-            --card-bg: #f8f9fa;
-            --card-border: #eeeeee;
-            --text-main: #000000; /* โหมดสว่างข้อความสีดำ */
-            --text-sub: #666666;
-            --primary: #00f2fe; 
-            --danger: #ef4444;
+        :root {
+            --bg-color: #0d0d0d;
+            --text-color: #f0f0f0;
+            --sub-text-color: #a0a0a0;
+            --card-bg: #1c1c1e;
+            --primary-accent: #ff7f50; /* สีพีช */
+            --secondary-accent: #c084fc; /* สีม่วงอ่อน */
+            --success-color: #4ade80; /* สีเขียวสำเร็จ */
+            --discount-color: #ef4444; /* สีแดงส่วนลด */
+            --border-color: #333333;
+            --font-family: 'Sarabun', 'Prompt', sans-serif;
         }
 
-        /* 🌙 การตั้งค่าเมื่อเปลี่ยนเป็นโหมดมืด */
-        [data-theme="dark"] {
-            --bg: #0a0a0a; 
-            --card-bg: #111111;
-            --card-border: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff; /* โหมดมืดข้อความสีขาวทุกข้อความ */
-            --text-sub: #9ca3af;
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap');
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            margin: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        * { box-sizing: border-box; transition: background 0.3s, color 0.3s; }
-        body { background: var(--bg); color: var(--text-main); font-family: 'Kanit', sans-serif; margin: 0; padding-bottom: 50px; }
+        /* --- Header (Shared) --- */
+        header {
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
 
-        /* 🔘 ระบบสลับโหมด (Toggle Theme) */
-        .theme-toggle { background: none; border: 1px solid var(--card-border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .header-left .store-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-accent);
+        }
 
-        nav { background: var(--bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--card-border); }
-        .logo { font-size: 22px; font-weight: 800; text-decoration: none; color: var(--text-main); }
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .user-btn { background: var(--text-main); color: var(--bg); padding: 8px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: 700; }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .header-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--sub-text-color);
+        }
 
-        /* 🖼️ แบนเนอร์ */
-        .hero-banner { width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 25px; border: 1px solid var(--card-border); }
-        .hero-banner img { width: 100%; height: auto; display: block; }
+        .header-icon:hover {
+            color: var(--text-color);
+        }
 
-        /* 📢 ประกาศ */
-        .ann-box { border: 1px solid var(--card-border); border-radius: 12px; padding: 10px 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 30px; background: var(--card-bg); overflow: hidden; }
-        .ann-btn { background: var(--text-main); color: var(--bg); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; }
-        .ann-text p { margin: 0; font-size: 13px; color: var(--text-main); }
+        /* --- Main Content --- */
+        main {
+            padding-top: 60px; /* Adjust for fixed header */
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding-bottom: 40px;
+        }
 
-        /* 📊 สถิติ */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 18px; text-align: left; }
-        .stat-card h2 { font-size: 26px; margin: 0; font-weight: 800; color: var(--text-main); }
-        .stat-card p { font-size: 11px; color: var(--text-main); margin-top: 5px; opacity: 0.7; }
+        section {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-        /* 🔘 Quick Menu */
-        .quick-menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
-        .menu-card { background: var(--card-bg); border-radius: 15px; padding: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--card-border); text-decoration: none; color: var(--text-main); transition: 0.3s; }
-        .menu-card h3 { font-size: 18px; margin: 0; font-weight: 800; color: var(--text-main); }
-        .menu-circle { width: 40px; height: 40px; background: var(--text-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--bg); }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-        /* 🛒 สินค้า */
-        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-        .p-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 12px; }
-        .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 12px; }
-        .p-name { color: var(--text-main); font-weight: 700; margin-bottom: 5px; }
-        .p-price { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; }
-        .btn-rent { background: var(--text-main); color: var(--bg); border: none; padding: 10px; border-radius: 10px; font-weight: 700; width: 100%; cursor: pointer; font-family: 'Kanit'; }
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
 
-        @media (max-width: 900px) { .product-grid, .stats-grid, .quick-menu-grid { grid-template-columns: repeat(2, 1fr); } }
+        .view-more {
+            background-color: #fff;
+            color: #000;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* --- Hero Section (Page 1) --- */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-welcome {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .hero-welcome h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-welcome p {
+            color: var(--sub-text-color);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero-banner-main {
+            background: linear-gradient(135deg, rgba(30, 10, 50, 0.8) 0%, rgba(10, 30, 60, 0.8) 100%), url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop') center/cover;
+            height: 250px;
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .hero-banner-main h2 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .hero-banner-main h2 span {
+            color: var(--primary-accent);
+        }
+
+        .btn-products {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- Banner & Icons (Page 2) --- */
+        .banner-icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .banner-icon-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+        }
+
+        .banner-icon {
+            font-size: 2.5rem;
+            color: var(--primary-accent);
+        }
+
+        .banner-text h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .banner-text p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--sub-text-color);
+        }
+
+        /* --- Notifications & Stats (Page 3) --- */
+        .notif-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            font-size: 1.8rem;
+            color: var(--secondary-accent);
+        }
+
+        .stat-content .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .stat-content .stat-label {
+            font-size: 0.8rem;
+            color: var(--sub-text-color);
+        }
+
+        /* --- Products (Page 4/5) --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .best-seller-badge {
+            background-color: var(--discount-color);
+            color: #fff;
+            padding: 3px 8px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            border-radius: 4px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 10;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .product-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-status {
+            font-size: 0.7rem;
+            color: var(--sub-text-color);
+            margin-bottom: 8px;
+        }
+
+        .product-pricing {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .product-price .original-price {
+            color: var(--sub-text-color);
+            text-decoration: line-through;
+            font-size: 0.75rem;
+            margin-left: 3px;
+        }
+
+        .btn-order {
+            background-color: #fff;
+            color: #000;
+            width: 100%;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* --- Categories (Page 6) --- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .category-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .category-text h3 {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .category-text p {
+            margin: 0;
+            font-size: 0.7rem;
+            color: var(--sub-text-color);
+        }
+
+        .category-meta {
+            margin-left: auto;
+            text-align: right;
+            font-size: 0.7rem;
+            color: var(--sub-text-color);
+        }
+
+        /* --- Order History (Page 7) --- */
+        .order-history {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .order-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .order-icon-box {
+            background-color: rgba(255,255,255,0.05);
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .order-icon {
+            font-size: 1.2rem;
+            color: var(--sub-text-color);
+        }
+
+        .order-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .order-price {
+            font-size: 0.75rem;
+            color: var(--secondary-accent);
+        }
+
+        .order-meta {
+            font-size: 0.7rem;
+            color: var(--sub-text-color);
+            text-align: right;
+        }
+
+        /* --- Login Prompt (Page 8) --- */
+        .login-prompt-section {
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 50px;
+        }
+
+        .login-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-box h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.3rem;
+        }
+
+        .login-box p {
+            font-size: 0.8rem;
+            color: var(--sub-text-color);
+            margin: 0 0 20px 0;
+        }
+
+        .login-box-item {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .login-box-item label {
+            font-size: 0.8rem;
+            color: var(--sub-text-color);
+            margin-bottom: 5px;
+        }
+
+        .login-box-item input {
+            background-color: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .login-meta-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .login-meta-actions a {
+            font-size: 0.75rem;
+            color: var(--sub-text-color);
+            text-decoration: none;
+        }
+
+        .login-meta-actions a:hover {
+            color: var(--text-color);
+        }
+
+        .btn-large-white {
+            background-color: #fff;
+            color: #000;
+            width: 100%;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .separator {
+            color: var(--sub-text-color);
+            font-size: 0.75rem;
+            margin: 0 0 20px 0;
+        }
+
+        .other-login-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-other-login {
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .btn-other-login.discord {
+            color: #5865F2;
+        }
+
+        .signup-prompt {
+            font-size: 0.8rem;
+            color: var(--sub-text-color);
+        }
+
+        .signup-prompt a {
+            color: var(--secondary-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* --- OTP Confirmation (Page 8 - Part) --- */
+        .otp-confirm-box {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto 0;
+            text-align: center;
+        }
+
+        .otp-confirm-icon {
+            font-size: 2rem;
+            color: var(--secondary-accent);
+            margin-bottom: 10px;
+        }
+
+        .otp-confirm-text {
+            font-size: 0.85rem;
+            color: var(--sub-text-color);
+        }
+
+        /* --- Footer --- */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--sub-text-color);
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        footer strong {
+            color: var(--text-color);
+        }
+
+        @media (min-width: 768px) {
+            .hero-welcome h1 { font-size: 2.2rem; }
+            .hero-banner-main h2 { font-size: 2rem; }
+            .banner-icon-grid { grid-template-columns: repeat(4, 1fr); }
+            .notif-stats { grid-template-columns: repeat(2, 1fr); }
+            .product-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="index.html" class="logo">PeachWeb.</a>
-        <div class="nav-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
-                <i class="fas fa-moon"></i>
-            </div>
-            <div id="navActions"></div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="hero-banner"><img id="mainBanner" src=""></div>
-
-        <div class="welcome-sec">
-            <h1 id="disp-welcome" style="color: var(--text-main);">กำลังโหลด...</h1>
-        </div>
-
-        <div class="ann-box">
-            <div class="ann-btn">ประกาศ</div>
-            <div class="ann-text"><p id="disp-marquee">ยินดีต้อนรับสู่ PeachWeb!</p></div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card"><h2 id="sUsers">0</h2><p>ผู้ใช้ทั้งหมด</p></div>
-            <div class="stat-card"><h2 id="sProds">0</h2><p>สินค้าทั้งหมด</p></div>
-            <div class="stat-card"><h2 id="sCats">0</h2><p>หมวดหมู่</p></div>
-            <div class="stat-card"><h2 id="sSold">0</h2><p>รายการสำเร็จ</p></div>
-        </div>
-
-        <div class="quick-menu-grid">
-            <div onclick="toggleChat()" class="menu-card"><div class="menu-text"><span>สอบถาม</span><h3>ADMIN</h3></div><div class="menu-circle"><i class="fas fa-headset"></i></div></div>
-            <a href="topup.html" class="menu-card"><div class="menu-text"><span>เติมเงิน</span><h3>WALLET</h3></div><div class="menu-circle"><i class="fas fa-wallet"></i></div></a>
-            <a href="topup.html" class="menu-card"><div class="menu-text"><span>ซองของขวัญ</span><h3>GIFT</h3></div><div class="menu-circle"><i class="fas fa-envelope-open-text"></i></div></a>
-            <a href="#shop" class="menu-card"><div class="menu-text"><span>เลือกซื้อ</span><h3>SHOP</h3></div><div class="menu-circle"><i class="fas fa-shopping-cart"></i></div></a>
-        </div>
-
-        <div id="shop" class="product-grid"></div>
+<header>
+    <div class="header-left">
+        <span class="store-name">Peachweb-store</span>
     </div>
+    <div class="header-right">
+        <span class="header-icon">🔍</span>
+        <span class="header-icon">☀️</span>
+        <span class="header-icon">👤</span>
+    </div>
+</header>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        
-        const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
-        const app = initializeApp(firebaseConfig); const db = getDatabase(app); const auth = getAuth(app);
+<main>
+    <section class="hero" id="home">
+        <div class="hero-welcome">
+            <h1>ยินดีต้อนรับสู่ร้าน Peachweb-store</h1>
+            <p>Peachweb - ร้านขายบัญชีเกมส์ออฟไลน์ Steam ราคาถูก เล่นได้ 100% มีรับประกัน! ติดต่อแอดมินได้ที่เพจ Peachweb แพลตฟอร์มจำหน่ายเกม Steam ราคาถูก | แอดมินบริการเวลา 13.00-00.00 น.</p>
+            <button class="btn-products">🛍️ เลือกดูสินค้า</button>
+        </div>
+        <div class="hero-banner-main">
+            <h2>บริการจำหน่าย <span>“STEAM OFFLINE”</span></h2>
+        </div>
+    </section>
 
-        // 🌗 ระบบเปลี่ยนโหมด (เริ่มต้นที่สว่าง)
-        window.toggleTheme = () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', targetTheme);
-            document.getElementById('themeBtn').innerHTML = targetTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem('theme', targetTheme);
-        };
+    <section class="banners" id="services">
+        <div class="banner-icon-grid">
+            <div class="banner-icon-card">
+                <span class="banner-icon">💬</span>
+                <div class="banner-text">
+                    <h3>ADMIN</h3>
+                    <p>CLICK -&gt;</p>
+                </div>
+            </div>
+            <div class="banner-icon-card">
+                <span class="banner-icon">💰</span>
+                <div class="banner-text">
+                    <h3>TOPUP</h3>
+                    <p>CLICK -&gt;</p>
+                </div>
+            </div>
+            <div class="banner-icon-card">
+                <span class="banner-icon">📜</span>
+                <div class="banner-text">
+                    <h3>MANUAL</h3>
+                    <p>CLICK -&gt;</p>
+                </div>
+            </div>
+            <div class="banner-icon-card">
+                <span class="banner-icon">🛒</span>
+                <div class="banner-text">
+                    <h3>SHOP</h3>
+                    <p>CLICK -&gt;</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // ตรวจเช็คค่า Theme ที่เซฟไว้
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    <section class="stats" id="info">
+        <div class="notif-stats">
+            <div class="stat-card">
+                <span class="stat-icon">👥</span>
+                <div class="stat-content">
+                    <span class="stat-value">212</span>
+                    <span class="stat-label">ผู้ใช้ทั้งหมด</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🛍️</span>
+                <div class="stat-content">
+                    <span class="stat-value">239</span>
+                    <span class="stat-label">สินค้าทั้งหมด</span>
+                </div>
+            </div>
+        </div>
+        <div style="background-color: var(--card-bg); border-radius: 8px; padding: 10px; margin-top: 15px; border: 1px solid var(--border-color);">
+            📣 <span style="color: var(--sub-text-color); font-size: 0.8rem; margin-left: 10px;">ข่าวด่วน: อัปเดตสินค้าใหม่วันนี้! เช็คหน้าสินค้าแนะนำได้เลย...</span>
+        </div>
+    </section>
 
-        // 🟢 โหลดข้อมูลต่างๆ
-        onAuthStateChanged(auth, user => {
-            const nav = document.getElementById('navActions');
-            if(user) {
-                onValue(ref(db, `users/${user.uid}`), s => {
-                    const d = s.val()||{};
-                    nav.innerHTML = `<div style="font-weight:700; margin-right:15px; color:var(--text-main);">฿${(d.balance||0).toFixed(2)}</div><a href="profile.html" class="user-btn">โปรไฟล์</a>`;
-                });
-            } else { nav.innerHTML = `<a href="login.html" class="user-btn">เข้าสู่ระบบ</a>`; }
-        });
+    <section class="recommended-products" id="products">
+        <div class="section-header">
+            <span class="section-title">สินค้าแนะนำ</span>
+            <button class="view-more">ดูเพิ่มเติม ❯</button>
+        </div>
+        <div class="product-grid">
+            <div class="product-card">
+                <span class="best-seller-badge">Best Seller</span>
+                <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=600" alt="Ghost of Tsushima" class="product-img">
+                <div class="product-info">
+                    <div class="product-name">Ghost of Tsushima</div>
+                    <div class="product-status">สินค้าคงเหลือ 16 ชิ้น</div>
+                    <div class="product-pricing">
+                        <span class="product-price">฿40.00</span>
+                        <span style="font-size: 0.6rem; background-color: var(--success-color); color: #000; padding: 2px 5px; border-radius: 4px;">พร้อมขาย</span>
+                    </div>
+                    <button class="btn-order">สั่งซื้อสินค้า</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <span class="best-seller-badge">Best Seller</span>
+                <img src="https://images.unsplash.com/photo-1627409217646-6085a690e54d?q=80&w=600" alt="Marvel's Spider-Man 2" class="product-img">
+                <div class="product-info">
+                    <div class="product-name">Marvel's Spider-Man 2</div>
+                    <div class="product-status">สินค้าคงเหลือ 7 ชิ้น</div>
+                    <div class="product-pricing">
+                        <span class="product-price">฿797.29 <span class="original-price">฿999.00</span></span>
+                        <span style="font-size: 0.6rem; background-color: var(--success-color); color: #000; padding: 2px 5px; border-radius: 4px;">พร้อมขาย</span>
+                    </div>
+                    <button class="btn-order">สั่งซื้อสินค้า</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1623126889224-8b63e63994ac?q=80&w=600" alt="Khazan" class="product-img">
+                <div class="product-info">
+                    <div class="product-name">The First Berserker: Khazan</div>
+                    <div class="product-status">สั่งซื้อล่วงหน้า</div>
+                    <div class="product-pricing">
+                        <span class="product-price">TBA</span>
+                        <span style="font-size: 0.6rem; background-color: var(--sub-text-color); color: #000; padding: 2px 5px; border-radius: 4px;">Pre-Order</span>
+                    </div>
+                    <button class="btn-order" disabled style="opacity: 0.5;">Coming Soon</button>
+                </div>
+            </div>
+             <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1613946069412-38f7f1ff0b65?q=80&w=600" alt="Dying Light" class="product-img">
+                <div class="product-info">
+                    <div class="product-name">Dying Light: The Beast</div>
+                    <div class="product-status">สินค้าคงเหลือ 8 ชิ้น</div>
+                    <div class="product-pricing">
+                        <span class="product-price">฿89.00</span>
+                        <span style="font-size: 0.6rem; background-color: var(--success-color); color: #000; padding: 2px 5px; border-radius: 4px;">พร้อมขาย</span>
+                    </div>
+                    <button class="btn-order">สั่งซื้อสินค้า</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        onValue(ref(db, 'settings'), s => {
-            const d = s.val()||{};
-            if(d.webImages) document.getElementById('mainBanner').src = d.webImages.main;
-            if(d.announcement) {
-                document.getElementById('disp-welcome').innerText = d.announcement.welcome;
-                document.getElementById('disp-marquee').innerText = d.announcement.marquee;
-            }
-        });
+    <section class="categories" id="categories">
+        <div class="section-header">
+            <span class="section-title">หมวดหมู่แนะนำ</span>
+            <button class="view-more">ดูเพิ่มเติม ❯</button>
+        </div>
+        <div class="category-grid">
+            <div class="category-card">
+                <img src="https://img.icons8.com/wired/64/FFFFFF/steam-circled.png" alt="Steam Logo" class="category-icon">
+                <div class="category-text">
+                    <h3>Steam Offline</h3>
+                    <p>สินค้าทั้งหมด 239 รายการ</p>
+                </div>
+                <div class="category-meta">10.00 - 999.99</div>
+            </div>
+            <div class="category-card">
+                <img src="https://img.icons8.com/wired/64/FFFFFF/xbox.png" alt="Xbox Logo" class="category-icon">
+                <div class="category-text">
+                    <h3>Xbox Game Pass</h3>
+                    <p>สินค้าทั้งหมด 15 รายการ</p>
+                </div>
+                <div class="category-meta">50.00 - 500.00</div>
+            </div>
+        </div>
+    </section>
 
-        onValue(ref(db, 'stats'), s => {
-            const d = s.val()||{};
-            document.getElementById('sUsers').innerText = d.users||0;
-            document.getElementById('sProds').innerText = d.prods||0;
-            document.getElementById('sCats').innerText = d.cats||0;
-            document.getElementById('sSold').innerText = d.sold||0;
-        });
+    <section class="order-history" id="orders">
+        <div class="section-header">
+            <span class="section-title">รายการสั่งซื้อล่าสุด</span>
+            <button class="view-more">ดูเพิ่มเติม ❯</button>
+        </div>
+        <div class="order-history-list">
+            <div class="order-item">
+                <div class="order-icon-box">
+                    <span class="order-icon">📄</span>
+                </div>
+                <div class="order-details">
+                    <span class="order-name">God of War Ragnarok - สั่งซื้อ</span>
+                    <span class="order-price">ราคา 69.00 บาท</span>
+                </div>
+                <div class="order-meta">
+                    05/02/2569 18:16:15
+                </div>
+            </div>
+             <div class="order-item">
+                <div class="order-icon-box">
+                    <span class="order-icon">📄</span>
+                </div>
+                <div class="order-details">
+                    <span class="order-name">Dying Light: The Beast - สั่งซื้อ</span>
+                    <span class="order-price">ราคา 89.00 บาท</span>
+                </div>
+                <div class="order-meta">
+                    05/02/2569 17:05:10
+                </div>
+            </div>
+        </div>
+    </section>
 
-        onValue(ref(db, 'products'), s => {
-            const d = document.getElementById('shop'); d.innerHTML = "";
-            s.forEach(c => {
-                const p = c.val();
-                d.innerHTML += `
-                    <div class="p-card">
-                        <img src="${p.image}" class="p-img">
-                        <div class="p-name">${p.name}</div>
-                        <div class="p-price">฿${parseFloat(p.price).toLocaleString()}</div>
-                        <button class="btn-rent" onclick="location.href='product_detail.html?id=${c.key}'">เช่าเว็บ</button>
-                    </div>`;
-            });
-        });
-    </script>
+    <section class="login-prompt-section" id="login">
+        <div class="login-box">
+            <h2>เข้าสู่ระบบ</h2>
+            <p>กรุณาเข้าสู่ระบบเพื่อใช้งานต่อ</p>
+            <form>
+                <div class="login-box-item">
+                    <label>ชื่อผู้ใช้ หรือ อีเมล</label>
+                    <input type="text" placeholder="username หรือ user@gmail.com">
+                </div>
+                <div class="login-box-item">
+                    <label>รหัสผ่าน</label>
+                    <input type="password" placeholder="password">
+                </div>
+                <div class="login-meta-actions">
+                    <a href="#">ลืมรหัสผ่าน?</a>
+                </div>
+                <button type="submit" class="btn-large-white">🛡️ เข้าสู่ระบบ</button>
+            </form>
+            <div class="separator">หรือ</div>
+            <div class="other-login-options">
+                <button class="btn-other-login discord">🌐 Discord</button>
+                <button class="btn-other-login">🔍 Google</button>
+            </div>
+            <div class="signup-prompt">
+                ยังไม่มีบัญชี? <a href="#">สมัครสมาชิก</a>
+            </div>
+        </div>
+
+        <div class="otp-confirm-box">
+            <span class="otp-confirm-icon">🛡️</span>
+            <p class="otp-confirm-text">รอการยืนยันความปลอดภัย... <br> กรุณาตรวจสอบอีเมลหรือรหัส OTP</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div>Peachweb-store Powered by <strong>4TUNEZ - STUDIO</strong> Copyright 2025</div>
+    <div style="font-size: 0.7rem; color: #666;">อยากมีเว็บไซต์จำหน่ายสินค้าแบบนี้? <a href="#" style="color: #666; text-decoration: underline;">คลิกเลยที่นี่!</a></div>
+</footer>
+
 </body>
 </html>
