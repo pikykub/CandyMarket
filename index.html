@@ -38,7 +38,6 @@
 
         #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
         
-        /* Auth Modal */
         .auth-overlay { position: fixed; inset: 0; background: rgba(255, 245, 247, 0.9); backdrop-blur: 8px; z-index: 100; display: none; align-items: center; justify-content: center; }
         .auth-card { background: white; width: 90%; max-width: 400px; padding: 40px 30px; border-radius: 3rem; border: 4px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.15); }
         .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; background: #fffafa; margin-bottom: 15px; outline: none; }
@@ -50,18 +49,11 @@
 </head>
 <body class="grid-bg pb-20">
 
-    <div id="process-loader">
-        <div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div>
-    </div>
-
+    <div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
     <div id="candy-toast">
         <div id="toast-icon-bg" class="toast-icon"><i id="toast-i" class="fa-solid"></i></div>
-        <div>
-            <h4 id="toast-title" class="font-black text-sm text-gray-700"></h4>
-            <p id="toast-msg" class="text-xs text-gray-500 font-medium"></p>
-        </div>
+        <div><h4 id="toast-title" class="font-black text-sm text-gray-700"></h4><p id="toast-msg" class="text-xs text-gray-500 font-medium"></p></div>
     </div>
-
     <div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
 
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
@@ -115,19 +107,12 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        // 🍭 List of Candy Icons for Random Profile
-        const candyIcons = [
-            "fa-lollipop",
-            "fa-ice-cream",
-            "fa-cookie",
-            "fa-lemon",
-            "fa-candy-cane"
-        ];
+        const candyIcons = ["fa-lollipop", "fa-ice-cream", "fa-cookie", "fa-lemon", "fa-candy-cane"];
 
         window.showCandyAlert = (title, msg, type = 'success') => {
             const toast = document.getElementById('candy-toast');
@@ -153,6 +138,8 @@
         document.getElementById('auth-btn').onclick = async () => {
             const user = document.getElementById('user-input').value;
             const pass = document.getElementById('pass-input').value;
+            if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
+            
             document.getElementById('process-loader').style.display = 'flex';
 
             if (user === "AdminPeach" && pass === "khaohom1554") {
@@ -173,19 +160,26 @@
                     closeAuth();
                 } else {
                     await createUserWithEmailAndPassword(auth, email, pass);
-                    showCandyAlert("สมัครสำเร็จ!", "กรุณาเข้าสู่ระบบอีกครั้งนะคะ");
+                    
+                    // 🔥 เพิ่มระบบ Auto Update สถิติเมื่อสมัครสำเร็จ
+                    const userStatRef = ref(db, 'stats/users');
+                    await runTransaction(userStatRef, (currentValue) => {
+                        return (currentValue || 0) + 1;
+                    });
+
+                    showCandyAlert("สมัครสำเร็จ!", "ยอดลูกค้าในร้านเพิ่มขึ้นแล้วค่ะ!");
                     isLoginMode = true; document.getElementById('auth-title').innerText = "Sign In";
                     document.getElementById('pass-input').value = "";
                 }
             } catch (err) {
-                showCandyAlert("อุ๊ปส์!", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้องค่ะ", "error");
+                showCandyAlert("อุ๊ปส์!", "เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะ", "error");
             } finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
         function updateUI(user) {
             const section = document.getElementById('auth-section');
             if(user || localStorage.getItem('isAdmin')) {
-                // 🎲 สุ่มไอคอนให้ลูกค้าแบบ Random
+                // 🎲 สุ่มไอคอนใหม่ทุกครั้งที่โหลด UI
                 const randomIcon = candyIcons[Math.floor(Math.random() * candyIcons.length)];
                 section.innerHTML = `
                     <button onclick="togglePanel()" class="w-10 h-10 rounded-full bg-white border-2 border-pink-200 text-pink-500 flex items-center justify-center shadow-sm hover:scale-110 transition">
