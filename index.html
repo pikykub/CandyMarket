@@ -8,140 +8,133 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* 🎨 ปรับธีมสีใหม่ให้เป็น Candy */
-        :root {
-            --candy-pink: #ffafbd;
-            --candy-blue: #c9ffbf;
-            --candy-purple: #cc99ff;
-            --candy-text: #6a4c93;
-        }
-
         body { 
-            background: #fff5f7; /* สีชมพูขาวนวล */
+            background-color: #fff5f7; 
             font-family: 'Kanit', sans-serif; 
-            color: #4a4a4a; 
+            color: #5a5a5a; 
         }
-
         .grid-bg { 
-            background-image: radial-gradient(#ffcad4 1px, transparent 1px); 
-            background-size: 30px 30px; 
+            background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); 
+            background-size: 25px 25px; 
         }
-
-        .candy-gradient-text { 
-            background: linear-gradient(to right, #ff758c, #ff7eb3, #70d6ff); 
+        .candy-text { 
+            background: linear-gradient(to right, #ff8da1, #8ec5fc); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
         }
 
-        .candy-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 2px solid #ffffff;
-            border-radius: 2rem;
-            box-shadow: 0 10px 20px rgba(255, 182, 193, 0.2);
+        /* 🎨 Quick Menu Style (ตามภาพที่คุณต้องการ) */
+        .btn-custom {
+            background: white;
+            border-radius: 50px; /* มนแบบแคปซูล */
+            padding: 12px 15px 12px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            position: relative;
         }
+        .btn-custom:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255, 182, 193, 0.3); }
+        
+        /* วงกลมไอคอนด้านขวา */
+        .icon-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .bg-blue-candy { background: #7db9f9; }
+        .bg-pink-candy { background: #f07ab0; }
 
-        /* 🍭 Loader รูปอมยิ้มหมุน */
-        #loader { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
-        .spinner { 
-            font-size: 50px;
-            animation: spin 2s linear infinite; 
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* 🎀 Badge แบบน่ารัก */
-        .badge-ribbon { 
-            position: absolute; top: 15px; right: -30px; width: 120px; 
-            text-align: center; transform: rotate(45deg); font-size: 11px; 
-            font-weight: bold; padding: 4px 0; color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 10;
-        }
+        /* Loader */
+        #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        .spinner { font-size: 50px; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
     </style>
 </head>
 <body class="grid-bg pb-20">
 
     <div id="loader"><div class="spinner">🍭</div></div>
 
-    <div id="popup-modal" style="display: none;" class="fixed inset-0 bg-pink-100/60 backdrop-blur-md z-[5000] flex justify-center items-center p-5">
-        <div class="candy-card w-full max-w-sm p-8 text-center animate-[popIn_0.3s_ease-out]">
-            <div class="w-20 h-20 bg-gradient-to-br from-pink-200 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl shadow-inner">🍭</div>
-            <h2 id="popup-title" class="text-2xl font-bold text-[#6a4c93] mb-2"></h2>
-            <p id="popup-desc" class="text-gray-500 text-sm mb-6"></p>
-            <button onclick="closePopup()" class="w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white py-3 rounded-2xl font-bold shadow-lg hover:scale-105 transition active:scale-95">เย้! ตกลง</button>
-        </div>
-    </div>
-
-    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/70 backdrop-blur-lg z-50 border-b border-pink-100">
-        <h1 class="text-2xl font-black tracking-tighter candy-gradient-text">CandyMarket.</h1>
-        <div id="auth-section" class="flex items-center gap-3"></div>
+    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
+        <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+        <div id="auth-section"></div>
     </header>
 
     <div class="mx-5 mt-6 mb-8">
-        <div id="main-banner" class="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[#a1c4fd] via-[#fbc2eb] to-[#ff9a9e] p-8 min-h-[220px] flex flex-col justify-center shadow-xl border-4 border-white">
-            <p class="text-sm font-bold text-white/90 drop-shadow-sm">🍭 บริการปล่อยเช่าเว็บ</p>
-            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-md leading-[1.1] mt-2 mb-1">CANDY<br>RENTAL</h3>
-            <p class="text-xs text-white/80 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
+        <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 min-h-[220px] flex flex-col justify-center shadow-xl border-4 border-white">
+            <p class="text-sm font-bold text-white drop-shadow-sm flex items-center gap-2">
+                <i class="fa-solid fa-lollipop"></i> บริการปล่อยเช่าเว็บ
+            </p>
+            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-tight mt-1">CANDY<br>RENTAL</h3>
+            <p class="text-xs text-white/90 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
             <div class="flex gap-2 mt-5">
-                <span class="text-[10px] bg-white/30 text-white px-4 py-1.5 rounded-full border border-white/50 backdrop-blur-md font-bold uppercase">Delicious</span>
-                <span class="text-[10px] bg-white/30 text-white px-4 py-1.5 rounded-full border border-white/50 backdrop-blur-md font-bold uppercase">Fast Delivery</span>
+                <span class="text-[10px] bg-white/40 text-white px-4 py-1.5 rounded-full font-bold backdrop-blur-sm">DELICIOUS</span>
+                <span class="text-[10px] bg-white/40 text-white px-4 py-1.5 rounded-full font-bold backdrop-blur-sm">FAST DELIVERY</span>
             </div>
-            <div class="absolute -bottom-5 -right-5 text-8xl opacity-20 transform -rotate-12">🍬</div>
         </div>
     </div>
 
     <div class="px-5 mb-8">
-        <div class="bg-white rounded-2xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm overflow-hidden">
-            <div class="bg-gradient-to-r from-pink-400 to-orange-300 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shrink-0">
-                <i class="fa-solid fa-candy-cane"></i> ข่าวสาร
+        <div class="bg-white/80 rounded-3xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm">
+            <div class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-bullhorn"></i> ข่าวสาร
             </div>
-            <marquee class="text-sm text-pink-400 font-medium" scrollamount="5" id="marquee-text">กำลังโหลดความหวาน...</marquee>
+            <marquee class="text-sm text-pink-400 font-bold" scrollamount="5" id="marquee-text">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่หวานที่สุด!</marquee>
         </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 px-5 mb-8">
-        <div class="candy-card p-5 relative overflow-hidden">
-            <p class="text-pink-300 text-[10px] font-black uppercase mb-1">ลูกค้าที่น่ารัก</p>
-            <h4 class="text-3xl font-black text-[#6a4c93]" id="stat-users">0</h4>
-            <i class="fa-solid fa-users absolute bottom-2 right-4 text-pink-50 text-4xl"></i>
-        </div>
-        <div class="candy-card p-5 relative overflow-hidden">
-            <p class="text-blue-300 text-[10px] font-black uppercase mb-1">ขนมในร้าน</p>
-            <h4 class="text-3xl font-black text-[#6a4c93]" id="stat-prods">0</h4>
-            <i class="fa-solid fa-box-open absolute bottom-2 right-4 text-blue-50 text-4xl"></i>
+    <div class="grid grid-cols-1 gap-4 px-5 mb-10">
+        <div class="flex gap-3">
+            <a href="admin-chat.html" class="btn-custom flex-1 group">
+                <div>
+                    <p class="text-[12px] text-[#7db9f9] font-black">แจ้งปัญหา</p>
+                    <h5 class="text-2xl font-black italic text-[#7db9f9] tracking-tighter">CHAT</h5>
+                </div>
+                <div class="icon-circle bg-blue-candy">
+                    <i class="fa-solid fa-comment-dots"></i>
+                </div>
+            </a>
+
+            <a href="guide.html" class="btn-custom flex-1 group">
+                <div>
+                    <p class="text-[12px] text-[#f07ab0] font-black">วิธีสั่งซื้อ</p>
+                    <h5 class="text-2xl font-black italic text-[#f07ab0] tracking-tighter">GUIDE</h5>
+                </div>
+                <div class="icon-circle bg-pink-candy">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+            </a>
         </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-3 px-5 mb-10">
-        <a href="admin-chat.html" class="candy-card p-4 flex items-center justify-between hover:scale-105 transition active:scale-95 border-blue-100">
-            <div>
-                <p class="text-[10px] text-blue-400 font-bold">แจ้งปัญหา</p>
-                <h5 class="text-xl font-black italic text-blue-500">CHAT</h5>
-            </div>
-            <div class="w-12 h-12 bg-blue-400 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-200">
-                <i class="fa-solid fa-comment-dots text-xl"></i>
-            </div>
-        </a>
-        <a href="guide.html" class="candy-card p-4 flex items-center justify-between hover:scale-105 transition active:scale-95 border-pink-100">
-            <div>
-                <p class="text-[10px] text-pink-400 font-bold">วิธีสั่งซื้อ</p>
-                <h5 class="text-xl font-black italic text-pink-500">GUIDE</h5>
-            </div>
-            <div class="w-12 h-12 bg-pink-400 rounded-full flex items-center justify-center text-white shadow-lg shadow-pink-200">
-                <i class="fa-solid fa-star text-xl"></i>
-            </div>
-        </a>
+    <div class="grid grid-cols-2 gap-4 px-5 mb-10">
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-pink-50 shadow-sm">
+            <p class="text-pink-300 text-[10px] font-black uppercase">ลูกค้าที่น่ารัก</p>
+            <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">0</h4>
+        </div>
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-blue-50 shadow-sm">
+            <p class="text-blue-300 text-[10px] font-black uppercase">ขนมในร้าน</p>
+            <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
+        </div>
     </div>
 
-    <div class="px-5 mb-10">
-        <h3 class="text-lg font-black text-[#6a4c93] mb-4 flex items-center gap-2">
-            <span class="text-2xl">🍬</span> เว็บไซต์แนะนำ
+    <div class="px-5">
+        <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2">
+            <i class="fa-solid fa-candy-cane text-pink-400"></i> รายการแนะนำ
         </h3>
-        <div class="grid grid-cols-2 gap-4" id="product-container">
-            </div>
+        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
     </div>
 
     <script type="module">
-        // Firebase Logic (เหมือนเดิมของคุณ แต่เปลี่ยนการแสดงผล HTML ในส่วน product)
+        // --- ส่วน Firebase (ใส่ Config เดิมของคุณได้เลย) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
@@ -149,44 +142,33 @@
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display = 'none', 500); }, 800); };
+        window.onload = () => { setTimeout(() => document.getElementById('loader').style.display='none', 800); };
 
         onAuthStateChanged(auth, (user) => {
             const authSection = document.getElementById('auth-section');
             if (user) {
-                const uid = user.uid;
-                authSection.innerHTML = `<a href="profile.html" class="candy-card px-4 py-2 text-sm font-bold flex items-center gap-2 border-pink-200 text-pink-500"><i class="fa-solid fa-circle-user text-lg"></i> UID: ${uid.substring(0,6)}</a>`;
+                authSection.innerHTML = `<a href="profile.html" class="bg-white border-2 border-pink-200 text-pink-500 px-4 py-2 rounded-full text-sm font-bold shadow-sm flex items-center gap-2"><i class="fa-solid fa-user-circle"></i> UID: ${user.uid.substring(0,6)}</a>`;
             } else {
-                authSection.innerHTML = `<a href="login.html" class="bg-gradient-to-r from-pink-400 to-purple-400 text-white px-5 py-2 rounded-full text-sm font-bold shadow-md hover:shadow-pink-200">เข้าสู่ระบบ</a>`;
+                authSection.innerHTML = `<a href="login.html" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-sm font-black shadow-md">เข้าสู่ระบบ</a>`;
             }
         });
 
-        // Update Stats & Announcement (เหมือนเดิม)
-        onValue(ref(db, 'stats'), snap => { const d = snap.val()||{}; document.getElementById('stat-users').innerText = d.users||0; document.getElementById('stat-prods').innerText = d.prods||0; });
-        onValue(ref(db, 'settings/announcement/marquee'), snap => { if(snap.exists()) document.getElementById('marquee-text').innerText = snap.val(); });
-
-        // Rendering Products ในสไตล์ Candy
+        // ดึงข้อมูลสินค้ามาแสดง (ปรับสไตล์การ์ดให้น่ารัก)
         onValue(ref(db, 'products'), snap => {
             const container = document.getElementById('product-container'); container.innerHTML = '';
             snap.forEach(child => {
                 const p = child.val();
-                let badgeColor = p.badge === 'best' ? 'bg-orange-400' : 'bg-blue-400';
-                let badgeText = p.badge === 'best' ? 'ขายดี 🍭' : 'แนะนำ ✨';
-
                 container.innerHTML += `
-                    <div class="candy-card p-3 flex flex-col hover:border-pink-300 transition-all relative overflow-hidden group">
-                        ${p.badge ? `<div class="badge-ribbon ${badgeColor}">${badgeText}</div>` : ''}
-                        <img src="${p.image}" class="rounded-2xl mb-3 w-full aspect-square object-cover border-2 border-pink-50 group-hover:scale-105 transition">
-                        <h4 class="font-bold text-sm mb-1 text-[#6a4c93] truncate">${p.name}</h4>
-                        <div class="mb-3">
-                            <span class="text-pink-500 font-black text-xl">฿${p.price}</span>
-                        </div>
-                        <a href="${p.demo||'#'}" target="_blank" class="w-full bg-pink-50 text-pink-500 text-center text-[11px] font-black py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition">
-                            <i class="fa-solid fa-eye mr-1"></i> ส่องตัวอย่าง
-                        </a>
+                    <div class="bg-white border-2 border-pink-50 rounded-[2rem] p-3 flex flex-col shadow-sm">
+                        <img src="${p.image}" class="rounded-[1.5rem] mb-3 aspect-square object-cover border-2 border-pink-50">
+                        <h4 class="font-bold text-sm text-gray-700 truncate">${p.name}</h4>
+                        <p class="text-pink-500 font-black text-xl mb-3">฿${p.price}</p>
+                        <a href="${p.demo||'#'}" class="bg-pink-50 text-pink-500 text-center text-xs font-black py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition">ดูตัวอย่าง</a>
                     </div>`;
             });
         });
+
+        onValue(ref(db, 'stats'), snap => { const d = snap.val()||{}; document.getElementById('stat-users').innerText = d.users||0; document.getElementById('stat-prods').innerText = d.prods||0; });
     </script>
 </body>
 </html>
