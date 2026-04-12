@@ -3,838 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peachweb-store - ร้านค้าเกม</title>
+    <title>candyMarket | ระบบเช่าเว็บไซต์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #0d0d0d;
-            --text-color: #f0f0f0;
-            --sub-text-color: #a0a0a0;
-            --card-bg: #1c1c1e;
-            --primary-accent: #ff7f50; /* สีพีช */
-            --secondary-accent: #c084fc; /* สีม่วงอ่อน */
-            --success-color: #4ade80; /* สีเขียวสำเร็จ */
-            --discount-color: #ef4444; /* สีแดงส่วนลด */
-            --border-color: #333333;
-            --font-family: 'Sarabun', 'Prompt', sans-serif;
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap');
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-family);
-            margin: 0;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* --- Header (Shared) --- */
-        header {
-            background-color: var(--bg-color);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .header-left .store-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary-accent);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-icon {
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--sub-text-color);
-        }
-
-        .header-icon:hover {
-            color: var(--text-color);
-        }
-
-        /* --- Main Content --- */
-        main {
-            padding-top: 60px; /* Adjust for fixed header */
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-            padding-bottom: 40px;
-        }
-
-        section {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .view-more {
-            background-color: #fff;
-            color: #000;
-            border: none;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        /* --- Hero Section (Page 1) --- */
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .hero-welcome {
-            text-align: center;
-            padding: 30px 0;
-        }
-
-        .hero-welcome h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .hero-welcome p {
-            color: var(--sub-text-color);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero-banner-main {
-            background: linear-gradient(135deg, rgba(30, 10, 50, 0.8) 0%, rgba(10, 30, 60, 0.8) 100%), url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop') center/cover;
-            height: 250px;
-            border-radius: 12px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
-        .hero-banner-main h2 {
-            font-size: 1.5rem;
-            color: #fff;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .hero-banner-main h2 span {
-            color: var(--primary-accent);
-        }
-
-        .btn-products {
-            background-color: #fff;
-            color: #000;
-            border: 1px solid #ccc;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* --- Banner & Icons (Page 2) --- */
-        .banner-icon-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .banner-icon-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            text-align: center;
-        }
-
-        .banner-icon {
-            font-size: 2.5rem;
-            color: var(--primary-accent);
-        }
-
-        .banner-text h3 {
-            margin: 0;
-            font-size: 1rem;
-        }
-
-        .banner-text p {
-            margin: 0;
-            font-size: 0.8rem;
-            color: var(--sub-text-color);
-        }
-
-        /* --- Notifications & Stats (Page 3) --- */
-        .notif-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .stat-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .stat-icon {
-            font-size: 1.8rem;
-            color: var(--secondary-accent);
-        }
-
-        .stat-content .stat-value {
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .stat-content .stat-label {
-            font-size: 0.8rem;
-            color: var(--sub-text-color);
-        }
-
-        /* --- Products (Page 4/5) --- */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .product-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.2s;
-            position: relative;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .best-seller-badge {
-            background-color: var(--discount-color);
-            color: #fff;
-            padding: 3px 8px;
-            font-size: 0.6rem;
-            font-weight: 600;
-            border-radius: 4px;
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            z-index: 10;
-        }
-
-        .product-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 10px;
-        }
-
-        .product-name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .product-status {
-            font-size: 0.7rem;
-            color: var(--sub-text-color);
-            margin-bottom: 8px;
-        }
-
-        .product-pricing {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 10px;
-        }
-
-        .product-price {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .product-price .original-price {
-            color: var(--sub-text-color);
-            text-decoration: line-through;
-            font-size: 0.75rem;
-            margin-left: 3px;
-        }
-
-        .btn-order {
-            background-color: #fff;
-            color: #000;
-            width: 100%;
-            border: none;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* --- Categories (Page 6) --- */
-        .category-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        .category-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-align: left;
-        }
-
-        .category-icon {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .category-text h3 {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-
-        .category-text p {
-            margin: 0;
-            font-size: 0.7rem;
-            color: var(--sub-text-color);
-        }
-
-        .category-meta {
-            margin-left: auto;
-            text-align: right;
-            font-size: 0.7rem;
-            color: var(--sub-text-color);
-        }
-
-        /* --- Order History (Page 7) --- */
-        .order-history {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .order-item {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .order-icon-box {
-            background-color: rgba(255,255,255,0.05);
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-        }
-
-        .order-icon {
-            font-size: 1.2rem;
-            color: var(--sub-text-color);
-        }
-
-        .order-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .order-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .order-price {
-            font-size: 0.75rem;
-            color: var(--secondary-accent);
-        }
-
-        .order-meta {
-            font-size: 0.7rem;
-            color: var(--sub-text-color);
-            text-align: right;
-        }
-
-        /* --- Login Prompt (Page 8) --- */
-        .login-prompt-section {
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding-bottom: 50px;
-        }
-
-        .login-box {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .login-box h2 {
-            margin: 0 0 5px 0;
-            font-size: 1.3rem;
-        }
-
-        .login-box p {
-            font-size: 0.8rem;
-            color: var(--sub-text-color);
-            margin: 0 0 20px 0;
-        }
-
-        .login-box-item {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            margin-bottom: 15px;
-        }
-
-        .login-box-item label {
-            font-size: 0.8rem;
-            color: var(--sub-text-color);
-            margin-bottom: 5px;
-        }
-
-        .login-box-item input {
-            background-color: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-        }
-
-        .login-meta-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-
-        .login-meta-actions a {
-            font-size: 0.75rem;
-            color: var(--sub-text-color);
-            text-decoration: none;
-        }
-
-        .login-meta-actions a:hover {
-            color: var(--text-color);
-        }
-
-        .btn-large-white {
-            background-color: #fff;
-            color: #000;
-            width: 100%;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .separator {
-            color: var(--sub-text-color);
-            font-size: 0.75rem;
-            margin: 0 0 20px 0;
-        }
-
-        .other-login-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .btn-other-login {
-            background-color: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .btn-other-login.discord {
-            color: #5865F2;
-        }
-
-        .signup-prompt {
-            font-size: 0.8rem;
-            color: var(--sub-text-color);
-        }
-
-        .signup-prompt a {
-            color: var(--secondary-accent);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        /* --- OTP Confirmation (Page 8 - Part) --- */
-        .otp-confirm-box {
-            background-color: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            margin: 30px auto 0;
-            text-align: center;
-        }
-
-        .otp-confirm-icon {
-            font-size: 2rem;
-            color: var(--secondary-accent);
-            margin-bottom: 10px;
-        }
-
-        .otp-confirm-text {
-            font-size: 0.85rem;
-            color: var(--sub-text-color);
-        }
-
-        /* --- Footer --- */
-        footer {
-            border-top: 1px solid var(--border-color);
-            padding: 30px 20px;
-            text-align: center;
-            color: var(--sub-text-color);
-            font-size: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        footer strong {
-            color: var(--text-color);
-        }
-
-        @media (min-width: 768px) {
-            .hero-welcome h1 { font-size: 2.2rem; }
-            .hero-banner-main h2 { font-size: 2rem; }
-            .banner-icon-grid { grid-template-columns: repeat(4, 1fr); }
-            .notif-stats { grid-template-columns: repeat(2, 1fr); }
-            .product-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-            .category-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        body { background-color: #0d0d0f; font-family: 'Kanit', sans-serif; color: white; }
+        .grid-bg { background-image: radial-gradient(#222 1px, transparent 1px); background-size: 20px 20px; }
+        .peach-text { background: linear-gradient(to right, #ff9a9e, #fecfef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .badge-ribbon { position: absolute; top: 10px; right: -30px; width: 120px; text-align: center; transform: rotate(45deg); font-size: 10px; font-weight: bold; padding: 4px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10;}
+        
+        /* 🌀 New Loader (หน้าหมุนๆ) */
+        #loader { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
+        .spinner { width: 60px; height: 60px; border: 5px solid rgba(223,79,141,0.3); border-top-color: #df4f8d; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 📢 Popup Modal (หน้าต่างประกาศ) */
+        #popup-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 5000; justify-content: center; align-items: center; padding: 20px; }
+        .popup-content { background: #111; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 400px; padding: 30px; border-radius: 2rem; text-align: center; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: popIn 0.3s ease-out; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
-<body>
+<body class="grid-bg pb-20">
 
-<header>
-    <div class="header-left">
-        <span class="store-name">Peachweb-store</span>
+    <div id="loader"><div class="spinner"></div></div>
+
+    <div id="popup-modal">
+        <div class="popup-content">
+            <div class="w-16 h-16 bg-[#1a1a1c] border border-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-[0_0_20px_rgba(223,79,141,0.3)]">🍑</div>
+            <h2 id="popup-title" class="text-xl font-bold text-white mb-2 leading-tight"></h2>
+            <p id="popup-desc" class="text-gray-400 text-sm mb-6 leading-relaxed whitespace-pre-line"></p>
+            <button onclick="closePopup()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition active:scale-95">รับทราบ / ปิด</button>
+        </div>
     </div>
-    <div class="header-right">
-        <span class="header-icon">🔍</span>
-        <span class="header-icon">☀️</span>
-        <span class="header-icon">👤</span>
+
+    <header class="flex justify-between items-center px-5 py-4 sticky top-0 bg-[#0d0d0f]/90 backdrop-blur-md z-50 border-b border-white/5">
+        <h1 class="text-xl font-black tracking-tight peach-text">Peachweb.</h1>
+        <div id="auth-section" class="flex items-center gap-3"></div>
+    </header>
+
+    <div class="mx-5 mt-6 mb-8">
+        <div id="main-banner" class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1c122b] via-[#2d1135] to-[#4a1538] border border-white/10 p-8 min-h-[220px] flex flex-col justify-center shadow-[0_0_30px_rgba(255,105,180,0.1)]">
+            <p class="text-sm font-medium opacity-90 tracking-wide text-gray-300">เปิดร้านค้าออนไลน์</p>
+            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-[1.1] mt-2 mb-1">"RENTAL<br>SYSTEM"</h3>
+            <p class="text-[10px] text-gray-400 mt-2 tracking-wide">สวย จบ ครบ พร้อมทำเงินได้ทันที</p>
+            <div class="flex gap-2 mt-5">
+                <span class="text-[9px] bg-pink-500/30 text-white px-4 py-1.5 rounded-lg border border-pink-500/50 uppercase font-bold tracking-wider backdrop-blur-md">Premium</span>
+                <span class="text-[9px] bg-indigo-500/30 text-white px-4 py-1.5 rounded-lg border border-indigo-500/50 uppercase font-bold tracking-wider backdrop-blur-md">Fast Support</span>
+            </div>
+        </div>
     </div>
-</header>
 
-<main>
-    <section class="hero" id="home">
-        <div class="hero-welcome">
-            <h1>ยินดีต้อนรับสู่ร้าน Peachweb-store</h1>
-            <p>Peachweb - ร้านขายบัญชีเกมส์ออฟไลน์ Steam ราคาถูก เล่นได้ 100% มีรับประกัน! ติดต่อแอดมินได้ที่เพจ Peachweb แพลตฟอร์มจำหน่ายเกม Steam ราคาถูก | แอดมินบริการเวลา 13.00-00.00 น.</p>
-            <button class="btn-products">🛍️ เลือกดูสินค้า</button>
+    <div class="px-5 mb-8">
+        <div class="bg-[#111113] rounded-2xl p-2 flex items-center gap-4 overflow-hidden border border-white/5">
+            <div class="bg-pink-500 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shrink-0"><i class="fa-solid fa-bullhorn"></i> อัปเดต</div>
+            <div class="flex gap-6 text-sm text-gray-400 whitespace-nowrap overflow-hidden"><marquee scrollamount="5" id="marquee-text">กำลังโหลดประกาศ...</marquee></div>
         </div>
-        <div class="hero-banner-main">
-            <h2>บริการจำหน่าย <span>“STEAM OFFLINE”</span></h2>
-        </div>
-    </section>
+    </div>
 
-    <section class="banners" id="services">
-        <div class="banner-icon-grid">
-            <div class="banner-icon-card">
-                <span class="banner-icon">💬</span>
-                <div class="banner-text">
-                    <h3>ADMIN</h3>
-                    <p>CLICK -&gt;</p>
-                </div>
-            </div>
-            <div class="banner-icon-card">
-                <span class="banner-icon">💰</span>
-                <div class="banner-text">
-                    <h3>TOPUP</h3>
-                    <p>CLICK -&gt;</p>
-                </div>
-            </div>
-            <div class="banner-icon-card">
-                <span class="banner-icon">📜</span>
-                <div class="banner-text">
-                    <h3>MANUAL</h3>
-                    <p>CLICK -&gt;</p>
-                </div>
-            </div>
-            <div class="banner-icon-card">
-                <span class="banner-icon">🛒</span>
-                <div class="banner-text">
-                    <h3>SHOP</h3>
-                    <p>CLICK -&gt;</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="grid grid-cols-2 gap-4 px-5 mb-8">
+        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">ผู้ใช้ทั้งหมด</p><h4 class="text-3xl font-black" id="stat-users">0</h4></div>
+        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">สินค้าทั้งหมด</p><h4 class="text-3xl font-black" id="stat-prods">0</h4></div>
+        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">หมวดหมู่</p><h4 class="text-3xl font-black" id="stat-cats">0</h4></div>
+        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">รายการสำเร็จ</p><h4 class="text-3xl font-black" id="stat-sold">0</h4></div>
+    </div>
 
-    <section class="stats" id="info">
-        <div class="notif-stats">
-            <div class="stat-card">
-                <span class="stat-icon">👥</span>
-                <div class="stat-content">
-                    <span class="stat-value">212</span>
-                    <span class="stat-label">ผู้ใช้ทั้งหมด</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-icon">🛍️</span>
-                <div class="stat-content">
-                    <span class="stat-value">239</span>
-                    <span class="stat-label">สินค้าทั้งหมด</span>
-                </div>
-            </div>
-        </div>
-        <div style="background-color: var(--card-bg); border-radius: 8px; padding: 10px; margin-top: 15px; border: 1px solid var(--border-color);">
-            📣 <span style="color: var(--sub-text-color); font-size: 0.8rem; margin-left: 10px;">ข่าวด่วน: อัปเดตสินค้าใหม่วันนี้! เช็คหน้าสินค้าแนะนำได้เลย...</span>
-        </div>
-    </section>
+    <div class="grid grid-cols-2 gap-3 px-5 mb-10">
+        <a href="admin-chat.html" class="bg-[#111113] p-4 rounded-2xl flex items-center justify-between border border-white/5 hover:bg-[#1a1a1c] transition">
+            <div class="relative z-10 w-full"><p class="text-[10px] text-gray-500 font-medium">ติดต่อแจ้งปัญหา</p><h5 class="text-2xl font-black italic tracking-tight text-white mt-0.5">CHAT</h5><p class="text-[9px] text-gray-400 mt-1 font-medium">ทักแชทหาแอด →</p></div>
+            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-black shadow-[0_0_15px_rgba(255,255,255,0.1)] relative z-10 shrink-0"><i class="fa-solid fa-headset text-xl"></i></div>
+        </a>
+        <a href="guide.html" class="bg-[#111113] p-4 rounded-2xl flex items-center justify-between border border-white/5 hover:bg-[#1a1a1c] transition">
+            <div class="relative z-10 w-full"><p class="text-[10px] text-gray-500 font-medium">วิธีสั่งซื้อ</p><h5 class="text-2xl font-black italic tracking-tight text-white mt-0.5">GUIDE</h5><p class="text-[9px] text-gray-400 mt-1 font-medium">ดูขั้นตอน →</p></div>
+            <div class="w-14 h-14 bg-[#df4f8d] rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(223,79,141,0.5)] relative z-10 shrink-0"><i class="fa-solid fa-book-open text-xl"></i></div>
+        </a>
+    </div>
 
-    <section class="recommended-products" id="products">
-        <div class="section-header">
-            <span class="section-title">สินค้าแนะนำ</span>
-            <button class="view-more">ดูเพิ่มเติม ❯</button>
-        </div>
-        <div class="product-grid">
-            <div class="product-card">
-                <span class="best-seller-badge">Best Seller</span>
-                <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=600" alt="Ghost of Tsushima" class="product-img">
-                <div class="product-info">
-                    <div class="product-name">Ghost of Tsushima</div>
-                    <div class="product-status">สินค้าคงเหลือ 16 ชิ้น</div>
-                    <div class="product-pricing">
-                        <span class="product-price">฿40.00</span>
-                        <span style="font-size: 0.6rem; background-color: var(--success-color); color: #000; padding: 2px 5px; border-radius: 4px;">พร้อมขาย</span>
-                    </div>
-                    <button class="btn-order">สั่งซื้อสินค้า</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <span class="best-seller-badge">Best Seller</span>
-                <img src="https://images.unsplash.com/photo-1627409217646-6085a690e54d?q=80&w=600" alt="Marvel's Spider-Man 2" class="product-img">
-                <div class="product-info">
-                    <div class="product-name">Marvel's Spider-Man 2</div>
-                    <div class="product-status">สินค้าคงเหลือ 7 ชิ้น</div>
-                    <div class="product-pricing">
-                        <span class="product-price">฿797.29 <span class="original-price">฿999.00</span></span>
-                        <span style="font-size: 0.6rem; background-color: var(--success-color); color: #000; padding: 2px 5px; border-radius: 4px;">พร้อมขาย</span>
-                    </div>
-                    <button class="btn-order">สั่งซื้อสินค้า</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1623126889224-8b63e63994ac?q=80&w=600" alt="Khazan" class="product-img">
-                <div class="product-info">
-                    <div class="product-name">The First Berserker: Khazan</div>
-                    <div class="product-status">สั่งซื้อล่วงหน้า</div>
-                    <div class="product-pricing">
-                        <span class="product-price">TBA</span>
-                        <span style="font-size: 0.6rem; background-color: var(--sub-text-color); color: #000; padding: 2px 5px; border-radius: 4px;">Pre-Order</span>
-                    </div>
-                    <button class="btn-order" disabled style="opacity: 0.5;">Coming Soon</button>
-                </div>
-            </div>
-             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1613946069412-38f7f1ff0b65?q=80&w=600" alt="Dying Light" class="product-img">
-                <div class="product-info">
-                    <div class="product-name">Dying Light: The Beast</div>
-                    <div class="product-status">สินค้าคงเหลือ 8 ชิ้น</div>
-                    <div class="product-pricing">
-                        <span class="product-price">฿89.00</span>
-                        <span style="font-size: 0.6rem; background-color: var(--success-color); color: #000; padding: 2px 5px; border-radius: 4px;">พร้อมขาย</span>
-                    </div>
-                    <button class="btn-order">สั่งซื้อสินค้า</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="px-5 mb-10">
+        <h3 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-lock text-sm text-pink-400"></i> รายการเว็บไซต์แนะนำ</h3>
+        <div class="grid grid-cols-2 gap-3" id="product-container"><div class="text-xs text-gray-500 w-full">กำลังโหลดข้อมูลสินค้า...</div></div>
+    </div>
 
-    <section class="categories" id="categories">
-        <div class="section-header">
-            <span class="section-title">หมวดหมู่แนะนำ</span>
-            <button class="view-more">ดูเพิ่มเติม ❯</button>
-        </div>
-        <div class="category-grid">
-            <div class="category-card">
-                <img src="https://img.icons8.com/wired/64/FFFFFF/steam-circled.png" alt="Steam Logo" class="category-icon">
-                <div class="category-text">
-                    <h3>Steam Offline</h3>
-                    <p>สินค้าทั้งหมด 239 รายการ</p>
-                </div>
-                <div class="category-meta">10.00 - 999.99</div>
-            </div>
-            <div class="category-card">
-                <img src="https://img.icons8.com/wired/64/FFFFFF/xbox.png" alt="Xbox Logo" class="category-icon">
-                <div class="category-text">
-                    <h3>Xbox Game Pass</h3>
-                    <p>สินค้าทั้งหมด 15 รายการ</p>
-                </div>
-                <div class="category-meta">50.00 - 500.00</div>
-            </div>
-        </div>
-    </section>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        
+        const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-    <section class="order-history" id="orders">
-        <div class="section-header">
-            <span class="section-title">รายการสั่งซื้อล่าสุด</span>
-            <button class="view-more">ดูเพิ่มเติม ❯</button>
-        </div>
-        <div class="order-history-list">
-            <div class="order-item">
-                <div class="order-icon-box">
-                    <span class="order-icon">📄</span>
-                </div>
-                <div class="order-details">
-                    <span class="order-name">God of War Ragnarok - สั่งซื้อ</span>
-                    <span class="order-price">ราคา 69.00 บาท</span>
-                </div>
-                <div class="order-meta">
-                    05/02/2569 18:16:15
-                </div>
-            </div>
-             <div class="order-item">
-                <div class="order-icon-box">
-                    <span class="order-icon">📄</span>
-                </div>
-                <div class="order-details">
-                    <span class="order-name">Dying Light: The Beast - สั่งซื้อ</span>
-                    <span class="order-price">ราคา 89.00 บาท</span>
-                </div>
-                <div class="order-meta">
-                    05/02/2569 17:05:10
-                </div>
-            </div>
-        </div>
-    </section>
+        // ปิด Loader
+        window.onload = () => { setTimeout(() => document.getElementById('loader').style.opacity = '0', 500); setTimeout(() => document.getElementById('loader').style.display = 'none', 1000); };
 
-    <section class="login-prompt-section" id="login">
-        <div class="login-box">
-            <h2>เข้าสู่ระบบ</h2>
-            <p>กรุณาเข้าสู่ระบบเพื่อใช้งานต่อ</p>
-            <form>
-                <div class="login-box-item">
-                    <label>ชื่อผู้ใช้ หรือ อีเมล</label>
-                    <input type="text" placeholder="username หรือ user@gmail.com">
-                </div>
-                <div class="login-box-item">
-                    <label>รหัสผ่าน</label>
-                    <input type="password" placeholder="password">
-                </div>
-                <div class="login-meta-actions">
-                    <a href="#">ลืมรหัสผ่าน?</a>
-                </div>
-                <button type="submit" class="btn-large-white">🛡️ เข้าสู่ระบบ</button>
-            </form>
-            <div class="separator">หรือ</div>
-            <div class="other-login-options">
-                <button class="btn-other-login discord">🌐 Discord</button>
-                <button class="btn-other-login">🔍 Google</button>
-            </div>
-            <div class="signup-prompt">
-                ยังไม่มีบัญชี? <a href="#">สมัครสมาชิก</a>
-            </div>
-        </div>
+        onAuthStateChanged(auth, (user) => {
+            const authSection = document.getElementById('auth-section');
+            if (user) {
+                const uid = user.uid; const username = user.email.split('@')[0].toLowerCase();
+                let userAvatar = "https://ui-avatars.com/api/?name=User&background=1a1a1c&color=fff";
+                onValue(ref(db, `users/${uid}/avatar`), snap => { 
+                    if(snap.exists()) userAvatar = snap.val(); 
+                    onValue(ref(db, 'admins/' + username), (adminSnap) => {
+                        const isAdmin = username === 'adminpeach' || adminSnap.exists();
+                        let adminLabel = isAdmin ? `<span class="bg-yellow-500 text-black text-[9px] font-black px-2 py-0.5 rounded-md mr-1">ADMIN</span>` : '';
+                        let adminLink = isAdmin ? `<a href="admin.html" class="text-[10px] text-gray-400 hover:text-white underline decoration-pink-500 underline-offset-4 mr-1">เข้าหลังบ้าน</a>` : '';
+                        authSection.innerHTML = `${adminLink}<a href="profile.html" class="bg-[#1a1a1c] border border-pink-500/50 text-white px-3 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(255,105,180,0.2)]"><img src="${userAvatar}" class="w-6 h-6 rounded-full object-cover border border-white/20"> <div>${adminLabel} UID: ${uid.substring(0,6)}..</div></a>`;
+                    }, {onlyOnce: true});
+                });
+            } else {
+                authSection.innerHTML = `<a href="login.html" class="bg-[#1a1a1c] border border-pink-500/50 text-white px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(255,105,180,0.2)]"><span class="text-lg">🍑</span> เข้าสู่ระบบ</a>`;
+            }
+        });
 
-        <div class="otp-confirm-box">
-            <span class="otp-confirm-icon">🛡️</span>
-            <p class="otp-confirm-text">รอการยืนยันความปลอดภัย... <br> กรุณาตรวจสอบอีเมลหรือรหัส OTP</p>
-        </div>
-    </section>
+        // 🟢 โหลด Popup และแสดงผลทันที (ถ้าเปิดใช้งาน)
+        onValue(ref(db, 'settings/popup'), snap => {
+            const data = snap.val();
+            if(data && data.isActive && !sessionStorage.getItem('popupShown')) {
+                document.getElementById('popup-title').innerText = data.title;
+                document.getElementById('popup-desc').innerText = data.desc;
+                document.getElementById('popup-modal').style.display = 'flex';
+            }
+        });
+        window.closePopup = () => { document.getElementById('popup-modal').style.display = 'none'; sessionStorage.setItem('popupShown', 'true'); }
 
-</main>
-
-<footer>
-    <div>Peachweb-store Powered by <strong>4TUNEZ - STUDIO</strong> Copyright 2025</div>
-    <div style="font-size: 0.7rem; color: #666;">อยากมีเว็บไซต์จำหน่ายสินค้าแบบนี้? <a href="#" style="color: #666; text-decoration: underline;">คลิกเลยที่นี่!</a></div>
-</footer>
-
+        onValue(ref(db, 'stats'), snap => { const d = snap.val()||{}; document.getElementById('stat-users').innerText = d.users||0; document.getElementById('stat-cats').innerText = d.cats||0; document.getElementById('stat-prods').innerText = d.prods||0; document.getElementById('stat-sold').innerText = d.sold||0; });
+        onValue(ref(db, 'settings/announcement/marquee'), snap => { if(snap.exists()) document.getElementById('marquee-text').innerText = snap.val(); });
+        
+        onValue(ref(db, 'products'), snap => {
+            const container = document.getElementById('product-container'); container.innerHTML = '';
+            if(!snap.exists()) { container.innerHTML = `<div class="text-gray-500 text-xs w-full">ยังไม่มีสินค้าในระบบค่ะ</div>`; return; }
+            snap.forEach(child => {
+                const p = child.val(); const id = child.key;
+                let badgeHtml = p.badge === 'best' ? `<div class="badge-ribbon bg-red-500 text-white">Best Seller</div>` : (p.badge === 'recommend' ? `<div class="badge-ribbon bg-blue-500 text-white">สินค้าแนะนำ</div>` : '');
+                
+                container.innerHTML += `
+                    <div class="bg-[#111113] border border-white/5 rounded-2xl p-3 flex flex-col hover:border-pink-500/30 transition relative overflow-hidden">
+                        ${badgeHtml}
+                        <img src="${p.image||'https://via.placeholder.com/400x250'}" class="rounded-xl mb-3 w-full object-cover aspect-video border border-white/5">
+                        <h4 class="font-bold text-sm mb-1 text-white truncate">${p.name}</h4>
+                        <div class="flex items-baseline gap-2 mb-3 mt-auto">
+                            <span class="text-cyan-400 font-black text-xl">฿${p.price}</span>
+                            ${p.oldPrice?`<span class="text-[10px] text-gray-500 line-through">฿${p.oldPrice}</span>`:''}
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="${p.demo||'#'}" target="_blank" class="w-full bg-[#1a1a1c] border border-white/10 text-white text-center text-xs font-bold py-3 rounded-xl hover:bg-white/10 transition hover:border-white/30">
+                                <i class="fa-solid fa-desktop mr-1"></i> ดูตัวอย่าง / ทดลอง
+                            </a>
+                        </div>
+                    </div>`;
+            });
+        });
+    </script>
 </body>
 </html>
