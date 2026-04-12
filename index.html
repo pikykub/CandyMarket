@@ -6,96 +6,76 @@
     <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background-color: #fff5f7; font-family: 'Kanit', sans-serif; color: #5a5a5a; overflow-x: hidden; }
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Modal Overlays */
+        /* 🎀 Modal Logic */
         .contact-overlay {
             position: fixed; inset: 0; background: rgba(30, 41, 59, 0.4);
-            backdrop-blur: 5px; z-index: 10005; display: none; align-items: flex-start; justify-content: center; overflow: hidden;
+            backdrop-blur: 5px; z-index: 10005; display: none; align-items: flex-start; justify-content: center;
         }
-        
-        /* Chibi Pull Animation ( Simplified without Chibi image ) */
         #pull-container {
             transform: translateY(-150%);
-            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        #pull-container.active {
-            transform: translateY(0);
-        }
-
-        .contact-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            border-radius: 20px; margin-bottom: 12px; transition: 0.3s; border: 2px solid #fff5f7;
-        }
-        .contact-item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(240, 122, 176, 0.1); }
+        #pull-container.active { transform: translateY(0); }
 
         /* Existing Styles */
-        #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-blur: 4px; z-index: 10000; display: none; align-items: center; justify-content: center; }
+        #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
         .cookie-spin { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
-        #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: white; border-radius: 25px; padding: 15px 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 3px solid #fff; z-index: 10001; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 15px; }
-        #candy-toast.show { transform: translateX(-50%) translateY(0); }
-        .toast-icon { width: 45px; height: 45px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-        
-        .btn-custom { background: white; border-radius: 50px; padding: 12px 10px 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2); border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.3s ease; position: relative; }
-        .icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; flex-shrink: 0; }
-        .bg-blue-candy { background: #7db9f9; } .bg-pink-candy { background: #f07ab0; }
-        
-        #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
-        .auth-overlay { position: fixed; inset: 0; background: rgba(255, 245, 247, 0.9); backdrop-blur: 8px; z-index: 100; display: none; align-items: center; justify-content: center; }
-        .auth-card { background: white; width: 90%; max-width: 400px; padding: 40px 30px; border-radius: 3rem; border: 4px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.15); }
-        .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; background: #fffafa; margin-bottom: 15px; outline: none; }
-        
-        .control-panel { position: absolute; top: 70px; right: 20px; width: 220px; background: white; border-radius: 2rem; padding: 15px; box-shadow: 0 15px 30px rgba(240, 122, 176, 0.2); border: 3px solid #fff; display: none; z-index: 100; }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 15px; font-family: 'Itim', cursive; cursor: pointer; transition: 0.2s; }
-        .menu-item:hover { background: #fff0f3; }
+
+        .btn-custom { background: white; border-radius: 50px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2); border: 2px solid rgba(255, 255, 255, 0.8); transition: 0.3s; }
+        .icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; }
     </style>
 </head>
 <body class="grid-bg pb-20">
 
-    <div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
-    <div id="candy-toast">
-        <div id="toast-icon-bg" class="toast-icon"><i id="toast-i" class="fa-solid"></i></div>
-        <div><h4 id="toast-title" class="font-black text-sm text-gray-700"></h4><p id="toast-msg" class="text-xs text-gray-500 font-medium"></p></div>
-    </div>
     <div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
 
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
         <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
-        <div id="auth-section" class="relative"></div>
-        <div id="user-panel" class="control-panel">
-            <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-user-gear"></i></div><span>จัดการโปรไฟล์</span></div>
-            <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-500 flex items-center justify-center"><i class="fa-solid fa-desktop"></i></div><span>สถานะเว็บ</span></div>
-            <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-yellow-100 text-yellow-500 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div><span>เติมเงิน</span></div>
-            <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-500 flex items-center justify-center"><i class="fa-solid fa-clock-rotate-left"></i></div><span>ประวัติการเช่า</span></div>
-            <hr class="my-2 border-pink-50">
-            <div class="menu-item text-red-400"><div class="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center"><i class="fa-solid fa-circle-exclamation"></i></div><span>ติดต่อด่วน</span></div>
-            <button onclick="handleLogout()" class="w-full mt-2 py-2 text-[10px] font-black text-gray-400 uppercase">Logout</button>
+        <div id="auth-section">
+            <button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-sm font-black shadow-md">เข้าสู่ระบบ</button>
         </div>
     </header>
-
-    <div id="auth-modal" class="auth-overlay">
-        <div class="auth-card">
-            <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text italic uppercase">Sign In</h2>
-            <input type="text" id="user-input" class="auth-input" placeholder="Username...">
-            <input type="password" id="pass-input" class="auth-input" placeholder="Password...">
-            <button id="auth-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg">ตกลง</button>
-            <p id="toggle-auth" class="text-center mt-5 text-sm text-pink-400 font-bold cursor-pointer">ยังไม่มีบัญชี? สมัครที่นี่นะ</p>
-            <button onclick="closeAuth()" class="block mx-auto mt-4 text-gray-400 text-xs font-bold uppercase">Maybe Later</button>
-        </div>
-    </div>
 
     <div class="mx-5 mt-6 mb-4">
         <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 min-h-[220px] flex flex-col justify-center shadow-xl border-4 border-white">
             <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-tight">CANDY<br>RENTAL</h3>
             <p class="text-xs text-white/90 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
         </div>
+    </div>
+
+    <div class="px-5 mb-6">
+        <div class="bg-white/80 rounded-3xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm">
+            <div class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2 rounded-2xl font-bold text-[10px] shrink-0 italic underline">ANNOUNCEMENT</div>
+            <marquee class="text-sm text-pink-400 font-bold" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่สดใสที่สุดในโลก! โปรโมชั่นเดือนนี้ลดราคาพิเศษนะคะ</marquee>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 px-5 mb-8">
+        <button onclick="openContact()" class="btn-custom">
+            <div class="text-[#7db9f9] text-left">
+                <p class="text-[10px] font-black uppercase">แจ้งปัญหา</p>
+                <h5 class="text-2xl font-black italic tracking-tighter leading-none">CHAT</h5>
+            </div>
+            <div class="icon-circle bg-[#7db9f9] shadow-lg shadow-blue-200">
+                <i class="fa-solid fa-comment-dots"></i>
+            </div>
+        </button>
+        <button class="btn-custom">
+            <div class="text-[#f07ab0] text-left">
+                <p class="text-[10px] font-black uppercase">วิธีสั่งซื้อ</p>
+                <h5 class="text-2xl font-black italic tracking-tighter leading-none">GUIDE</h5>
+            </div>
+            <div class="icon-circle bg-[#f07ab0] shadow-lg shadow-pink-200">
+                <i class="fa-solid fa-star"></i>
+            </div>
+        </button>
     </div>
 
     <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
@@ -111,167 +91,61 @@
 
     <div class="px-5">
         <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
-        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 px-5 mb-10">
-        <button onclick="openContact()" class="btn-custom flex-1">
-            <div class="text-[#7db9f9] text-left">
-                <p class="text-[10px] font-black uppercase">แจ้งปัญหา</p>
-                <h5 class="text-2xl font-black italic tracking-tighter leading-none">CHAT</h5>
+        <div class="grid grid-cols-2 gap-4" id="product-container">
             </div>
-            <div class="icon-circle bg-blue-candy shadow-lg shadow-blue-200">
-                <i class="fa-solid fa-comment-dots"></i>
-            </div>
-        </button>
-        <a href="#" class="btn-custom flex-1 text-left">
-            <div class="text-[#f07ab0]">
-                <p class="text-[10px] font-black uppercase">วิธีสั่งซื้อ</p>
-                <h5 class="text-2xl font-black italic tracking-tighter leading-none">GUIDE</h5>
-            </div>
-            <div class="icon-circle bg-pink-candy shadow-lg shadow-pink-200">
-                <i class="fa-solid fa-star"></i>
-            </div>
-        </a>
     </div>
 
     <div id="contact-modal" class="contact-overlay" onclick="closeContact()">
-        <div id="pull-container" class="relative flex flex-col items-center w-full max-w-sm mt-0" onclick="event.stopPropagation()">
-            
-            <div class="bg-[#fff9f9] w-[90%] rounded-[2rem] border-4 border-[#ffd1dc] shadow-2xl p-6 relative z-10 mt-10"> 
-                <div class="text-center mb-5 mt-6">
-                    <h3 class="text-2xl font-black text-[#ff8da1] italic">CONTACT US</h3>
+        <div id="pull-container" class="relative flex flex-col items-center w-full max-w-sm" onclick="event.stopPropagation()">
+            <div class="bg-white w-[90%] rounded-[3rem] border-4 border-[#ffd1dc] shadow-2xl p-8 mt-20"> 
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-pink-100">
+                        <i class="fa-solid fa-heart-pulse text-pink-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-gray-700 italic uppercase">Contact Us</h3>
                     <p class="text-[10px] text-gray-400 font-bold uppercase">เลือกช่องทางที่สะดวกได้เลยค่ะ</p>
                 </div>
                 
-                <a href="https://www.facebook.com/share/1KVCB1cc5c/?mibextid=wwXIfr" target="_blank" class="flex items-center p-3 mb-3 bg-blue-50 rounded-2xl hover:bg-blue-100 transition border-2 border-blue-100">
-                    <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl mr-3">
+                <a href="#" class="flex items-center p-4 mb-3 bg-blue-50 rounded-3xl border-2 border-blue-100 transition hover:scale-105">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-xl mr-4 shadow-md">
                         <i class="fa-brands fa-facebook-f"></i>
                     </div>
                     <div><h4 class="font-black text-blue-600">Facebook Page</h4><p class="text-[10px] text-blue-400 font-bold">ติดต่อผ่านหน้าเพจโดยตรง</p></div>
                 </a>
                 
-                <a href="https://lin.ee/YdAzm8t" target="_blank" class="flex items-center p-3 mb-5 bg-green-50 rounded-2xl hover:bg-green-100 transition border-2 border-green-100">
-                    <div class="w-12 h-12 rounded-xl bg-green-500 text-white flex items-center justify-center text-xl mr-3">
+                <a href="#" class="flex items-center p-4 mb-8 bg-green-50 rounded-3xl border-2 border-green-100 transition hover:scale-105">
+                    <div class="w-12 h-12 rounded-2xl bg-green-500 text-white flex items-center justify-center text-xl mr-4 shadow-md">
                         <i class="fa-brands fa-line"></i>
                     </div>
                     <div><h4 class="font-black text-green-600">Line Official</h4><p class="text-[10px] text-green-400 font-bold">แชทผ่านไลน์กับแอดมิน</p></div>
                 </a>
                 
-                <button onclick="closeContact()" class="w-full py-3 rounded-2xl bg-[#ffe4e9] text-[#ff8da1] font-black text-xs uppercase tracking-widest hover:bg-[#ffcdd6] transition">
-                    ดันป้ายเก็บขึ้นไป
+                <button onclick="closeContact()" class="w-full py-4 rounded-2xl bg-gray-100 text-gray-400 font-black text-xs uppercase tracking-widest hover:bg-gray-200 transition">
+                    Close
                 </button>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-        
-        const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
-        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
-
-        // Chibi Contact Logic ( Simplified )
+    <script>
         window.openContact = () => {
-            const modal = document.getElementById('contact-modal');
-            const container = document.getElementById('pull-container');
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                container.classList.add('active'); // ป้ายไหลลงมา
-            }, 50);
+            const m = document.getElementById('contact-modal');
+            const c = document.getElementById('pull-container');
+            m.style.display = 'flex';
+            setTimeout(() => c.classList.add('active'), 50);
         };
-
         window.closeContact = () => {
-            const modal = document.getElementById('contact-modal');
-            const container = document.getElementById('pull-container');
-            container.classList.remove('active'); // ดันป้ายกลับขึ้นไป
-            setTimeout(() => { modal.style.display = 'none'; }, 700);
+            const m = document.getElementById('contact-modal');
+            const c = document.getElementById('pull-container');
+            c.classList.remove('active');
+            setTimeout(() => m.style.display = 'none', 600);
         };
-
-        const candyIcons = ["fa-lollipop", "fa-ice-cream", "fa-cookie", "fa-lemon", "fa-candy-cane"];
-        window.showCandyAlert = (title, msg, type = 'success') => {
-            const toast = document.getElementById('candy-toast');
-            document.getElementById('toast-title').innerText = title;
-            document.getElementById('toast-msg').innerText = msg;
-            document.getElementById('toast-icon-bg').className = type === 'success' ? "toast-icon bg-green-100 text-green-500" : "toast-icon bg-red-100 text-red-500";
-            document.getElementById('toast-i').className = type === 'success' ? "fa-solid fa-check-circle" : "fa-solid fa-circle-exclamation";
-            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
+        window.onload = () => {
+            setTimeout(() => { 
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display='none', 500);
+            }, 800);
         };
-        window.openAuth = () => document.getElementById('auth-modal').style.display = 'flex';
-        window.closeAuth = () => document.getElementById('auth-modal').style.display = 'none';
-        window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
-        window.handleLogout = () => { localStorage.removeItem('isAdmin'); signOut(auth); window.location.reload(); };
-
-        let isLoginMode = true;
-        document.getElementById('toggle-auth').onclick = () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('auth-title').innerText = isLoginMode ? "Sign In" : "Register";
-            document.getElementById('toggle-auth').innerText = isLoginMode ? "ยังไม่มีบัญชี? สมัครที่นี่นะ" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
-        };
-
-        document.getElementById('auth-btn').onclick = async () => {
-            const user = document.getElementById('user-input').value.trim();
-            const pass = document.getElementById('pass-input').value.trim();
-            if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
-            document.getElementById('process-loader').style.display = 'flex';
-            if (user === "AdminPeach" && pass === "khaohom1554") {
-                setTimeout(() => {
-                    document.getElementById('process-loader').style.display = 'none';
-                    localStorage.setItem('isAdmin', 'true');
-                    showCandyAlert("สวัสดีค่ะคุณลูกพีช!", "แอดมินเข้าชมหน้าบ้านได้เลยนะคะ");
-                    closeAuth(); updateUI(true);
-                }, 800);
-                return;
-            }
-            try {
-                const email = `${user}@candymarket.com`;
-                if(isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                    showCandyAlert("สำเร็จ!", "ยินดีต้อนรับกลับสู่ CandyMarket นะคะ");
-                    closeAuth();
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, pass);
-                    const userStatRef = ref(db, 'stats/users');
-                    await runTransaction(userStatRef, (currentValue) => (currentValue || 0) + 1);
-                    showCandyAlert("สมัครสำเร็จ!", "กรุณาเข้าสู่ระบบอีกครั้งเพื่อเข้าบ้านนะคะ");
-                    isLoginMode = true; document.getElementById('auth-title').innerText = "Sign In";
-                    document.getElementById('pass-input').value = "";
-                }
-            } catch (err) {
-                let errorMsg = "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ";
-                if(err.code === 'auth/invalid-credential') errorMsg = "ชื่อผู้ใช้หรือรหัสผ่านผิดพลาดค่ะ";
-                showCandyAlert("อุ๊ปส์!", errorMsg, "error");
-            } finally { document.getElementById('process-loader').style.display = 'none'; }
-        };
-
-        function updateUI(user) {
-            const section = document.getElementById('auth-section');
-            if(user || localStorage.getItem('isAdmin')) {
-                const randomIcon = candyIcons[Math.floor(Math.random() * candyIcons.length)];
-                section.innerHTML = `<button onclick="togglePanel()" class="w-10 h-10 rounded-full bg-white border-2 border-pink-200 text-pink-500 flex items-center justify-center shadow-sm hover:scale-110 transition"><i class="fa-solid ${randomIcon} text-xl"></i></button>`;
-            } else {
-                section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-sm font-black shadow-md">เข้าสู่ระบบ</button>`;
-            }
-        }
-
-        onValue(ref(db, 'products'), snap => {
-            const container = document.getElementById('product-container'); container.innerHTML = '';
-            snap.forEach(child => {
-                const p = child.val();
-                container.innerHTML += `<div class="bg-white border-2 border-pink-50 rounded-[2rem] p-3 flex flex-col shadow-sm"><img src="${p.image}" class="rounded-[1.5rem] mb-3 aspect-square object-cover border-2 border-pink-50"><h4 class="font-bold text-sm text-gray-700 truncate">${p.name}</h4><p class="text-pink-500 font-black text-xl mb-3">฿${p.price}</p><a href="${p.demo||'#'}" class="bg-pink-50 text-pink-500 text-center text-xs font-black py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition">ดูตัวอย่าง</a></div>`;
-            });
-        });
-
-        onValue(ref(db, 'stats'), snap => {
-            const d = snap.val()||{};
-            document.getElementById('stat-users').innerText = d.users||0;
-            document.getElementById('stat-prods').innerText = d.prods||0;
-        });
-
-        onAuthStateChanged(auth, user => updateUI(user));
-        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display='none', 500); }, 800); };
     </script>
 </body>
 </html>
