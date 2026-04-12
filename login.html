@@ -65,11 +65,11 @@ CandyMarket
 </h1>
 
 <p class="text-center text-pink-400 font-bold mb-6 text-sm">
-ยินดีต้อนรับกลับมา 🍬
+เข้าสู่ระบบเพื่อจัดการเว็บไซต์ของคุณ 🍬
 </p>
 
-<input id="login-input"
-placeholder="Username หรือ Email"
+<input id="login-user"
+placeholder="Username"
 class="w-full mb-3 px-4 py-3 rounded-xl border-2 border-pink-100">
 
 <input id="login-pass"
@@ -84,16 +84,7 @@ class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 round
 
 </button>
 
-<button onclick="loginGoogle()"
-class="w-full border-2 border-pink-200 py-3 rounded-xl font-bold flex justify-center gap-2 text-pink-500">
-
-<i class="fa-solid fa-candy-cane"></i>
-
-เข้าสู่ CandyMarket ด้วย Google
-
-</button>
-
-<p class="text-center text-sm mt-5">
+<p class="text-center text-sm">
 
 ยังไม่มีบัญชี ?
 
@@ -107,21 +98,21 @@ class="w-full border-2 border-pink-200 py-3 rounded-xl font-bold flex justify-ce
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"
 
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup }
+import { getAuth, signInWithEmailAndPassword }
 
-from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"
 
 import { getDatabase, ref, get }
 
-from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"
 
 const firebaseConfig={
-apiKey:"AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w",
-authDomain:"web-rental-system-d8894.firebaseapp.com",
-projectId:"web-rental-system-d8894",
-databaseURL:"https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app"
+apiKey:"ใส่ของลูกพีช",
+authDomain:"ใส่ของลูกพีช",
+projectId:"ใส่ของลูกพีช",
+databaseURL:"ใส่ของลูกพีช"
 }
 
 const app=initializeApp(firebaseConfig)
@@ -129,8 +120,6 @@ const app=initializeApp(firebaseConfig)
 const auth=getAuth(app)
 
 const db=getDatabase(app)
-
-const provider=new GoogleAuthProvider()
 
 window.onload=()=>{
 
@@ -142,48 +131,52 @@ document.getElementById("loader").style.display="none"
 
 window.loginUser=async function(){
 
-let input=document.getElementById("login-input").value
+let user=document.getElementById("login-user").value
 let pass=document.getElementById("login-pass").value
 
-let email=input
+/* 👑 ADMIN LOGIN */
 
-if(!input.includes("@")){
+if(user==="adminpeach"){
 
-let snap=await get(ref(db,"usernames/"+input))
-
-if(!snap.exists()){
-alert("ไม่พบ Username")
-return
-}
-
-email=snap.val()
-
-}
-
-signInWithEmailAndPassword(auth,email,pass)
-.then(()=>{
-location.href="dashboard.html"
-})
-.catch(()=>{
-alert("เข้าสู่ระบบไม่สำเร็จ")
-})
-
-}
-
-window.loginGoogle=function(){
-
-signInWithPopup(auth,provider)
-.then((result)=>{
-
-if(result.user.email==="feirnbiddu10@gmail.com"){
+if(pass==="khao155454"){
 
 location.href="admin.html"
 
 }else{
 
-location.href="dashboard.html"
+alert("รหัสผ่านแอดมินไม่ถูกต้อง")
 
 }
+
+return
+
+}
+
+/* 👤 USER LOGIN */
+
+let snap=await get(ref(db,"usernames/"+user))
+
+if(!snap.exists()){
+
+alert("ไม่พบชื่อผู้ใช้")
+
+return
+
+}
+
+let email=snap.val()
+
+signInWithEmailAndPassword(auth,email,pass)
+
+.then(()=>{
+
+location.href="dashboard.html"
+
+})
+
+.catch(()=>{
+
+alert("รหัสผ่านไม่ถูกต้อง")
 
 })
 
