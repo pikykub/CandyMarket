@@ -2,103 +2,95 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Candy Market Login</title>
+<title>เข้าสู่ระบบ | Candy Market</title>
 
 <style>
 body{
-font-family:sans-serif;
-background:#fff0f6;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
+    font-family: sans-serif;
+    background:#FFF5FA;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
 }
 
 .login-box{
-background:white;
-padding:30px;
-border-radius:15px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
-width:300px;
-text-align:center;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    width:320px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    text-align:center;
 }
 
 h2{
-color:#ff6fa5;
+    margin-bottom:20px;
 }
 
 input{
-width:100%;
-padding:10px;
-margin:10px 0;
-border-radius:8px;
-border:1px solid #ddd;
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ddd;
 }
 
 button{
-width:100%;
-padding:10px;
-background:#ff6fa5;
-border:none;
-color:white;
-border-radius:8px;
-cursor:pointer;
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#ff69b4;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
 }
 
 button:hover{
-background:#ff4f91;
-}
-
-.error{
-color:red;
-font-size:14px;
+    background:#ff4da6;
 }
 </style>
 
 </head>
+
 <body>
 
 <div class="login-box">
 
-<h2>Candy Market</h2>
+<h2>เข้าสู่ระบบ</h2>
 
-<input id="username" placeholder="Username">
+<input type="email" id="email" placeholder="Email">
 
-<input id="password" type="password" placeholder="Password">
+<input type="password" id="password" placeholder="Password">
 
 <button onclick="login()">เข้าสู่ระบบ</button>
-
-<p class="error" id="error"></p>
 
 </div>
 
 <script>
 
-const adminUser = "adminpeach"
-const adminPass = "khao155454"
-
 function login(){
 
-let user = document.getElementById("username").value
-let pass = document.getElementById("password").value
+let email = document.getElementById("email").value
+let password = document.getElementById("password").value
 
-if(user === adminUser && pass === adminPass){
+if(email === "" || password === ""){
+alert("กรุณากรอกข้อมูล")
+return
+}
 
-localStorage.setItem("candyUser", user)
+// ตัวอย่างระบบจำลอง
+if(email === "admin@candy.com" && password === "1234"){
 
-window.location.href = "dashboard.html"
+alert("เข้าสู่ระบบสำเร็จ")
+
+window.location.href="/admin.html"
 
 }else{
 
-document.getElementById("error").innerText = "ชื่อผู้ใช้หรือรหัสผ่านผิด"
+alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง")
 
 }
 
-}
-
-// Auto Login
-if(localStorage.getItem("candyUser")){
-window.location.href = "dashboard.html"
 }
 
 </script>
