@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,7 +11,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;900&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 
@@ -25,61 +26,88 @@ background-size:25px 25px;
 }
 
 .candy-text{
-background:linear-gradient(to right,#ff8da1,#8ec5fc);
+background: linear-gradient(to right,#ff8da1,#8ec5fc);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
+}
+
+#loader{
+position:fixed;
+inset:0;
+background:#fff5f7;
+z-index:9999;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.candy-spinner{
+font-size:60px;
+color:#f07ab0;
+animation:spin 1.5s infinite;
+}
+
+@keyframes spin{
+0%{transform:rotate(0)}
+100%{transform:rotate(360deg)}
 }
 
 </style>
 
 </head>
 
-<body class="grid-bg min-h-screen pb-20">
+<body class="grid-bg pb-20">
 
-<header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md border-b border-pink-100">
+<div id="loader">
+<div class="candy-spinner">
+<i class="fa-solid fa-cookie-bite"></i>
+</div>
+</div>
 
-<h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+<header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
 
-<a href="index.html"
-class="text-sm font-bold text-pink-500">
+<h1 class="text-2xl font-black candy-text">
+CandyMarket.
+</h1>
 
-กลับหน้าหลัก
-
-</a>
+<button onclick="logout()" class="bg-pink-100 text-pink-500 px-4 py-2 rounded-full font-bold text-sm">
+ออกจากระบบ
+</button>
 
 </header>
 
-<div class="px-5 mt-8">
+<div class="px-6 mt-8">
 
-<h2 class="text-2xl font-black text-gray-700 mb-6">
-
-แดชบอร์ดของฉัน
-
+<h2 class="text-3xl font-black text-gray-700 mb-2">
+Dashboard
 </h2>
 
-<div id="dashboard-content"></div>
+<p class="text-pink-400 font-bold mb-8 text-sm">
+จัดการเว็บไซต์ที่คุณเช่าจาก CandyMarket
+</p>
+
+<div id="site-container"></div>
 
 </div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"
 
-import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth,onAuthStateChanged,signOut }
 
-import { getDatabase,ref,get } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"
 
-const firebaseConfig = {
+import { getDatabase,ref,onValue }
 
+from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"
+
+const firebaseConfig={
 apiKey:"AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w",
-
 authDomain:"web-rental-system-d8894.firebaseapp.com",
-
 projectId:"web-rental-system-d8894",
-
 databaseURL:"https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app"
-
-};
+}
 
 const app=initializeApp(firebaseConfig)
 
@@ -87,46 +115,54 @@ const auth=getAuth(app)
 
 const db=getDatabase(app)
 
-onAuthStateChanged(auth,async(user)=>{
+window.onload=()=>{
 
-if(!user){
-
-location.href="login.html"
-
-return
+setTimeout(()=>{
+document.getElementById("loader").style.display="none"
+},800)
 
 }
 
-const snap=await get(ref(db,"rentals/"+user.uid))
+onAuthStateChanged(auth,(user)=>{
 
-const box=document.getElementById("dashboard-content")
+if(!user){
+location.href="login.html"
+return
+}
+
+const siteRef=ref(db,"rentals/"+user.uid)
+
+onValue(siteRef,(snap)=>{
+
+const container=document.getElementById("site-container")
+
+container.innerHTML=""
 
 if(!snap.exists()){
 
-box.innerHTML=`
+container.innerHTML=`
 
-<div class="bg-white border-2 border-pink-100 rounded-3xl p-8 text-center shadow-sm">
+<div class="bg-white border-2 border-pink-100 rounded-[2rem] p-8 text-center shadow-sm">
 
-<i class="fa-solid fa-store text-5xl text-pink-300 mb-4"></i>
+<div class="text-5xl text-pink-300 mb-4">
+<i class="fa-solid fa-candy-cane"></i>
+</div>
 
 <h3 class="text-xl font-black text-gray-700 mb-2">
-
-ยังไม่มีเว็บไซต์ที่เช่า
-
+ยังไม่มีเว็บไซต์ในระบบ
 </h3>
 
-<p class="text-sm text-gray-500 mb-5">
+<p class="text-sm text-gray-500 mb-6">
 
-บัญชีของคุณยังไม่มีการเช่าเว็บไซต์ในระบบ  
-หากต้องการใช้งาน กรุณาเลือกแพ็กเกจที่หน้าหลัก
+บัญชีของคุณยังไม่มีเว็บไซต์ที่เช่าอยู่ในระบบ  
+เมื่อคุณเช่าเว็บกับ CandyMarket เว็บไซต์ของคุณจะแสดงที่นี่
 
 </p>
 
 <a href="index.html"
+class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-3 rounded-full font-bold">
 
-class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-3 rounded-full font-bold shadow">
-
-เลือกแพ็กเกจเช่าเว็บ
+ไปเลือกแพ็กเกจ
 
 </a>
 
@@ -134,32 +170,73 @@ class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-3 rounded
 
 `
 
-}else{
+return
 
-const data=snap.val()
+}
 
-box.innerHTML=`
+snap.forEach(child=>{
 
-<div class="bg-white border-2 border-pink-100 rounded-3xl p-6 shadow-sm">
+const site=child.val()
 
-<h3 class="text-lg font-black text-gray-700 mb-4">
+container.innerHTML+=`
 
-เว็บไซต์ของคุณ
+<div class="bg-white border-2 border-blue-100 rounded-[2rem] p-6 mb-6 shadow-sm">
 
+<div class="flex justify-between items-center mb-3">
+
+<h3 class="text-xl font-black text-blue-500">
+${site.name}
 </h3>
 
-<div class="grid gap-3 text-sm">
-
-<div>
-
-<span class="text-gray-400">ชื่อเว็บไซต์</span>
-
-<p class="font-bold text-pink-500">${data.siteName}</p>
+<span class="text-xs bg-blue-100 text-blue-500 px-3 py-1 rounded-full font-bold">
+Active
+</span>
 
 </div>
 
-<div>
+<p class="text-sm text-gray-500 mb-4">
+โดเมน : ${site.domain || "ไม่ได้กำหนด"}
+</p>
 
-<span class="text-gray-400">สถานะ</span>
+<p class="text-sm text-gray-500 mb-6">
+หมดอายุ : ${site.expire || "-"}
+</p>
 
-<p class="font-bold text-green-500">${data
+<div class="flex gap-3">
+
+<a href="${site.link || '#'}"
+class="bg-blue-100 text-blue-500 px-4 py-2 rounded-full text-sm font-bold">
+
+เปิดเว็บไซต์
+
+</a>
+
+<button
+class="bg-pink-100 text-pink-500 px-4 py-2 rounded-full text-sm font-bold">
+
+ต่ออายุ
+
+</button>
+
+</div>
+
+</div>
+
+`
+
+})
+
+})
+
+})
+
+window.logout=function(){
+
+signOut(auth)
+
+}
+
+</script>
+
+</body>
+</html>
