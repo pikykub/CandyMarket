@@ -13,23 +13,27 @@
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* 🎀 Chibi Swing Animation */
-        @keyframes swing {
-            0% { transform: rotate(3deg); }
-            50% { transform: rotate(-3deg); }
-            100% { transform: rotate(3deg); }
-        }
-        .animate-swing {
-            transform-origin: top center;
-            animation: swing 3s ease-in-out infinite;
-        }
-
         /* Modal Overlays */
         .contact-overlay {
             position: fixed; inset: 0; background: rgba(30, 41, 59, 0.4);
             backdrop-blur: 5px; z-index: 10005; display: none; align-items: flex-start; justify-content: center; overflow: hidden;
         }
         
+        /* Chibi Pull Animation ( Simplified without Chibi image ) */
+        #pull-container {
+            transform: translateY(-150%);
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #pull-container.active {
+            transform: translateY(0);
+        }
+
+        .contact-item {
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            border-radius: 20px; margin-bottom: 12px; transition: 0.3s; border: 2px solid #fff5f7;
+        }
+        .contact-item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(240, 122, 176, 0.1); }
+
         /* Existing Styles */
         #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-blur: 4px; z-index: 10000; display: none; align-items: center; justify-content: center; }
         .cookie-spin { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
@@ -94,11 +98,20 @@
         </div>
     </div>
 
-    <div class="px-5 mb-8">
-        <div class="bg-white/80 rounded-3xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm">
-            <div class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2 rounded-2xl font-bold text-[10px] shrink-0 italic underline">ANNOUNCEMENT</div>
-            <marquee class="text-sm text-pink-400 font-bold" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่สดใสที่สุดในโลก! โปรโมชั่นเดือนนี้ลดราคาพิเศษนะคะ</marquee>
+    <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-pink-50 shadow-sm">
+            <p class="text-pink-300 text-[10px] font-black uppercase">ลูกค้าที่น่ารัก</p>
+            <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">0</h4>
         </div>
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-blue-50 shadow-sm">
+            <p class="text-blue-300 text-[10px] font-black uppercase">ขนมในร้าน</p>
+            <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
+        </div>
+    </div>
+
+    <div class="px-5">
+        <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
+        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
     </div>
 
     <div class="grid grid-cols-2 gap-4 px-5 mb-10">
@@ -123,13 +136,9 @@
     </div>
 
     <div id="contact-modal" class="contact-overlay" onclick="closeContact()">
-        <div id="chibi-pull-container" class="relative transform -translate-y-[150%] transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] flex flex-col items-center w-full max-w-sm mt-0 animate-swing" onclick="event.stopPropagation()">
+        <div id="pull-container" class="relative flex flex-col items-center w-full max-w-sm mt-0" onclick="event.stopPropagation()">
             
-            <div class="absolute top-0 w-[60%] h-16 border-l-[3px] border-r-[3px] border-dashed border-[#ffb3c1] -z-10 opacity-70"></div>
-
-            <img src="https://bright-blush-eqit5wkfc6.edgeone.app/IMG_6148.jpeg" alt="Chibi" class="w-56 z-20 relative drop-shadow-xl mt-4 pointer-events-none">
-            
-            <div class="bg-[#fff9f9] w-[90%] rounded-[2rem] border-4 border-[#ffd1dc] shadow-2xl p-6 relative z-10 -mt-8"> 
+            <div class="bg-[#fff9f9] w-[90%] rounded-[2rem] border-4 border-[#ffd1dc] shadow-2xl p-6 relative z-10 mt-10"> 
                 <div class="text-center mb-5 mt-6">
                     <h3 class="text-2xl font-black text-[#ff8da1] italic">CONTACT US</h3>
                     <p class="text-[10px] text-gray-400 font-bold uppercase">เลือกช่องทางที่สะดวกได้เลยค่ะ</p>
@@ -156,22 +165,6 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
-        <div class="bg-white p-5 rounded-[2rem] border-2 border-pink-50 shadow-sm">
-            <p class="text-pink-300 text-[10px] font-black uppercase">ลูกค้าที่น่ารัก</p>
-            <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">0</h4>
-        </div>
-        <div class="bg-white p-5 rounded-[2rem] border-2 border-blue-50 shadow-sm">
-            <p class="text-blue-300 text-[10px] font-black uppercase">ขนมในร้าน</p>
-            <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
-        </div>
-    </div>
-
-    <div class="px-5">
-        <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
-        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -180,22 +173,20 @@
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        // Chibi Contact Logic
+        // Chibi Contact Logic ( Simplified )
         window.openContact = () => {
             const modal = document.getElementById('contact-modal');
-            const container = document.getElementById('chibi-pull-container');
+            const container = document.getElementById('pull-container');
             modal.style.display = 'flex';
             setTimeout(() => {
-                container.classList.remove('-translate-y-[150%]');
-                container.classList.add('translate-y-0');
+                container.classList.add('active'); // ป้ายไหลลงมา
             }, 50);
         };
 
         window.closeContact = () => {
             const modal = document.getElementById('contact-modal');
-            const container = document.getElementById('chibi-pull-container');
-            container.classList.remove('translate-y-0');
-            container.classList.add('-translate-y-[150%]');
+            const container = document.getElementById('pull-container');
+            container.classList.remove('active'); // ดันป้ายกลับขึ้นไป
             setTimeout(() => { modal.style.display = 'none'; }, 700);
         };
 
@@ -208,7 +199,6 @@
             document.getElementById('toast-i').className = type === 'success' ? "fa-solid fa-check-circle" : "fa-solid fa-circle-exclamation";
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
         };
-
         window.openAuth = () => document.getElementById('auth-modal').style.display = 'flex';
         window.closeAuth = () => document.getElementById('auth-modal').style.display = 'none';
         window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
@@ -245,11 +235,14 @@
                     await createUserWithEmailAndPassword(auth, email, pass);
                     const userStatRef = ref(db, 'stats/users');
                     await runTransaction(userStatRef, (currentValue) => (currentValue || 0) + 1);
-                    showCandyAlert("สมัครสำเร็จ!", "เข้าสู่ระบบได้เลยนะคะ");
+                    showCandyAlert("สมัครสำเร็จ!", "กรุณาเข้าสู่ระบบอีกครั้งเพื่อเข้าบ้านนะคะ");
                     isLoginMode = true; document.getElementById('auth-title').innerText = "Sign In";
+                    document.getElementById('pass-input').value = "";
                 }
             } catch (err) {
-                showCandyAlert("อุ๊ปส์!", "ข้อมูลไม่ถูกต้องค่ะ", "error");
+                let errorMsg = "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ";
+                if(err.code === 'auth/invalid-credential') errorMsg = "ชื่อผู้ใช้หรือรหัสผ่านผิดพลาดค่ะ";
+                showCandyAlert("อุ๊ปส์!", errorMsg, "error");
             } finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
