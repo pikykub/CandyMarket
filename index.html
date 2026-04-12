@@ -1,323 +1,68 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CandyMarket | ระบบเช่าเว็บไซต์</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<style>
-body{
-    background:#fff5f7;
-    font-family:'Kanit',sans-serif;
-    color:#5a5a5a;
-}
-.grid-bg{
-    background-image:radial-gradient(#ffcad4 1.5px,transparent 1.5px);
-    background-size:25px 25px;
-}
-.candy-text{
-    background:linear-gradient(to right,#ff8da1,#8ec5fc);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-.btn-custom{
-    background:white;
-    border-radius:50px;
-    padding:12px 10px 12px 20px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    box-shadow:0 8px 20px rgba(255,182,193,0.2);
-    border:2px solid rgba(255,255,255,0.8);
-    transition:.3s;
-}
-.btn-custom:hover{
-    transform:translateY(-3px);
-    box-shadow:0 12px 25px rgba(255,182,193,0.3);
-}
-.icon-circle{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:22px;
-    box-shadow:0 4px 10px rgba(0,0,0,.1);
-    flex-shrink:0;
-}
-.bg-blue-candy{background:#7db9f9;}
-.bg-pink-candy{background:#f07ab0;}
-
-/* Modal Style */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(255, 192, 203, 0.4);
-    backdrop-blur: 4px;
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-}
-.modal-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 2.5rem;
-    width: 90%;
-    max-width: 350px;
-    border: 4px solid #ffe4e9;
-    box-shadow: 0 20px 40px rgba(255,182,193,0.3);
-    text-align: center;
-}
-.modal-input {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    border-radius: 50px;
-    border: 2px solid #fff0f3;
-    background: #fffafa;
-    outline: none;
-}
-.modal-input:focus { border-color: #ffb6c1; }
-
-#loader{
-    position:fixed;
-    inset:0;
-    background:#fff5f7;
-    z-index:9999;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    transition:opacity .5s;
-}
-.candy-spinner{
-    font-size:55px;
-    color:#f07ab0;
-    animation:candy-spin 1.5s cubic-bezier(.68,-.55,.265,1.55) infinite;
-    filter:drop-shadow(0 10px 15px rgba(240,122,176,.3));
-}
-@keyframes candy-spin{
-    0%{transform:rotate(0deg) scale(1)}
-    50%{transform:rotate(180deg) scale(1.1);color:#7db9f9}
-    100%{transform:rotate(360deg) scale(1);color:#f07ab0}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background:#fff5f7; font-family:'Kanit',sans-serif; color:#5a5a5a; }
+        .grid-bg { background-image:radial-gradient(#ffcad4 1.5px,transparent 1.5px); background-size:25px 25px; }
+        .candy-text { background:linear-gradient(to right,#ff8da1,#8ec5fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        /* Modal & Loader Style */
+        .modal { display:none; position:fixed; inset:0; background:rgba(255,192,203,0.4); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; }
+        .modal-content { background:white; padding:2rem; border-radius:2.5rem; width:90%; max-width:350px; border:4px solid #ffe4e9; text-align:center; }
+        #loader { position:fixed; inset:0; background:#fff5f7; z-index:9999; display:flex; justify-content:center; align-items:center; transition:opacity .5s; }
+    </style>
 </head>
-
 <body class="grid-bg pb-20">
 
-<div id="loader">
-    <div class="candy-spinner">
-        <i class="fa-solid fa-cookie-bite"></i>
+    <div id="loader">
+        <i class="fa-solid fa-cookie-bite text-5xl text-[#f07ab0] animate-bounce"></i>
     </div>
-</div>
 
-<div id="login-modal" class="modal flex">
-    <div class="modal-content">
-        <h3 class="text-2xl font-black candy-text mb-4">Login</h3>
-        <input type="text" id="login-user" class="modal-input" placeholder="ชื่อผู้ใช้">
-        <input type="password" id="login-pass" class="modal-input" placeholder="รหัสผ่าน">
-        <button id="btn-do-login" class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 rounded-full font-black mt-4 shadow-lg">เข้าสู่ระบบ</button>
-        <button onclick="closeModal('login-modal')" class="text-gray-400 text-sm mt-4 block mx-auto">ไว้วันหลังนะ</button>
-    </div>
-</div>
-
-<div id="register-modal" class="modal flex">
-    <div class="modal-content">
-        <h3 class="text-2xl font-black text-[#7db9f9] mb-4">Register</h3>
-        <input type="text" id="reg-user" class="modal-input" placeholder="ตั้งชื่อผู้ใช้">
-        <input type="password" id="reg-pass" class="modal-input" placeholder="ตั้งรหัสผ่าน">
-        <button id="btn-do-reg" class="w-full bg-[#7db9f9] text-white py-3 rounded-full font-black mt-4 shadow-lg">สมัครสมาชิก</button>
-        <button onclick="closeModal('register-modal')" class="text-gray-400 text-sm mt-4 block mx-auto">ยกเลิก</button>
-    </div>
-</div>
-
-<header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
-    <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
-    <div id="auth-section">
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-black candy-text mb-4">Login</h3>
+            <input type="text" id="login-user" class="w-full p-3 mb-2 rounded-full border-2 border-pink-50" placeholder="ชื่อผู้ใช้">
+            <input type="password" id="login-pass" class="w-full p-3 mb-4 rounded-full border-2 border-pink-50" placeholder="รหัสผ่าน">
+            <button id="btn-do-login" class="w-full bg-pink-400 text-white py-3 rounded-full font-black">เข้าสู่ระบบ</button>
+            <button onclick="closeModal('login-modal')" class="mt-4 text-gray-400 text-sm">ปิด</button>
         </div>
-</header>
+    </div>
 
-<div class="mx-5 mt-6 mb-8">
-    <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 min-h-[220px] flex flex-col justify-center shadow-xl border-4 border-white">
-        <p class="text-sm font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-asterisk text-xs"></i> บริการปล่อยเช่าเว็บ
-        </p>
-        <h3 class="text-5xl font-black italic tracking-tighter text-white mt-1">
-            CANDY<br>RENTAL
+    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
+        <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+        <div id="auth-section"></div>
+    </header>
+
+    <div class="mx-5 mt-6 mb-8">
+        <div class="relative rounded-[3rem] bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 text-white shadow-xl">
+            <p class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-asterisk"></i> บริการปล่อยเช่าเว็บ</p>
+            <h3 class="text-5xl font-black italic mt-1">CANDY RENTAL</h3>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 px-5 mb-10">
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-pink-50 text-center">
+            <p class="text-pink-300 text-[10px] font-black uppercase">ลูกค้าที่น่ารัก</p>
+            <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">0</h4>
+        </div>
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-blue-50 text-center">
+            <p class="text-blue-300 text-[10px] font-black uppercase">ขนมในร้าน</p>
+            <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
+        </div>
+    </div>
+
+    <div class="px-5">
+        <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2">
+            <i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ
         </h3>
-        <p class="text-xs text-white/90 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
+        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
     </div>
-</div>
 
-<div class="grid grid-cols-1 px-5 mb-10">
-    <div class="flex gap-6">
-        <a href="admin-chat.html" class="btn-custom flex-1">
-            <div>
-                <p class="text-[10px] text-[#7db9f9] font-black uppercase">แจ้งปัญหา</p>
-                <h5 class="text-2xl font-black italic text-[#7db9f9] tracking-tighter">CHAT</h5>
-            </div>
-            <div class="icon-circle bg-blue-candy">
-                <i class="fa-solid fa-comment-dots"></i>
-            </div>
-        </a>
-        <a href="guide.html" class="btn-custom flex-1">
-            <div>
-                <p class="text-[10px] text-[#f07ab0] font-black uppercase">วิธีสั่งซื้อ</p>
-                <h5 class="text-2xl font-black italic text-[#f07ab0] tracking-tighter">GUIDE</h5>
-            </div>
-            <div class="icon-circle bg-pink-candy">
-                <i class="fa-solid fa-asterisk"></i>
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="grid grid-cols-2 gap-4 px-5 mb-10">
-    <div class="bg-white p-5 rounded-[2rem] border-2 border-pink-50 shadow-sm">
-        <p class="text-pink-300 text-[10px] font-black uppercase">ลูกค้าที่น่ารัก</p>
-        <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">0</h4>
-    </div>
-    <div class="bg-white p-5 rounded-[2rem] border-2 border-blue-50 shadow-sm">
-        <p class="text-blue-300 text-[10px] font-black uppercase">ขนมในร้าน</p>
-        <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
-    </div>
-</div>
-
-<div class="px-5">
-    <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2">
-        <i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ
-    </h3>
-    <div class="grid grid-cols-2 gap-4" id="product-container"></div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w",
-    authDomain: "web-rental-system-d8894.firebaseapp.com",
-    projectId: "web-rental-system-d8894",
-    databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// --- ระบบ Login จำลองสำหรับเทส ---
-const ADMIN_USER = "adminpeach";
-const ADMIN_PASS = "khaohom155454";
-
-const authSection = document.getElementById('auth-section');
-
-// ฟังก์ชันเปิด-ปิด Modal
-window.openModal = (id) => document.getElementById(id).style.display = 'flex';
-window.closeModal = (id) => document.getElementById(id).style.display = 'none';
-
-function checkAuthStatus() {
-    const loggedInUser = localStorage.getItem('candy_user');
-    
-    if (loggedInUser) {
-        // ไอคนรูปคนสีสันสดใส (ไล่เฉดสี)
-        authSection.innerHTML = `
-            <div class="flex items-center gap-3">
-                <div onclick="logout()" class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#ff9a9e] via-[#fad0c4] to-[#ffecd2] flex items-center justify-center text-white shadow-md border-2 border-white cursor-pointer hover:scale-110 transition">
-                    <i class="fa-solid fa-user-astronaut text-lg"></i>
-                </div>
-                <span class="text-xs font-black text-pink-400 bg-white px-3 py-1 rounded-full border border-pink-100">${loggedInUser}</span>
-            </div>
-        `;
-    } else {
-        authSection.innerHTML = `
-            <div class="flex gap-2">
-                <button onclick="openModal('register-modal')" class="text-[#7db9f9] text-xs font-black px-3 py-2">สมัคร</button>
-                <button onclick="openModal('login-modal')" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2 rounded-full text-xs font-black shadow-md">เข้าสู่ระบบ</button>
-            </div>
-        `;
-    }
-}
-
-// จัดการ Login
-document.getElementById('btn-do-login').onclick = () => {
-    const user = document.getElementById('login-user').value;
-    const pass = document.getElementById('login-pass').value;
-
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
-        localStorage.setItem('candy_user', 'Admin Peach');
-        location.reload();
-    } else {
-        const localPass = localStorage.getItem('reg_' + user);
-        if (localPass && localPass === pass) {
-            localStorage.setItem('candy_user', user);
-            location.reload();
-        } else {
-            alert("งือออ ข้อมูลไม่ถูกต้องค่ะ!");
-        }
-    }
-};
-
-// จัดการ Register
-document.getElementById('btn-do-reg').onclick = () => {
-    const user = document.getElementById('reg-user').value;
-    const pass = document.getElementById('reg-pass').value;
-    if(user && pass) {
-        localStorage.setItem('reg_' + user, pass);
-        alert("สมัครสมาชิกแล้ว! ลองเข้าสู่ระบบดูนะคะ");
-        closeModal('register-modal');
-        openModal('login-modal');
-    }
-};
-
-// จัดการ Logout
-window.logout = () => {
-    if(confirm('ออกจากระบบไหมคะ?')) {
-        localStorage.removeItem('candy_user');
-        location.reload();
-    }
-};
-
-// เรียกใช้งานครั้งแรก
-checkAuthStatus();
-closeModal('login-modal');
-closeModal('register-modal');
-
-// --- จบระบบ Login ---
-
-// ปิด Loader
-setTimeout(() => {
-    document.getElementById('loader').style.opacity = '0';
-    setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
-}, 800);
-
-onValue(ref(db,'products'), snap => {
-    const container = document.getElementById('product-container');
-    container.innerHTML = '';
-    snap.forEach(child => {
-        const p = child.val();
-        container.innerHTML += `
-            <div class="bg-white border-2 border-pink-50 rounded-[2rem] p-3 flex flex-col shadow-sm">
-                <img src="${p.image}" class="rounded-[1.5rem] mb-3 aspect-square object-cover border-2 border-pink-50">
-                <h4 class="font-bold text-sm text-gray-700 truncate">${p.name}</h4>
-                <p class="text-pink-500 font-black text-xl mb-3">฿${p.price}</p>
-                <a href="${p.demo||'#'}" class="bg-pink-50 text-pink-500 text-center text-xs font-black py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition">ดูตัวอย่าง</a>
-            </div>
-        `;
-    });
-});
-
-onValue(ref(db,'stats'), snap => {
-    const d = snap.val() || {};
-    document.getElementById('stat-users').innerText = d.users || 0;
-    document.getElementById('stat-prods').innerText = d.prods || 0;
-});
-</script>
-
+    <script type="module" src="app.js"></script>
 </body>
 </html>
