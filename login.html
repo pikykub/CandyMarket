@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>เข้าสู่ระบบ | Candy Market</title>
+<title>Candy Market Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@300;400;500&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -12,95 +14,107 @@
 
 *{
 box-sizing:border-box;
-font-family: "Kanit", sans-serif;
+margin:0;
+padding:0;
 }
 
 body{
-margin:0;
 height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
+font-family:'Quicksand',sans-serif;
+
 background:
-radial-gradient(#ffc0d9 2px, transparent 2px);
-background-size:30px 30px;
-background-color:#fff4fa;
+radial-gradient(#ffd4e8 1.5px, transparent 1.5px);
+background-size:28px 28px;
+background-color:#fff7fb;
 }
 
 /* card */
 
 .login-card{
+width:360px;
 background:white;
-padding:35px;
-border-radius:22px;
-width:350px;
-box-shadow:0 15px 40px rgba(0,0,0,0.08);
+padding:38px;
+border-radius:26px;
+box-shadow:0 20px 50px rgba(255,150,200,0.15);
 text-align:center;
 }
 
-/* logo */
+/* brand */
 
-.logo{
+.brand{
+font-family:'Mali',cursive;
 font-size:28px;
-margin-bottom:5px;
-}
-
-.title{
-font-size:22px;
-font-weight:600;
-margin-bottom:20px;
+color:#ff6fae;
+margin-bottom:25px;
+letter-spacing:.5px;
 }
 
 /* input */
 
 .input-box{
 position:relative;
-margin-bottom:15px;
+margin-bottom:16px;
 }
 
 .input-box i{
 position:absolute;
-left:12px;
+left:14px;
 top:50%;
 transform:translateY(-50%);
-color:#ff7db8;
+color:#ff8fbe;
+font-size:14px;
 }
 
 input{
 width:100%;
-padding:12px 12px 12px 38px;
-border-radius:12px;
-border:1px solid #eee;
+padding:12px 14px 12px 40px;
+border-radius:14px;
+border:1px solid #f0d9e6;
+font-family:'Quicksand';
 font-size:14px;
+outline:none;
+transition:.2s;
+}
+
+input:focus{
+border-color:#ff8fbe;
 }
 
 /* button */
 
 .login-btn{
+margin-top:8px;
 width:100%;
 padding:12px;
 border:none;
-background:#ff7db8;
+border-radius:14px;
+background:linear-gradient(135deg,#ff8fbe,#ff6fae);
 color:white;
-border-radius:12px;
+font-family:'Quicksand';
+font-weight:500;
 font-size:15px;
 cursor:pointer;
-margin-top:10px;
+transition:.2s;
 }
 
 .login-btn:hover{
-background:#ff5fa8;
+transform:translateY(-1px);
+box-shadow:0 8px 20px rgba(255,120,170,.25);
 }
 
 /* register */
 
 .register{
-margin-top:18px;
+margin-top:20px;
 font-size:14px;
+color:#777;
 }
 
 .register a{
-color:#ff5fa8;
+color:#ff6fae;
 text-decoration:none;
 font-weight:500;
 }
@@ -110,8 +124,8 @@ font-weight:500;
 @media(max-width:420px){
 
 .login-card{
-width:90%;
-padding:28px;
+width:92%;
+padding:30px;
 }
 
 }
@@ -123,24 +137,22 @@ padding:28px;
 
 <div class="login-card">
 
-<div class="logo">🍬</div>
-<div class="title">Candy Market</div>
+<div class="brand">Candy Market</div>
 
 <div class="input-box">
-<i class="fa fa-envelope"></i>
+<i class="fa-regular fa-envelope"></i>
 <input type="email" placeholder="อีเมล">
 </div>
 
 <div class="input-box">
-<i class="fa fa-lock"></i>
+<i class="fa-solid fa-lock"></i>
 <input type="password" placeholder="รหัสผ่าน">
 </div>
 
 <button class="login-btn">เข้าสู่ระบบ</button>
 
 <div class="register">
-ยังไม่มีบัญชี ?
-<a href="register.html">สมัครสมาชิก</a>
+ยังไม่มีบัญชี ? <a href="register.html">สมัครสมาชิก</a>
 </div>
 
 </div>
