@@ -81,11 +81,39 @@
         </div>
     </div>
 
+    <div class="px-5 mt-4">
+        <div class="bg-white/80 rounded-3xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm">
+            <div class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2 rounded-2xl font-bold text-xs shrink-0 italic underline">ANNOUNCEMENT</div>
+            <marquee class="text-sm text-pink-400 font-bold" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่สดใสที่สุดในโลก! โปรโมชั่นเดือนนี้ลดราคาพิเศษนะคะ</marquee>
+        </div>
+    </div>
+
     <div class="mx-5 mt-6 mb-8">
         <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 min-h-[220px] flex flex-col justify-center shadow-xl border-4 border-white">
             <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-tight">CANDY<br>RENTAL</h3>
             <p class="text-xs text-white/90 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
         </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 px-5 mb-10">
+        <a href="#" class="btn-custom flex-1">
+            <div class="text-[#7db9f9]">
+                <p class="text-[10px] font-black uppercase">แจ้งปัญหา</p>
+                <h5 class="text-2xl font-black italic tracking-tighter leading-none">CHAT</h5>
+            </div>
+            <div class="icon-circle bg-blue-candy shadow-lg shadow-blue-200">
+                <i class="fa-solid fa-comment-dots"></i>
+            </div>
+        </a>
+        <a href="#" class="btn-custom flex-1">
+            <div class="text-[#f07ab0]">
+                <p class="text-[10px] font-black uppercase">วิธีสั่งซื้อ</p>
+                <h5 class="text-2xl font-black italic tracking-tighter leading-none">GUIDE</h5>
+            </div>
+            <div class="icon-circle bg-pink-candy shadow-lg shadow-pink-200">
+                <i class="fa-solid fa-star"></i>
+            </div>
+        </a>
     </div>
 
     <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
@@ -136,8 +164,8 @@
         };
 
         document.getElementById('auth-btn').onclick = async () => {
-            const user = document.getElementById('user-input').value;
-            const pass = document.getElementById('pass-input').value;
+            const user = document.getElementById('user-input').value.trim();
+            const pass = document.getElementById('pass-input').value.trim();
             if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
             
             document.getElementById('process-loader').style.display = 'flex';
@@ -160,26 +188,23 @@
                     closeAuth();
                 } else {
                     await createUserWithEmailAndPassword(auth, email, pass);
-                    
-                    // 🔥 เพิ่มระบบ Auto Update สถิติเมื่อสมัครสำเร็จ
                     const userStatRef = ref(db, 'stats/users');
-                    await runTransaction(userStatRef, (currentValue) => {
-                        return (currentValue || 0) + 1;
-                    });
-
-                    showCandyAlert("สมัครสำเร็จ!", "ยอดลูกค้าในร้านเพิ่มขึ้นแล้วค่ะ!");
+                    await runTransaction(userStatRef, (currentValue) => (currentValue || 0) + 1);
+                    showCandyAlert("สมัครสำเร็จ!", "กรุณาเข้าสู่ระบบอีกครั้งเพื่อเข้าบ้านนะคะ");
                     isLoginMode = true; document.getElementById('auth-title').innerText = "Sign In";
                     document.getElementById('pass-input').value = "";
                 }
             } catch (err) {
-                showCandyAlert("อุ๊ปส์!", "เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะ", "error");
+                // จัดการ Error ให้เข้าใจง่ายขึ้น
+                let errorMsg = "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ";
+                if(err.code === 'auth/invalid-credential') errorMsg = "ชื่อผู้ใช้หรือรหัสผ่านผิดพลาดค่ะ";
+                showCandyAlert("อุ๊ปส์!", errorMsg, "error");
             } finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
         function updateUI(user) {
             const section = document.getElementById('auth-section');
             if(user || localStorage.getItem('isAdmin')) {
-                // 🎲 สุ่มไอคอนใหม่ทุกครั้งที่โหลด UI
                 const randomIcon = candyIcons[Math.floor(Math.random() * candyIcons.length)];
                 section.innerHTML = `
                     <button onclick="togglePanel()" class="w-10 h-10 rounded-full bg-white border-2 border-pink-200 text-pink-500 flex items-center justify-center shadow-sm hover:scale-110 transition">
