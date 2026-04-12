@@ -1,19 +1,64 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Register | CandyMarket</title>
+<title>สมัครสมาชิก | CandyMarket</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+body{
+background:#fff5f7;
+font-family:'Kanit',sans-serif;
+}
+
+.grid-bg{
+background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px);
+background-size:25px 25px;
+}
+
+#loader{
+position:fixed;
+inset:0;
+background:#fff5f7;
+z-index:9999;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.candy-spinner{
+font-size:55px;
+color:#f07ab0;
+animation:candy-spin 1.5s infinite;
+}
+
+@keyframes candy-spin{
+0%{transform:rotate(0)}
+100%{transform:rotate(360deg)}
+}
+
+</style>
 
 </head>
 
-<body class="bg-[#fff5f7] flex items-center justify-center min-h-screen">
+<body class="grid-bg flex items-center justify-center min-h-screen">
 
-<div class="bg-white p-8 rounded-3xl shadow-xl border-2 border-pink-100 w-[90%] max-w-md">
+<div id="loader">
+<div class="candy-spinner">
+<i class="fa-solid fa-cookie-bite"></i>
+</div>
+</div>
+
+<div class="bg-white p-8 rounded-[2rem] shadow-lg border-2 border-pink-100 w-[90%] max-w-md">
 
 <h2 class="text-3xl font-black text-center text-pink-500 mb-6">
 สมัครบัญชี
@@ -34,7 +79,9 @@ class="w-full mb-5 px-4 py-3 rounded-xl border-2 border-pink-100">
 
 <button onclick="registerUser()"
 class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 rounded-xl font-black">
+
 สมัครสมาชิก
+
 </button>
 
 </div>
@@ -42,19 +89,37 @@ class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 round
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+import { getAuth, createUserWithEmailAndPassword }
+
+from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+import { getDatabase, ref, set }
+
+from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w",
 authDomain:"web-rental-system-d8894.firebaseapp.com",
 projectId:"web-rental-system-d8894",
 databaseURL:"https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app"
-};
+}
 
 const app=initializeApp(firebaseConfig)
+
 const auth=getAuth(app)
+
 const db=getDatabase(app)
+
+window.onload=()=>{
+
+setTimeout(()=>{
+
+document.getElementById("loader").style.display="none"
+
+},800)
+
+}
 
 window.registerUser=function(){
 
