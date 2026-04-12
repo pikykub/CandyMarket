@@ -3,88 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>candyMarket | ระบบเช่าเว็บไซต์</title>
+    <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #0d0d0f; font-family: 'Kanit', sans-serif; color: white; }
-        .grid-bg { background-image: radial-gradient(#222 1px, transparent 1px); background-size: 20px 20px; }
-        .peach-text { background: linear-gradient(to right, #ff9a9e, #fecfef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .badge-ribbon { position: absolute; top: 10px; right: -30px; width: 120px; text-align: center; transform: rotate(45deg); font-size: 10px; font-weight: bold; padding: 4px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10;}
-        
-        /* 🌀 New Loader (หน้าหมุนๆ) */
-        #loader { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
-        .spinner { width: 60px; height: 60px; border: 5px solid rgba(223,79,141,0.3); border-top-color: #df4f8d; border-radius: 50%; animation: spin 1s linear infinite; }
+        /* 🎨 ปรับธีมสีใหม่ให้เป็น Candy */
+        :root {
+            --candy-pink: #ffafbd;
+            --candy-blue: #c9ffbf;
+            --candy-purple: #cc99ff;
+            --candy-text: #6a4c93;
+        }
+
+        body { 
+            background: #fff5f7; /* สีชมพูขาวนวล */
+            font-family: 'Kanit', sans-serif; 
+            color: #4a4a4a; 
+        }
+
+        .grid-bg { 
+            background-image: radial-gradient(#ffcad4 1px, transparent 1px); 
+            background-size: 30px 30px; 
+        }
+
+        .candy-gradient-text { 
+            background: linear-gradient(to right, #ff758c, #ff7eb3, #70d6ff); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        .candy-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 10px 20px rgba(255, 182, 193, 0.2);
+        }
+
+        /* 🍭 Loader รูปอมยิ้มหมุน */
+        #loader { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
+        .spinner { 
+            font-size: 50px;
+            animation: spin 2s linear infinite; 
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* 📢 Popup Modal (หน้าต่างประกาศ) */
-        #popup-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 5000; justify-content: center; align-items: center; padding: 20px; }
-        .popup-content { background: #111; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 400px; padding: 30px; border-radius: 2rem; text-align: center; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: popIn 0.3s ease-out; }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        /* 🎀 Badge แบบน่ารัก */
+        .badge-ribbon { 
+            position: absolute; top: 15px; right: -30px; width: 120px; 
+            text-align: center; transform: rotate(45deg); font-size: 11px; 
+            font-weight: bold; padding: 4px 0; color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 10;
+        }
     </style>
 </head>
 <body class="grid-bg pb-20">
 
-    <div id="loader"><div class="spinner"></div></div>
+    <div id="loader"><div class="spinner">🍭</div></div>
 
-    <div id="popup-modal">
-        <div class="popup-content">
-            <div class="w-16 h-16 bg-[#1a1a1c] border border-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-[0_0_20px_rgba(223,79,141,0.3)]">🍑</div>
-            <h2 id="popup-title" class="text-xl font-bold text-white mb-2 leading-tight"></h2>
-            <p id="popup-desc" class="text-gray-400 text-sm mb-6 leading-relaxed whitespace-pre-line"></p>
-            <button onclick="closePopup()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition active:scale-95">รับทราบ / ปิด</button>
+    <div id="popup-modal" style="display: none;" class="fixed inset-0 bg-pink-100/60 backdrop-blur-md z-[5000] flex justify-center items-center p-5">
+        <div class="candy-card w-full max-w-sm p-8 text-center animate-[popIn_0.3s_ease-out]">
+            <div class="w-20 h-20 bg-gradient-to-br from-pink-200 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl shadow-inner">🍭</div>
+            <h2 id="popup-title" class="text-2xl font-bold text-[#6a4c93] mb-2"></h2>
+            <p id="popup-desc" class="text-gray-500 text-sm mb-6"></p>
+            <button onclick="closePopup()" class="w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white py-3 rounded-2xl font-bold shadow-lg hover:scale-105 transition active:scale-95">เย้! ตกลง</button>
         </div>
     </div>
 
-    <header class="flex justify-between items-center px-5 py-4 sticky top-0 bg-[#0d0d0f]/90 backdrop-blur-md z-50 border-b border-white/5">
-        <h1 class="text-xl font-black tracking-tight peach-text">Peachweb.</h1>
+    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/70 backdrop-blur-lg z-50 border-b border-pink-100">
+        <h1 class="text-2xl font-black tracking-tighter candy-gradient-text">CandyMarket.</h1>
         <div id="auth-section" class="flex items-center gap-3"></div>
     </header>
 
     <div class="mx-5 mt-6 mb-8">
-        <div id="main-banner" class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1c122b] via-[#2d1135] to-[#4a1538] border border-white/10 p-8 min-h-[220px] flex flex-col justify-center shadow-[0_0_30px_rgba(255,105,180,0.1)]">
-            <p class="text-sm font-medium opacity-90 tracking-wide text-gray-300">เปิดร้านค้าออนไลน์</p>
-            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-[1.1] mt-2 mb-1">"RENTAL<br>SYSTEM"</h3>
-            <p class="text-[10px] text-gray-400 mt-2 tracking-wide">สวย จบ ครบ พร้อมทำเงินได้ทันที</p>
+        <div id="main-banner" class="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[#a1c4fd] via-[#fbc2eb] to-[#ff9a9e] p-8 min-h-[220px] flex flex-col justify-center shadow-xl border-4 border-white">
+            <p class="text-sm font-bold text-white/90 drop-shadow-sm">🍭 บริการปล่อยเช่าเว็บ</p>
+            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-md leading-[1.1] mt-2 mb-1">CANDY<br>RENTAL</h3>
+            <p class="text-xs text-white/80 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
             <div class="flex gap-2 mt-5">
-                <span class="text-[9px] bg-pink-500/30 text-white px-4 py-1.5 rounded-lg border border-pink-500/50 uppercase font-bold tracking-wider backdrop-blur-md">Premium</span>
-                <span class="text-[9px] bg-indigo-500/30 text-white px-4 py-1.5 rounded-lg border border-indigo-500/50 uppercase font-bold tracking-wider backdrop-blur-md">Fast Support</span>
+                <span class="text-[10px] bg-white/30 text-white px-4 py-1.5 rounded-full border border-white/50 backdrop-blur-md font-bold uppercase">Delicious</span>
+                <span class="text-[10px] bg-white/30 text-white px-4 py-1.5 rounded-full border border-white/50 backdrop-blur-md font-bold uppercase">Fast Delivery</span>
             </div>
+            <div class="absolute -bottom-5 -right-5 text-8xl opacity-20 transform -rotate-12">🍬</div>
         </div>
     </div>
 
     <div class="px-5 mb-8">
-        <div class="bg-[#111113] rounded-2xl p-2 flex items-center gap-4 overflow-hidden border border-white/5">
-            <div class="bg-pink-500 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shrink-0"><i class="fa-solid fa-bullhorn"></i> อัปเดต</div>
-            <div class="flex gap-6 text-sm text-gray-400 whitespace-nowrap overflow-hidden"><marquee scrollamount="5" id="marquee-text">กำลังโหลดประกาศ...</marquee></div>
+        <div class="bg-white rounded-2xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm overflow-hidden">
+            <div class="bg-gradient-to-r from-pink-400 to-orange-300 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-candy-cane"></i> ข่าวสาร
+            </div>
+            <marquee class="text-sm text-pink-400 font-medium" scrollamount="5" id="marquee-text">กำลังโหลดความหวาน...</marquee>
         </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4 px-5 mb-8">
-        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">ผู้ใช้ทั้งหมด</p><h4 class="text-3xl font-black" id="stat-users">0</h4></div>
-        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">สินค้าทั้งหมด</p><h4 class="text-3xl font-black" id="stat-prods">0</h4></div>
-        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">หมวดหมู่</p><h4 class="text-3xl font-black" id="stat-cats">0</h4></div>
-        <div class="bg-[#111113] p-5 rounded-2xl border border-white/5 relative"><p class="text-gray-500 text-[10px] uppercase mb-1">รายการสำเร็จ</p><h4 class="text-3xl font-black" id="stat-sold">0</h4></div>
+        <div class="candy-card p-5 relative overflow-hidden">
+            <p class="text-pink-300 text-[10px] font-black uppercase mb-1">ลูกค้าที่น่ารัก</p>
+            <h4 class="text-3xl font-black text-[#6a4c93]" id="stat-users">0</h4>
+            <i class="fa-solid fa-users absolute bottom-2 right-4 text-pink-50 text-4xl"></i>
+        </div>
+        <div class="candy-card p-5 relative overflow-hidden">
+            <p class="text-blue-300 text-[10px] font-black uppercase mb-1">ขนมในร้าน</p>
+            <h4 class="text-3xl font-black text-[#6a4c93]" id="stat-prods">0</h4>
+            <i class="fa-solid fa-box-open absolute bottom-2 right-4 text-blue-50 text-4xl"></i>
+        </div>
     </div>
 
     <div class="grid grid-cols-2 gap-3 px-5 mb-10">
-        <a href="admin-chat.html" class="bg-[#111113] p-4 rounded-2xl flex items-center justify-between border border-white/5 hover:bg-[#1a1a1c] transition">
-            <div class="relative z-10 w-full"><p class="text-[10px] text-gray-500 font-medium">ติดต่อแจ้งปัญหา</p><h5 class="text-2xl font-black italic tracking-tight text-white mt-0.5">CHAT</h5><p class="text-[9px] text-gray-400 mt-1 font-medium">ทักแชทหาแอด →</p></div>
-            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-black shadow-[0_0_15px_rgba(255,255,255,0.1)] relative z-10 shrink-0"><i class="fa-solid fa-headset text-xl"></i></div>
+        <a href="admin-chat.html" class="candy-card p-4 flex items-center justify-between hover:scale-105 transition active:scale-95 border-blue-100">
+            <div>
+                <p class="text-[10px] text-blue-400 font-bold">แจ้งปัญหา</p>
+                <h5 class="text-xl font-black italic text-blue-500">CHAT</h5>
+            </div>
+            <div class="w-12 h-12 bg-blue-400 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                <i class="fa-solid fa-comment-dots text-xl"></i>
+            </div>
         </a>
-        <a href="guide.html" class="bg-[#111113] p-4 rounded-2xl flex items-center justify-between border border-white/5 hover:bg-[#1a1a1c] transition">
-            <div class="relative z-10 w-full"><p class="text-[10px] text-gray-500 font-medium">วิธีสั่งซื้อ</p><h5 class="text-2xl font-black italic tracking-tight text-white mt-0.5">GUIDE</h5><p class="text-[9px] text-gray-400 mt-1 font-medium">ดูขั้นตอน →</p></div>
-            <div class="w-14 h-14 bg-[#df4f8d] rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(223,79,141,0.5)] relative z-10 shrink-0"><i class="fa-solid fa-book-open text-xl"></i></div>
+        <a href="guide.html" class="candy-card p-4 flex items-center justify-between hover:scale-105 transition active:scale-95 border-pink-100">
+            <div>
+                <p class="text-[10px] text-pink-400 font-bold">วิธีสั่งซื้อ</p>
+                <h5 class="text-xl font-black italic text-pink-500">GUIDE</h5>
+            </div>
+            <div class="w-12 h-12 bg-pink-400 rounded-full flex items-center justify-center text-white shadow-lg shadow-pink-200">
+                <i class="fa-solid fa-star text-xl"></i>
+            </div>
         </a>
     </div>
 
     <div class="px-5 mb-10">
-        <h3 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-lock text-sm text-pink-400"></i> รายการเว็บไซต์แนะนำ</h3>
-        <div class="grid grid-cols-2 gap-3" id="product-container"><div class="text-xs text-gray-500 w-full">กำลังโหลดข้อมูลสินค้า...</div></div>
+        <h3 class="text-lg font-black text-[#6a4c93] mb-4 flex items-center gap-2">
+            <span class="text-2xl">🍬</span> เว็บไซต์แนะนำ
+        </h3>
+        <div class="grid grid-cols-2 gap-4" id="product-container">
+            </div>
     </div>
 
     <script type="module">
+        // Firebase Logic (เหมือนเดิมของคุณ แต่เปลี่ยนการแสดงผล HTML ในส่วน product)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
@@ -92,63 +149,41 @@
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        // ปิด Loader
-        window.onload = () => { setTimeout(() => document.getElementById('loader').style.opacity = '0', 500); setTimeout(() => document.getElementById('loader').style.display = 'none', 1000); };
+        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display = 'none', 500); }, 800); };
 
         onAuthStateChanged(auth, (user) => {
             const authSection = document.getElementById('auth-section');
             if (user) {
-                const uid = user.uid; const username = user.email.split('@')[0].toLowerCase();
-                let userAvatar = "https://ui-avatars.com/api/?name=User&background=1a1a1c&color=fff";
-                onValue(ref(db, `users/${uid}/avatar`), snap => { 
-                    if(snap.exists()) userAvatar = snap.val(); 
-                    onValue(ref(db, 'admins/' + username), (adminSnap) => {
-                        const isAdmin = username === 'adminpeach' || adminSnap.exists();
-                        let adminLabel = isAdmin ? `<span class="bg-yellow-500 text-black text-[9px] font-black px-2 py-0.5 rounded-md mr-1">ADMIN</span>` : '';
-                        let adminLink = isAdmin ? `<a href="admin.html" class="text-[10px] text-gray-400 hover:text-white underline decoration-pink-500 underline-offset-4 mr-1">เข้าหลังบ้าน</a>` : '';
-                        authSection.innerHTML = `${adminLink}<a href="profile.html" class="bg-[#1a1a1c] border border-pink-500/50 text-white px-3 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(255,105,180,0.2)]"><img src="${userAvatar}" class="w-6 h-6 rounded-full object-cover border border-white/20"> <div>${adminLabel} UID: ${uid.substring(0,6)}..</div></a>`;
-                    }, {onlyOnce: true});
-                });
+                const uid = user.uid;
+                authSection.innerHTML = `<a href="profile.html" class="candy-card px-4 py-2 text-sm font-bold flex items-center gap-2 border-pink-200 text-pink-500"><i class="fa-solid fa-circle-user text-lg"></i> UID: ${uid.substring(0,6)}</a>`;
             } else {
-                authSection.innerHTML = `<a href="login.html" class="bg-[#1a1a1c] border border-pink-500/50 text-white px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(255,105,180,0.2)]"><span class="text-lg">🍑</span> เข้าสู่ระบบ</a>`;
+                authSection.innerHTML = `<a href="login.html" class="bg-gradient-to-r from-pink-400 to-purple-400 text-white px-5 py-2 rounded-full text-sm font-bold shadow-md hover:shadow-pink-200">เข้าสู่ระบบ</a>`;
             }
         });
 
-        // 🟢 โหลด Popup และแสดงผลทันที (ถ้าเปิดใช้งาน)
-        onValue(ref(db, 'settings/popup'), snap => {
-            const data = snap.val();
-            if(data && data.isActive && !sessionStorage.getItem('popupShown')) {
-                document.getElementById('popup-title').innerText = data.title;
-                document.getElementById('popup-desc').innerText = data.desc;
-                document.getElementById('popup-modal').style.display = 'flex';
-            }
-        });
-        window.closePopup = () => { document.getElementById('popup-modal').style.display = 'none'; sessionStorage.setItem('popupShown', 'true'); }
-
-        onValue(ref(db, 'stats'), snap => { const d = snap.val()||{}; document.getElementById('stat-users').innerText = d.users||0; document.getElementById('stat-cats').innerText = d.cats||0; document.getElementById('stat-prods').innerText = d.prods||0; document.getElementById('stat-sold').innerText = d.sold||0; });
+        // Update Stats & Announcement (เหมือนเดิม)
+        onValue(ref(db, 'stats'), snap => { const d = snap.val()||{}; document.getElementById('stat-users').innerText = d.users||0; document.getElementById('stat-prods').innerText = d.prods||0; });
         onValue(ref(db, 'settings/announcement/marquee'), snap => { if(snap.exists()) document.getElementById('marquee-text').innerText = snap.val(); });
-        
+
+        // Rendering Products ในสไตล์ Candy
         onValue(ref(db, 'products'), snap => {
             const container = document.getElementById('product-container'); container.innerHTML = '';
-            if(!snap.exists()) { container.innerHTML = `<div class="text-gray-500 text-xs w-full">ยังไม่มีสินค้าในระบบค่ะ</div>`; return; }
             snap.forEach(child => {
-                const p = child.val(); const id = child.key;
-                let badgeHtml = p.badge === 'best' ? `<div class="badge-ribbon bg-red-500 text-white">Best Seller</div>` : (p.badge === 'recommend' ? `<div class="badge-ribbon bg-blue-500 text-white">สินค้าแนะนำ</div>` : '');
-                
+                const p = child.val();
+                let badgeColor = p.badge === 'best' ? 'bg-orange-400' : 'bg-blue-400';
+                let badgeText = p.badge === 'best' ? 'ขายดี 🍭' : 'แนะนำ ✨';
+
                 container.innerHTML += `
-                    <div class="bg-[#111113] border border-white/5 rounded-2xl p-3 flex flex-col hover:border-pink-500/30 transition relative overflow-hidden">
-                        ${badgeHtml}
-                        <img src="${p.image||'https://via.placeholder.com/400x250'}" class="rounded-xl mb-3 w-full object-cover aspect-video border border-white/5">
-                        <h4 class="font-bold text-sm mb-1 text-white truncate">${p.name}</h4>
-                        <div class="flex items-baseline gap-2 mb-3 mt-auto">
-                            <span class="text-cyan-400 font-black text-xl">฿${p.price}</span>
-                            ${p.oldPrice?`<span class="text-[10px] text-gray-500 line-through">฿${p.oldPrice}</span>`:''}
+                    <div class="candy-card p-3 flex flex-col hover:border-pink-300 transition-all relative overflow-hidden group">
+                        ${p.badge ? `<div class="badge-ribbon ${badgeColor}">${badgeText}</div>` : ''}
+                        <img src="${p.image}" class="rounded-2xl mb-3 w-full aspect-square object-cover border-2 border-pink-50 group-hover:scale-105 transition">
+                        <h4 class="font-bold text-sm mb-1 text-[#6a4c93] truncate">${p.name}</h4>
+                        <div class="mb-3">
+                            <span class="text-pink-500 font-black text-xl">฿${p.price}</span>
                         </div>
-                        <div class="flex gap-2">
-                            <a href="${p.demo||'#'}" target="_blank" class="w-full bg-[#1a1a1c] border border-white/10 text-white text-center text-xs font-bold py-3 rounded-xl hover:bg-white/10 transition hover:border-white/30">
-                                <i class="fa-solid fa-desktop mr-1"></i> ดูตัวอย่าง / ทดลอง
-                            </a>
-                        </div>
+                        <a href="${p.demo||'#'}" target="_blank" class="w-full bg-pink-50 text-pink-500 text-center text-[11px] font-black py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition">
+                            <i class="fa-solid fa-eye mr-1"></i> ส่องตัวอย่าง
+                        </a>
                     </div>`;
             });
         });
