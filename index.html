@@ -54,6 +54,38 @@ body{
 .bg-blue-candy{background:#7db9f9;}
 .bg-pink-candy{background:#f07ab0;}
 
+/* Modal Style */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 192, 203, 0.4);
+    backdrop-blur: 4px;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 2.5rem;
+    width: 90%;
+    max-width: 350px;
+    border: 4px solid #ffe4e9;
+    box-shadow: 0 20px 40px rgba(255,182,193,0.3);
+    text-align: center;
+}
+.modal-input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border-radius: 50px;
+    border: 2px solid #fff0f3;
+    background: #fffafa;
+    outline: none;
+}
+.modal-input:focus { border-color: #ffb6c1; }
+
 #loader{
     position:fixed;
     inset:0;
@@ -86,9 +118,30 @@ body{
     </div>
 </div>
 
+<div id="login-modal" class="modal flex">
+    <div class="modal-content">
+        <h3 class="text-2xl font-black candy-text mb-4">Login</h3>
+        <input type="text" id="login-user" class="modal-input" placeholder="ชื่อผู้ใช้">
+        <input type="password" id="login-pass" class="modal-input" placeholder="รหัสผ่าน">
+        <button id="btn-do-login" class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 rounded-full font-black mt-4 shadow-lg">เข้าสู่ระบบ</button>
+        <button onclick="closeModal('login-modal')" class="text-gray-400 text-sm mt-4 block mx-auto">ไว้วันหลังนะ</button>
+    </div>
+</div>
+
+<div id="register-modal" class="modal flex">
+    <div class="modal-content">
+        <h3 class="text-2xl font-black text-[#7db9f9] mb-4">Register</h3>
+        <input type="text" id="reg-user" class="modal-input" placeholder="ตั้งชื่อผู้ใช้">
+        <input type="password" id="reg-pass" class="modal-input" placeholder="ตั้งรหัสผ่าน">
+        <button id="btn-do-reg" class="w-full bg-[#7db9f9] text-white py-3 rounded-full font-black mt-4 shadow-lg">สมัครสมาชิก</button>
+        <button onclick="closeModal('register-modal')" class="text-gray-400 text-sm mt-4 block mx-auto">ยกเลิก</button>
+    </div>
+</div>
+
 <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
     <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
-    <div id="auth-section"></div>
+    <div id="auth-section">
+        </div>
 </header>
 
 <div class="mx-5 mt-6 mb-8">
@@ -146,7 +199,6 @@ body{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -157,36 +209,92 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getDatabase(app);
 
-// เช็คสถานะการเข้าสู่ระบบ
-onAuthStateChanged(auth, (user) => {
-    const authSection = document.getElementById('auth-section');
+// --- ระบบ Login จำลองสำหรับเทส ---
+const ADMIN_USER = "adminpeach";
+const ADMIN_PASS = "khaohom155454";
 
-    if(user){
-        // ใช้รูปโปรไฟล์ ถ้าไม่มีให้ใช้ไอคอนคนหวานๆ
-        const avatarContent = user.photoURL 
-            ? `<img src="${user.photoURL}" class="w-9 h-9 rounded-full border-2 border-pink-200 object-cover">` 
-            : `<div class="w-9 h-9 rounded-full bg-pink-50 border-2 border-pink-200 flex items-center justify-center text-pink-400 text-lg shadow-sm"><i class="fa-solid fa-user"></i></div>`;
+const authSection = document.getElementById('auth-section');
 
+// ฟังก์ชันเปิด-ปิด Modal
+window.openModal = (id) => document.getElementById(id).style.display = 'flex';
+window.closeModal = (id) => document.getElementById(id).style.display = 'none';
+
+function checkAuthStatus() {
+    const loggedInUser = localStorage.getItem('candy_user');
+    
+    if (loggedInUser) {
+        // ไอคนรูปคนสีสันสดใส (ไล่เฉดสี)
         authSection.innerHTML = `
-            <a href="profile.html" class="flex items-center gap-2 bg-white border-2 border-pink-200 px-2 py-1.5 rounded-full shadow-sm hover:scale-105 transition">
-                ${avatarContent}
-            </a>
+            <div class="flex items-center gap-3">
+                <div onclick="logout()" class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#ff9a9e] via-[#fad0c4] to-[#ffecd2] flex items-center justify-center text-white shadow-md border-2 border-white cursor-pointer hover:scale-110 transition">
+                    <i class="fa-solid fa-user-astronaut text-lg"></i>
+                </div>
+                <span class="text-xs font-black text-pink-400 bg-white px-3 py-1 rounded-full border border-pink-100">${loggedInUser}</span>
+            </div>
         `;
     } else {
         authSection.innerHTML = `
-            <a href="login.html" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-sm font-black shadow-md">
-                เข้าสู่ระบบ
-            </a>
+            <div class="flex gap-2">
+                <button onclick="openModal('register-modal')" class="text-[#7db9f9] text-xs font-black px-3 py-2">สมัคร</button>
+                <button onclick="openModal('login-modal')" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2 rounded-full text-xs font-black shadow-md">เข้าสู่ระบบ</button>
+            </div>
         `;
     }
-    
-    // ปิดคุกกี้หมุน หลังจากโหลดสถานะเสร็จแล้ว
+}
+
+// จัดการ Login
+document.getElementById('btn-do-login').onclick = () => {
+    const user = document.getElementById('login-user').value;
+    const pass = document.getElementById('login-pass').value;
+
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        localStorage.setItem('candy_user', 'Admin Peach');
+        location.reload();
+    } else {
+        const localPass = localStorage.getItem('reg_' + user);
+        if (localPass && localPass === pass) {
+            localStorage.setItem('candy_user', user);
+            location.reload();
+        } else {
+            alert("งือออ ข้อมูลไม่ถูกต้องค่ะ!");
+        }
+    }
+};
+
+// จัดการ Register
+document.getElementById('btn-do-reg').onclick = () => {
+    const user = document.getElementById('reg-user').value;
+    const pass = document.getElementById('reg-pass').value;
+    if(user && pass) {
+        localStorage.setItem('reg_' + user, pass);
+        alert("สมัครสมาชิกแล้ว! ลองเข้าสู่ระบบดูนะคะ");
+        closeModal('register-modal');
+        openModal('login-modal');
+    }
+};
+
+// จัดการ Logout
+window.logout = () => {
+    if(confirm('ออกจากระบบไหมคะ?')) {
+        localStorage.removeItem('candy_user');
+        location.reload();
+    }
+};
+
+// เรียกใช้งานครั้งแรก
+checkAuthStatus();
+closeModal('login-modal');
+closeModal('register-modal');
+
+// --- จบระบบ Login ---
+
+// ปิด Loader
+setTimeout(() => {
     document.getElementById('loader').style.opacity = '0';
     setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
-});
+}, 800);
 
 onValue(ref(db,'products'), snap => {
     const container = document.getElementById('product-container');
