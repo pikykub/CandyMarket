@@ -4,166 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peachweb-store | ระบบเช่าเว็บไซต์</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { background-color: #fff5f7; font-family: 'Kanit', sans-serif; color: #5a5a5a; overflow-x: hidden; }
+    
+    <style type="text/tailwindcss">
+        /* ใส่ Style เพิ่มเติมตรงนี้เพื่อให้ Tailwind อ่านค่าได้แม่นยำขึ้น */
+        @theme {
+          --color-pink-candy: #f07ab0;
+          --color-blue-candy: #7db9f9;
+        }
+        
+        body { @apply bg-[#fff5f7] text-[#5a5a5a] overflow-x-hidden; font-family: 'Kanit', sans-serif; }
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* Modal Styles - Removed Chocolate Drip entirely */
-        .contact-overlay {
-            position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4);
-            backdrop-filter: blur(8px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px;
-        }
-        .contact-card {
-            background: white; width: 100%; max-width: 350px; border-radius: 3rem;
-            padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2);
-            transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .contact-card.show { transform: scale(1); }
-        .contact-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            border-radius: 20px; margin-bottom: 12px; transition: 0.3s; border: 2px solid #fff5f7;
-        }
-        .contact-item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(240, 122, 176, 0.1); }
-
-        /* Loaders & Toasts */
-        #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(4px); z-index: 10000; display: none; align-items: center; justify-content: center; }
-        .cookie-spin { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: white; border-radius: 25px; padding: 15px 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 3px solid #fff; z-index: 10001; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 15px; }
-        #candy-toast.show { transform: translateX(-50%) translateY(0); }
-        .btn-custom { background: white; border-radius: 50px; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2); border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.3s ease; }
-        .icon-circle { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
-        #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
-        .control-panel { position: absolute; top: 70px; right: 20px; width: 220px; background: white; border-radius: 2rem; padding: 15px; box-shadow: 0 15px 30px rgba(240, 122, 176, 0.2); border: 3px solid #fff; display: none; z-index: 100; }
+        
+        /* สไตล์ Modal แบบไม่มีช็อกโกแลต */
+        .contact-overlay { @apply fixed inset-0 bg-pink-200/40 backdrop-blur-md z-[9999] hidden items-center justify-center p-5; }
+        .contact-card { @apply bg-white w-full max-w-[350px] rounded-[3rem] p-8 border-4 border-white shadow-2xl scale-75 transition-transform duration-300; }
+        .contact-card.show { @apply scale-100; }
     </style>
 </head>
 <body class="grid-bg pb-20">
-
-    <div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
-    <div id="candy-toast">
-        <div id="toast-icon-bg" class="toast-icon w-[45px] h-[45px] rounded-xl flex items-center justify-center shrink-0"><i id="toast-i" class="fa-solid"></i></div>
-        <div><h4 id="toast-title" class="font-black text-sm text-gray-700"></h4><p id="toast-msg" class="text-xs text-gray-500 font-medium"></p></div>
+    <div id="loader" class="fixed inset-0 bg-[#fff5f7] z-[99999] flex justify-center items-center transition-opacity duration-500">
+        <div class="text-6xl text-[#f07ab0] animate-spin"><i class="fa-solid fa-cookie-bite"></i></div>
     </div>
-    <div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
 
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
         <h1 class="text-2xl font-black candy-text">Peachweb-store.</h1>
-        <div id="auth-section" class="relative"></div>
-        <div id="user-panel" class="control-panel">
-            <div class="menu-item flex items-center gap-3 p-2 rounded-xl hover:bg-pink-50 cursor-pointer transition">
-                <div class="w-8 h-8 rounded-lg bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-user-gear"></i></div>
-                <span class="font-medium text-sm">จัดการโปรไฟล์</span>
-            </div>
-            <button onclick="handleLogout()" class="w-full mt-2 py-2 text-[10px] font-black text-gray-400 uppercase">Logout</button>
+        <div id="auth-section">
+             <button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-xs font-black shadow-md">เข้าสู่ระบบ</button>
         </div>
     </header>
 
     <div class="mx-5 mt-6 mb-4">
-        <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 min-h-[200px] flex flex-col justify-center shadow-xl border-4 border-white">
+        <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 min-h-[180px] flex flex-col justify-center shadow-xl border-4 border-white">
             <h3 class="text-4xl font-black italic tracking-tighter text-white drop-shadow-lg leading-none">PEACH<br>RENTAL</h3>
-            <p class="text-[10px] text-white/90 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
-        </div>
-    </div>
-
-    <div class="px-5 mb-8">
-        <div class="bg-white/80 rounded-3xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm">
-            <div class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-4 py-2 rounded-2xl font-bold text-[9px] shrink-0 italic underline">ANNOUNCEMENT</div>
-            <marquee class="text-sm text-pink-400 font-bold" scrollamount="5">ยินดีต้อนรับสู่ Peachweb-store เว็บเช่าที่สดใสที่สุดในโลก!</marquee>
+            <p class="text-[10px] text-white/90 mt-2 font-medium uppercase">Brightest Web Rental in the World!</p>
         </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4 px-5 mb-10">
-        <button onclick="openContact()" class="btn-custom">
+        <button onclick="openContact()" class="bg-white rounded-[40px] p-4 flex items-center justify-between shadow-lg border-2 border-white">
             <div class="text-[#7db9f9] text-left">
-                <p class="text-[9px] font-black uppercase">แจ้งปัญหา</p>
-                <h5 class="text-xl font-black italic leading-none">CHAT</h5>
+                <p class="text-[9px] font-black">แจ้งปัญหา</p>
+                <h5 class="text-xl font-black italic">CHAT</h5>
             </div>
-            <div class="icon-circle bg-[#7db9f9] shadow-lg shadow-blue-100"><i class="fa-solid fa-comment-dots"></i></div>
+            <div class="w-10 h-10 rounded-full bg-[#7db9f9] text-white flex items-center justify-center shadow-md"><i class="fa-solid fa-comment-dots"></i></div>
         </button>
-        <a href="#" class="btn-custom">
+        <button class="bg-white rounded-[40px] p-4 flex items-center justify-between shadow-lg border-2 border-white">
             <div class="text-[#f07ab0] text-left">
-                <p class="text-[9px] font-black uppercase">วิธีสั่งซื้อ</p>
-                <h5 class="text-xl font-black italic leading-none">GUIDE</h5>
+                <p class="text-[9px] font-black">วิธีสั่งซื้อ</p>
+                <h5 class="text-xl font-black italic">GUIDE</h5>
             </div>
-            <div class="icon-circle bg-[#f07ab0] shadow-lg shadow-pink-100"><i class="fa-solid fa-star"></i></div>
-        </a>
+            <div class="w-10 h-10 rounded-full bg-[#f07ab0] text-white flex items-center justify-center shadow-md"><i class="fa-solid fa-star"></i></div>
+        </button>
     </div>
 
-    <div id="contact-modal" class="contact-overlay" onclick="closeContact()">
-        <div class="contact-card" onclick="event.stopPropagation()">
-            <div class="text-center mb-6">
-                <div class="inline-block p-4 bg-pink-100 rounded-full text-pink-500 mb-3">
-                    <i class="fa-solid fa-heart-pulse fa-bounce text-2xl"></i>
-                </div>
-                <h3 class="text-2xl font-black text-gray-700 italic">CONTACT US</h3>
-            </div>
-            <a href="https://www.facebook.com/share/1KVCB1cc5c/" target="_blank" class="contact-item bg-blue-50">
-                <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl shadow-lg"><i class="fa-brands fa-facebook-f"></i></div>
-                <div><h4 class="font-black text-blue-600 text-sm">Facebook Page</h4><p class="text-[9px] text-blue-400 font-bold">ติดต่อผ่านหน้าเพจโดยตรง</p></div>
-            </a>
-            <a href="https://lin.ee/YdAzm8t" target="_blank" class="contact-item bg-green-50">
-                <div class="w-12 h-12 rounded-xl bg-green-500 text-white flex items-center justify-center text-xl shadow-lg"><i class="fa-brands fa-line"></i></div>
-                <div><h4 class="font-black text-green-600 text-sm">Line Official</h4><p class="text-[9px] text-green-400 font-bold">แชทผ่านไลน์กับแอดมิน</p></div>
-            </a>
-            <button onclick="closeContact()" class="w-full mt-4 py-3 rounded-2xl bg-gray-100 text-gray-400 font-black text-[10px] uppercase">Close</button>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
-        <div class="bg-white p-5 rounded-[2rem] border-2 border-pink-50 shadow-sm">
-            <p class="text-pink-300 text-[9px] font-black uppercase">ลูกค้าที่น่ารัก</p>
-            <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">0</h4>
-        </div>
-        <div class="bg-white p-5 rounded-[2rem] border-2 border-blue-50 shadow-sm">
-            <p class="text-blue-300 text-[9px] font-black uppercase">ขนมในร้าน</p>
-            <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
-        </div>
-    </div>
-
-    <div class="px-5">
-        <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
-        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
-    </div>
-
-    <script type="module">
-        // ... Firebase Config เดิม ...
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-        
-        const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
-        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
-
-        // CLEAN CONTACT LOGIC (No Chocolate)
+    <script>
+        // ฟังก์ชันเปิดปิด Modal แบบง่ายๆ
         window.openContact = () => {
             const modal = document.getElementById('contact-modal');
-            const card = modal.querySelector('.contact-card');
             modal.style.display = 'flex';
-            setTimeout(() => card.classList.add('show'), 10);
+            setTimeout(() => modal.querySelector('.contact-card').classList.add('show'), 10);
         };
         window.closeContact = () => {
             const modal = document.getElementById('contact-modal');
-            const card = modal.querySelector('.contact-card');
-            card.classList.remove('show');
+            modal.querySelector('.contact-card').classList.remove('show');
             setTimeout(() => modal.style.display = 'none', 300);
         };
-
-        // ... ฟังก์ชันอื่นๆ UI Update ...
-        onAuthStateChanged(auth, user => {
-            const section = document.getElementById('auth-section');
-            if(user) {
-                section.innerHTML = `<button onclick="togglePanel()" class="w-10 h-10 rounded-full bg-white border-2 border-pink-200 text-pink-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-lollipop text-xl"></i></button>`;
-            } else {
-                section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2 rounded-full text-xs font-black shadow-md">เข้าสู่ระบบ</button>`;
-            }
-        });
-
-        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display='none', 500); }, 800); };
+        window.onload = () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 800);
+        };
     </script>
 </body>
 </html>
