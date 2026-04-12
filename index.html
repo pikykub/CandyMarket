@@ -6,6 +6,7 @@
     <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { 
@@ -23,11 +24,11 @@
             -webkit-text-fill-color: transparent; 
         }
 
-        /* 🎨 Quick Menu Style - ปรับปรุงระยะห่าง */
+        /* 🎨 Quick Menu Style */
         .btn-custom {
             background: white;
             border-radius: 50px; 
-            padding: 12px 10px 12px 20px; /* ลด padding ขวาเพื่อให้ไอคอนวงกลมดูสมดุล */
+            padding: 12px 10px 12px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -39,7 +40,7 @@
         .btn-custom:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255, 182, 193, 0.3); }
         
         .icon-circle {
-            width: 50px; /* ปรับขนาดเล็กลงนิดนึงเพื่อให้ดูไม่แน่น */
+            width: 50px; 
             height: 50px;
             border-radius: 50%;
             display: flex;
@@ -68,6 +69,37 @@
             50% { transform: rotate(180deg) scale(1.1); color: #7db9f9; }
             100% { transform: rotate(360deg) scale(1); color: #f07ab0; } 
         }
+
+        /* ✨ New Styles for Login & Control Panel */
+        .auth-overlay {
+            position: fixed; inset: 0; background: rgba(255, 245, 247, 0.9);
+            backdrop-blur: 8px; z-index: 100; display: none; align-items: center; justify-content: center;
+        }
+        .auth-card {
+            background: white; width: 90%; max-width: 400px; padding: 40px 30px;
+            border-radius: 3rem; border: 4px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.15);
+        }
+        .auth-input {
+            width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3;
+            background: #fffafa; margin-bottom: 15px; outline: none; transition: 0.3s;
+        }
+        .auth-input:focus { border-color: #f07ab0; background: white; }
+        
+        .control-panel {
+            position: absolute; top: 70px; right: 20px; width: 220px;
+            background: white; border-radius: 2rem; padding: 15px;
+            box-shadow: 0 15px 30px rgba(240, 122, 176, 0.2);
+            border: 3px solid #fff; display: none; z-index: 100;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn { from { transform: scale(0.8) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+        .menu-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px;
+            border-radius: 15px; transition: 0.2s; font-family: 'Itim', cursive; font-size: 16px;
+        }
+        .menu-item:hover { background: #fff0f3; color: #f07ab0; }
+        .menu-icon { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
     </style>
 </head>
 <body class="grid-bg pb-20">
@@ -78,9 +110,48 @@
         </div>
     </div>
 
+    <div id="auth-modal" class="auth-overlay">
+        <div class="auth-card">
+            <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text italic">SIGN IN</h2>
+            <div id="auth-form">
+                <input type="text" id="user-input" class="auth-input" placeholder="ชื่อผู้ใช้งาน (Username)">
+                <input type="password" id="pass-input" class="auth-input" placeholder="รหัสผ่าน (Password)">
+                <button id="auth-btn" class="w-100 bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg hover:scale-105 transition-transform">ตกลง</button>
+                <p id="toggle-auth" class="text-center mt-5 text-sm text-pink-400 font-bold cursor-pointer">ยังไม่มีบัญชี? สมัครที่นี่นะ</p>
+            </div>
+            <button onclick="closeAuth()" class="block mx-auto mt-4 text-gray-400 text-xs font-bold">ไว้ทีหลังนะ</button>
+        </div>
+    </div>
+
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
         <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
-        <div id="auth-section"></div>
+        <div id="auth-section" class="relative">
+            </div>
+
+        <div id="user-panel" class="control-panel">
+            <div class="menu-item cursor-pointer">
+                <div class="menu-icon bg-pink-100 text-pink-500"><i class="fa-solid fa-candy-cane"></i></div>
+                <span>จัดการโปรไฟล์</span>
+            </div>
+            <div class="menu-item cursor-pointer">
+                <div class="menu-icon bg-blue-100 text-blue-500"><i class="fa-solid fa-ice-cream"></i></div>
+                <span>สถานะเว็บ</span>
+            </div>
+            <div class="menu-item cursor-pointer">
+                <div class="menu-icon bg-yellow-100 text-yellow-500"><i class="fa-solid fa-lollipop"></i></div>
+                <span>เติมเงิน</span>
+            </div>
+            <div class="menu-item cursor-pointer">
+                <div class="menu-icon bg-purple-100 text-purple-500"><i class="fa-solid fa-cookie"></i></div>
+                <span>ประวัติการเติมเงิน</span>
+            </div>
+            <hr class="my-2 border-pink-50">
+            <div class="menu-item cursor-pointer text-red-400">
+                <div class="menu-icon bg-red-100 text-red-400"><i class="fa-solid fa-bolt-lightning"></i></div>
+                <span>ติดต่อเร่งด่วน</span>
+            </div>
+            <button onclick="handleLogout()" class="w-full mt-2 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Logout</button>
+        </div>
     </header>
 
     <div class="mx-5 mt-6 mb-8">
@@ -108,7 +179,7 @@
 
     <div class="grid grid-cols-1 px-5 mb-10">
         <div class="flex gap-6"> 
-            <a href="admin-chat.html" class="btn-custom flex-1 group">
+            <a href="#" onclick="alert('กรุณาเข้าสู่ระบบก่อนนะคะ')" class="btn-custom flex-1 group">
                 <div>
                     <p class="text-[10px] text-[#7db9f9] font-black uppercase">แจ้งปัญหา</p>
                     <h5 class="text-2xl font-black italic text-[#7db9f9] tracking-tighter">CHAT</h5>
@@ -118,7 +189,7 @@
                 </div>
             </a>
 
-            <a href="guide.html" class="btn-custom flex-1 group">
+            <a href="#" class="btn-custom flex-1 group">
                 <div>
                     <p class="text-[10px] text-[#f07ab0] font-black uppercase">วิธีสั่งซื้อ</p>
                     <h5 class="text-2xl font-black italic text-[#f07ab0] tracking-tighter">GUIDE</h5>
@@ -150,28 +221,87 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
+
+        // 🛠️ Global UI Functions
+        window.openAuth = () => { document.getElementById('auth-modal').style.display = 'flex'; };
+        window.closeAuth = () => { document.getElementById('auth-modal').style.display = 'none'; };
+        window.togglePanel = () => { 
+            const panel = document.getElementById('user-panel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        };
+        window.handleLogout = () => { signOut(auth); window.location.reload(); };
+
+        let isLoginMode = true;
+        const toggleBtn = document.getElementById('toggle-auth');
+        toggleBtn.onclick = () => {
+            isLoginMode = !isLoginMode;
+            document.getElementById('auth-title').innerText = isLoginMode ? "SIGN IN" : "REGISTER";
+            toggleBtn.innerText = isLoginMode ? "ยังไม่มีบัญชี? สมัครที่นี่นะ" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
+        };
+
+        // 🔑 Auth Logic
+        document.getElementById('auth-btn').onclick = async () => {
+            const user = document.getElementById('user-input').value;
+            const pass = document.getElementById('pass-input').value;
+
+            // Admin Logic
+            if (user === "AdminPeach" && pass === "khaohom1554") {
+                alert("ยินดีต้อนรับท่านแอดมิน!");
+                localStorage.setItem('isAdmin', 'true');
+                closeAuth();
+                updateAuthUI({ displayName: "AdminPeach", photoURL: null });
+                return;
+            }
+
+            if (!user || !pass) return alert("กรุณากรอกข้อมูลให้ครบนะคะ");
+
+            try {
+                const email = `${user}@candymarket.com`; // จำลอง email จาก username
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                    closeAuth();
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                    alert("สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบอีกครั้งนะคะ");
+                    isLoginMode = true; // เด้งไปหน้า login ตามสั่ง
+                    document.getElementById('auth-title').innerText = "SIGN IN";
+                    document.getElementById('pass-input').value = "";
+                }
+            } catch (err) {
+                alert("เกิดข้อผิดพลาด: " + err.message);
+            }
+        };
+
+        function updateAuthUI(user) {
+            const authSection = document.getElementById('auth-section');
+            if (user || localStorage.getItem('isAdmin')) {
+                authSection.innerHTML = `
+                    <button onclick="togglePanel()" class="w-10 h-10 rounded-full bg-white border-2 border-pink-200 text-pink-500 shadow-sm flex items-center justify-center hover:scale-110 transition">
+                        <i class="fa-solid fa-user-circle text-2xl"></i>
+                    </button>`;
+            } else {
+                authSection.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-sm font-black shadow-md">เข้าสู่ระบบ</button>`;
+            }
+        }
 
         window.onload = () => { 
             setTimeout(() => {
                 document.getElementById('loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('loader').style.display='none', 500);
             }, 800); 
+            if(localStorage.getItem('isAdmin')) updateAuthUI(true);
         };
 
         onAuthStateChanged(auth, (user) => {
-            const authSection = document.getElementById('auth-section');
-            if (user) {
-                authSection.innerHTML = `<a href="profile.html" class="bg-white border-2 border-pink-200 text-pink-500 px-4 py-2 rounded-full text-sm font-bold shadow-sm flex items-center gap-2"><i class="fa-solid fa-user-circle"></i> UID: ${user.uid.substring(0,6)}</a>`;
-            } else {
-                authSection.innerHTML = `<a href="login.html" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-sm font-black shadow-md">เข้าสู่ระบบ</a>`;
-            }
+            updateAuthUI(user);
         });
 
+        // 📦 Existing Database Logic
         onValue(ref(db, 'products'), snap => {
             const container = document.getElementById('product-container'); container.innerHTML = '';
             snap.forEach(child => {
