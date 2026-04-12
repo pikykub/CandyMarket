@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>สมัครสมาชิก | Candy Market</title>
+<title>สมัครสมาชิก</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@300;400;500&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -16,6 +16,7 @@
 box-sizing:border-box;
 margin:0;
 padding:0;
+font-family:'Quicksand',sans-serif;
 }
 
 body{
@@ -23,15 +24,12 @@ height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-font-family:'Quicksand',sans-serif;
 
 background:
 radial-gradient(#ffd4e8 1.5px, transparent 1.5px);
 background-size:28px 28px;
 background-color:#fff7fb;
 }
-
-/* card */
 
 .card{
 width:360px;
@@ -42,16 +40,12 @@ box-shadow:0 20px 50px rgba(255,150,200,0.15);
 text-align:center;
 }
 
-/* brand */
-
 .brand{
 font-family:'Mali',cursive;
 font-size:26px;
 color:#ff6fae;
 margin-bottom:20px;
 }
-
-/* input */
 
 .input-box{
 position:relative;
@@ -64,7 +58,6 @@ left:14px;
 top:50%;
 transform:translateY(-50%);
 color:#ff8fbe;
-font-size:14px;
 }
 
 input{
@@ -72,61 +65,29 @@ width:100%;
 padding:12px 14px 12px 40px;
 border-radius:14px;
 border:1px solid #f0d9e6;
-font-family:'Quicksand';
-font-size:14px;
-outline:none;
-transition:.2s;
 }
-
-input:focus{
-border-color:#ff8fbe;
-}
-
-/* button */
 
 button{
-margin-top:6px;
 width:100%;
 padding:12px;
 border:none;
 border-radius:14px;
 background:linear-gradient(135deg,#ff8fbe,#ff6fae);
 color:white;
-font-family:'Quicksand';
-font-weight:500;
-font-size:15px;
 cursor:pointer;
-transition:.2s;
 }
 
-button:hover{
-transform:translateY(-1px);
-box-shadow:0 8px 20px rgba(255,120,170,.25);
-}
-
-/* login link */
-
-.login-link{
-margin-top:18px;
-font-size:14px;
-color:#777;
-}
-
-.login-link a{
-color:#ff6fae;
-text-decoration:none;
-font-weight:500;
-}
-
-/* mobile */
-
-@media(max-width:420px){
-
-.card{
-width:92%;
-padding:28px;
-}
-
+.toast{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#ff6fae;
+color:white;
+padding:12px 20px;
+border-radius:20px;
+opacity:0;
+transition:.3s;
 }
 
 </style>
@@ -139,40 +100,54 @@ padding:28px;
 <div class="brand">Candy Market</div>
 
 <div class="input-box">
-<i class="fa-regular fa-user"></i>
-<input type="text" placeholder="ชื่อผู้ใช้">
-</div>
-
-<div class="input-box">
 <i class="fa-regular fa-envelope"></i>
-<input type="email" placeholder="อีเมล">
+<input type="email" id="email" placeholder="อีเมล">
 </div>
 
 <div class="input-box">
 <i class="fa-solid fa-lock"></i>
-<input type="password" placeholder="รหัสผ่าน">
-</div>
-
-<div class="input-box">
-<i class="fa-solid fa-lock"></i>
-<input type="password" placeholder="ยืนยันรหัสผ่าน">
+<input type="password" id="password" placeholder="รหัสผ่าน">
 </div>
 
 <button onclick="register()">สมัครสมาชิก</button>
 
-<div class="login-link">
-มีบัญชีแล้ว ? <a href="login.html">เข้าสู่ระบบ</a>
 </div>
 
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
 
+function showToast(text){
+
+let toast=document.getElementById("toast")
+toast.innerText=text
+toast.style.opacity=1
+
+setTimeout(()=>{
+toast.style.opacity=0
+},2500)
+
+}
+
 function register(){
 
-alert("สมัครสมาชิกสำเร็จ")
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
 
-window.location.href="login.html"
+let user={
+email:email,
+password:password,
+username:email.split("@")[0],
+nickname:"ผู้ใช้ใหม่"
+}
+
+localStorage.setItem("user",JSON.stringify(user))
+
+showToast("สมัครสมาชิกสำเร็จ")
+
+setTimeout(()=>{
+window.location.href="index.html"
+},1200)
 
 }
 
