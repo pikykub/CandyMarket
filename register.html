@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Register | CandyMarket</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;900&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="bg-[#fff5f7] flex items-center justify-center min-h-screen">
+
+<div class="bg-white p-8 rounded-3xl shadow-xl border-2 border-pink-100 w-[90%] max-w-md">
+
+<h2 class="text-3xl font-black text-center text-pink-500 mb-6">
+สมัครบัญชี
+</h2>
+
+<input id="username"
+placeholder="Username"
+class="w-full mb-3 px-4 py-3 rounded-xl border-2 border-pink-100">
+
+<input id="email"
+placeholder="Email"
+class="w-full mb-3 px-4 py-3 rounded-xl border-2 border-pink-100">
+
+<input id="password"
+type="password"
+placeholder="Password"
+class="w-full mb-5 px-4 py-3 rounded-xl border-2 border-pink-100">
+
+<button onclick="registerUser()"
+class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 rounded-xl font-black">
+สมัครสมาชิก
+</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w",
+authDomain:"web-rental-system-d8894.firebaseapp.com",
+projectId:"web-rental-system-d8894",
+databaseURL:"https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+
+const app=initializeApp(firebaseConfig)
+const auth=getAuth(app)
+const db=getDatabase(app)
+
+window.registerUser=function(){
+
+let username=document.getElementById("username").value
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
+
+createUserWithEmailAndPassword(auth,email,password)
+.then(user=>{
+
+set(ref(db,"usernames/"+username),email)
+
+alert("สมัครสำเร็จ")
+
+location.href="login.html"
+
+})
+
+.catch(e=>alert(e.message))
+
+}
+
+</script>
+
+</body>
+</html>
