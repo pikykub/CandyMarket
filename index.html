@@ -112,3 +112,169 @@
             </div>
             <div class="icon-circle bg-blue-candy shadow-lg shadow-blue-200">
                 <i class="fa-solid fa-comment-dots"></i>
+            </div>
+        </button>
+        <a href="#" class="btn-custom flex-1 text-left">
+            <div class="text-[#f07ab0]">
+                <p class="text-[10px] font-black uppercase">วิธีสั่งซื้อ</p>
+                <h5 class="text-2xl font-black italic tracking-tighter leading-none">GUIDE</h5>
+            </div>
+            <div class="icon-circle bg-pink-candy shadow-lg shadow-pink-200">
+                <i class="fa-solid fa-star"></i>
+            </div>
+        </a>
+    </div>
+
+    <div id="contact-modal" class="contact-overlay" onclick="closeContact()">
+        <div class="contact-card" onclick="event.stopPropagation()">
+            <div class="text-center mb-6">
+                <div class="inline-block p-4 bg-pink-100 rounded-full text-pink-500 mb-3">
+                    <i class="fa-solid fa-heart-pulse fa-bounce text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-black text-gray-700 italic">CONTACT US</h3>
+                <p class="text-xs text-gray-400 font-bold uppercase">เลือกช่องทางที่สะดวกได้เลยค่ะ</p>
+            </div>
+            <a href="https://www.facebook.com/share/1KVCB1cc5c/?mibextid=wwXIfr" target="_blank" class="contact-item bg-blue-50">
+                <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl shadow-lg">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </div>
+                <div><h4 class="font-black text-blue-600">Facebook Page</h4><p class="text-[10px] text-blue-400 font-bold">ติดต่อผ่านหน้าเพจโดยตรง</p></div>
+            </a>
+            <a href="https://lin.ee/YdAzm8t" target="_blank" class="contact-item bg-green-50">
+                <div class="w-12 h-12 rounded-xl bg-green-500 text-white flex items-center justify-center text-xl shadow-lg">
+                    <i class="fa-brands fa-line"></i>
+                </div>
+                <div><h4 class="font-black text-green-600">Line Official</h4><p class="text-[10px] text-green-400 font-bold">แชทผ่านไลน์กับแอดมิน</p></div>
+            </a>
+            <button onclick="closeContact()" class="w-full mt-4 py-3 rounded-2xl bg-gray-100 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-pink-50 shadow-sm">
+            <p class="text-pink-300 text-[10px] font-black uppercase">ลูกค้าที่น่ารัก</p>
+            <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">0</h4>
+        </div>
+        <div class="bg-white p-5 rounded-[2rem] border-2 border-blue-50 shadow-sm">
+            <p class="text-blue-300 text-[10px] font-black uppercase">ขนมในร้าน</p>
+            <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
+        </div>
+    </div>
+
+    <div class="px-5">
+        <h3 class="text-lg font-black text-gray-600 mb-5 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
+        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        
+        const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
+
+        // Contact Logic
+        window.openContact = () => {
+            const drip = document.getElementById('chocolate-melt');
+            const modal = document.getElementById('contact-modal');
+            const card = modal.querySelector('.contact-card');
+            drip.classList.add('melting');
+            setTimeout(() => {
+                modal.style.display = 'flex';
+                setTimeout(() => card.classList.add('show'), 50);
+                setTimeout(() => drip.classList.remove('melting'), 500);
+            }, 300);
+        };
+        window.closeContact = () => {
+            const modal = document.getElementById('contact-modal');
+            const card = modal.querySelector('.contact-card');
+            card.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        };
+
+        const candyIcons = ["fa-lollipop", "fa-ice-cream", "fa-cookie", "fa-lemon", "fa-candy-cane"];
+        window.showCandyAlert = (title, msg, type = 'success') => {
+            const toast = document.getElementById('candy-toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon-bg').className = type === 'success' ? "toast-icon bg-green-100 text-green-500" : "toast-icon bg-red-100 text-red-500";
+            document.getElementById('toast-i').className = type === 'success' ? "fa-solid fa-check-circle" : "fa-solid fa-circle-exclamation";
+            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
+        };
+        window.openAuth = () => document.getElementById('auth-modal').style.display = 'flex';
+        window.closeAuth = () => document.getElementById('auth-modal').style.display = 'none';
+        window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
+        window.handleLogout = () => { localStorage.removeItem('isAdmin'); signOut(auth); window.location.reload(); };
+
+        let isLoginMode = true;
+        document.getElementById('toggle-auth').onclick = () => {
+            isLoginMode = !isLoginMode;
+            document.getElementById('auth-title').innerText = isLoginMode ? "Sign In" : "Register";
+            document.getElementById('toggle-auth').innerText = isLoginMode ? "ยังไม่มีบัญชี? สมัครที่นี่นะ" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
+        };
+
+        document.getElementById('auth-btn').onclick = async () => {
+            const user = document.getElementById('user-input').value.trim();
+            const pass = document.getElementById('pass-input').value.trim();
+            if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
+            document.getElementById('process-loader').style.display = 'flex';
+            if (user === "AdminPeach" && pass === "khaohom1554") {
+                setTimeout(() => {
+                    document.getElementById('process-loader').style.display = 'none';
+                    localStorage.setItem('isAdmin', 'true');
+                    showCandyAlert("สวัสดีค่ะคุณลูกพีช!", "แอดมินเข้าชมหน้าบ้านได้เลยนะคะ");
+                    closeAuth(); updateUI(true);
+                }, 800);
+                return;
+            }
+            try {
+                const email = `${user}@candymarket.com`;
+                if(isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                    showCandyAlert("สำเร็จ!", "ยินดีต้อนรับกลับสู่ร้านขนมนะคะ");
+                    closeAuth();
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                    const userStatRef = ref(db, 'stats/users');
+                    await runTransaction(userStatRef, (currentValue) => (currentValue || 0) + 1);
+                    showCandyAlert("สมัครสำเร็จ!", "กรุณาเข้าสู่ระบบอีกครั้งเพื่อเข้าบ้านนะคะ");
+                    isLoginMode = true; document.getElementById('auth-title').innerText = "Sign In";
+                    document.getElementById('pass-input').value = "";
+                }
+            } catch (err) {
+                let errorMsg = "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ";
+                if(err.code === 'auth/invalid-credential') errorMsg = "ชื่อผู้ใช้หรือรหัสผ่านผิดพลาดค่ะ";
+                showCandyAlert("อุ๊ปส์!", errorMsg, "error");
+            } finally { document.getElementById('process-loader').style.display = 'none'; }
+        };
+
+        function updateUI(user) {
+            const section = document.getElementById('auth-section');
+            if(user || localStorage.getItem('isAdmin')) {
+                const randomIcon = candyIcons[Math.floor(Math.random() * candyIcons.length)];
+                section.innerHTML = `<button onclick="togglePanel()" class="w-10 h-10 rounded-full bg-white border-2 border-pink-200 text-pink-500 flex items-center justify-center shadow-sm hover:scale-110 transition"><i class="fa-solid ${randomIcon} text-xl"></i></button>`;
+            } else {
+                section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-6 py-2 rounded-full text-sm font-black shadow-md">เข้าสู่ระบบ</button>`;
+            }
+        }
+
+        onValue(ref(db, 'products'), snap => {
+            const container = document.getElementById('product-container'); container.innerHTML = '';
+            snap.forEach(child => {
+                const p = child.val();
+                container.innerHTML += `<div class="bg-white border-2 border-pink-50 rounded-[2rem] p-3 flex flex-col shadow-sm"><img src="${p.image}" class="rounded-[1.5rem] mb-3 aspect-square object-cover border-2 border-pink-50"><h4 class="font-bold text-sm text-gray-700 truncate">${p.name}</h4><p class="text-pink-500 font-black text-xl mb-3">฿${p.price}</p><a href="${p.demo||'#'}" class="bg-pink-50 text-pink-500 text-center text-xs font-black py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition">ดูตัวอย่าง</a></div>`;
+            });
+        });
+
+        onValue(ref(db, 'stats'), snap => {
+            const d = snap.val()||{};
+            document.getElementById('stat-users').innerText = d.users||0;
+            document.getElementById('stat-prods').innerText = d.prods||0;
+        });
+
+        onAuthStateChanged(auth, user => updateUI(user));
+        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display='none', 500); }, 800); };
+    </script>
+</body>
+</html>
