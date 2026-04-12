@@ -11,7 +11,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;900&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 
@@ -25,25 +25,23 @@ background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px);
 background-size:25px 25px;
 }
 
-/* loader */
-
 #loader{
 position:fixed;
 inset:0;
 background:#fff5f7;
 z-index:9999;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 }
 
 .candy-spinner{
-font-size:55px;
+font-size:60px;
 color:#f07ab0;
-animation:candy-spin 1.5s infinite;
+animation:spin 1.5s infinite;
 }
 
-@keyframes candy-spin{
+@keyframes spin{
 0%{transform:rotate(0)}
 100%{transform:rotate(360deg)}
 }
@@ -60,20 +58,24 @@ animation:candy-spin 1.5s infinite;
 </div>
 </div>
 
-<div class="bg-white p-8 rounded-[2rem] shadow-lg border-2 border-pink-100 w-[90%] max-w-md">
+<div class="bg-white p-8 rounded-[2rem] border-2 border-pink-100 shadow-xl w-[90%] max-w-md">
 
-<h2 class="text-3xl font-black text-center text-pink-500 mb-6">
+<h1 class="text-3xl font-black text-center text-pink-500 mb-2">
 CandyMarket
-</h2>
+</h1>
+
+<p class="text-center text-pink-400 font-bold mb-6 text-sm">
+ยินดีต้อนรับกลับมา 🍬
+</p>
 
 <input id="login-input"
 placeholder="Username หรือ Email"
-class="w-full mb-4 px-4 py-3 rounded-xl border-2 border-pink-100">
+class="w-full mb-3 px-4 py-3 rounded-xl border-2 border-pink-100">
 
 <input id="login-pass"
 type="password"
 placeholder="Password"
-class="w-full mb-5 px-4 py-3 rounded-xl border-2 border-pink-100">
+class="w-full mb-4 px-4 py-3 rounded-xl border-2 border-pink-100">
 
 <button onclick="loginUser()"
 class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 rounded-xl font-black mb-4">
@@ -83,10 +85,11 @@ class="w-full bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white py-3 round
 </button>
 
 <button onclick="loginGoogle()"
-class="w-full border-2 border-pink-200 py-3 rounded-xl font-bold flex justify-center gap-2">
+class="w-full border-2 border-pink-200 py-3 rounded-xl font-bold flex justify-center gap-2 text-pink-500">
 
-<i class="fa-brands fa-google"></i>
-เข้าสู่ระบบด้วย Google
+<i class="fa-solid fa-candy-cane"></i>
+
+เข้าสู่ CandyMarket ด้วย Google
 
 </button>
 
@@ -132,9 +135,7 @@ const provider=new GoogleAuthProvider()
 window.onload=()=>{
 
 setTimeout(()=>{
-
 document.getElementById("loader").style.display="none"
-
 },800)
 
 }
@@ -161,14 +162,10 @@ email=snap.val()
 
 signInWithEmailAndPassword(auth,email,pass)
 .then(()=>{
-
 location.href="dashboard.html"
-
 })
 .catch(()=>{
-
 alert("เข้าสู่ระบบไม่สำเร็จ")
-
 })
 
 }
@@ -176,9 +173,17 @@ alert("เข้าสู่ระบบไม่สำเร็จ")
 window.loginGoogle=function(){
 
 signInWithPopup(auth,provider)
-.then(()=>{
+.then((result)=>{
+
+if(result.user.email==="feirnbiddu10@gmail.com"){
+
+location.href="admin.html"
+
+}else{
 
 location.href="dashboard.html"
+
+}
 
 })
 
