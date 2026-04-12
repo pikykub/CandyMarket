@@ -13,43 +13,41 @@
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* 🍫 Chocolate Drip & Contact Modal Styles */
-        .choco-drip {
-            position: fixed; top: -110%; left: 0; width: 100%; height: 130px;
-            background: #6D4C41; z-index: 20000; transition: all 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-            border-radius: 0 0 50% 50% / 0 0 100% 100%; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
+        /* 🎀 Chibi Swing Animation */
+        @keyframes swing {
+            0% { transform: rotate(3deg); }
+            50% { transform: rotate(-3deg); }
+            100% { transform: rotate(3deg); }
         }
-        .choco-drip.melting { top: 0; }
-        .contact-overlay {
-            position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4);
-            backdrop-blur: 8px; z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px;
+        .animate-swing {
+            transform-origin: top center;
+            animation: swing 3s ease-in-out infinite;
         }
-        .contact-card {
-            background: white; width: 100%; max-width: 350px; border-radius: 3rem;
-            padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2);
-            transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .contact-card.show { transform: scale(1); }
-        .contact-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            border-radius: 20px; margin-bottom: 12px; transition: 0.3s; border: 2px solid #fff5f7;
-        }
-        .contact-item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(240, 122, 176, 0.1); }
 
+        /* Modal Overlays */
+        .contact-overlay {
+            position: fixed; inset: 0; background: rgba(30, 41, 59, 0.4);
+            backdrop-blur: 5px; z-index: 10005; display: none; align-items: flex-start; justify-content: center; overflow: hidden;
+        }
+        
         /* Existing Styles */
         #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-blur: 4px; z-index: 10000; display: none; align-items: center; justify-content: center; }
         .cookie-spin { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
         #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: white; border-radius: 25px; padding: 15px 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 3px solid #fff; z-index: 10001; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 15px; }
         #candy-toast.show { transform: translateX(-50%) translateY(0); }
         .toast-icon { width: 45px; height: 45px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        
         .btn-custom { background: white; border-radius: 50px; padding: 12px 10px 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2); border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.3s ease; position: relative; }
         .icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; flex-shrink: 0; }
         .bg-blue-candy { background: #7db9f9; } .bg-pink-candy { background: #f07ab0; }
+        
         #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
         .auth-overlay { position: fixed; inset: 0; background: rgba(255, 245, 247, 0.9); backdrop-blur: 8px; z-index: 100; display: none; align-items: center; justify-content: center; }
         .auth-card { background: white; width: 90%; max-width: 400px; padding: 40px 30px; border-radius: 3rem; border: 4px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.15); }
         .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; background: #fffafa; margin-bottom: 15px; outline: none; }
+        
         .control-panel { position: absolute; top: 70px; right: 20px; width: 220px; background: white; border-radius: 2rem; padding: 15px; box-shadow: 0 15px 30px rgba(240, 122, 176, 0.2); border: 3px solid #fff; display: none; z-index: 100; }
         .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 15px; font-family: 'Itim', cursive; cursor: pointer; transition: 0.2s; }
         .menu-item:hover { background: #fff0f3; }
@@ -57,7 +55,6 @@
 </head>
 <body class="grid-bg pb-20">
 
-    <div id="chocolate-melt" class="choco-drip"></div>
     <div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
     <div id="candy-toast">
         <div id="toast-icon-bg" class="toast-icon"><i id="toast-i" class="fa-solid"></i></div>
@@ -126,27 +123,36 @@
     </div>
 
     <div id="contact-modal" class="contact-overlay" onclick="closeContact()">
-        <div class="contact-card" onclick="event.stopPropagation()">
-            <div class="text-center mb-6">
-                <div class="inline-block p-4 bg-pink-100 rounded-full text-pink-500 mb-3">
-                    <i class="fa-solid fa-heart-pulse fa-bounce text-2xl"></i>
+        <div id="chibi-pull-container" class="relative transform -translate-y-[150%] transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] flex flex-col items-center w-full max-w-sm mt-0 animate-swing" onclick="event.stopPropagation()">
+            
+            <div class="absolute top-0 w-[60%] h-16 border-l-[3px] border-r-[3px] border-dashed border-[#ffb3c1] -z-10 opacity-70"></div>
+
+            <img src="https://bright-blush-eqit5wkfc6.edgeone.app/IMG_6148.jpeg" alt="Chibi" class="w-56 z-20 relative drop-shadow-xl mt-4 pointer-events-none">
+            
+            <div class="bg-[#fff9f9] w-[90%] rounded-[2rem] border-4 border-[#ffd1dc] shadow-2xl p-6 relative z-10 -mt-8"> 
+                <div class="text-center mb-5 mt-6">
+                    <h3 class="text-2xl font-black text-[#ff8da1] italic">CONTACT US</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase">เลือกช่องทางที่สะดวกได้เลยค่ะ</p>
                 </div>
-                <h3 class="text-2xl font-black text-gray-700 italic">CONTACT US</h3>
-                <p class="text-xs text-gray-400 font-bold uppercase">เลือกช่องทางที่สะดวกได้เลยค่ะ</p>
+                
+                <a href="https://www.facebook.com/share/1KVCB1cc5c/?mibextid=wwXIfr" target="_blank" class="flex items-center p-3 mb-3 bg-blue-50 rounded-2xl hover:bg-blue-100 transition border-2 border-blue-100">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl mr-3">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </div>
+                    <div><h4 class="font-black text-blue-600">Facebook Page</h4><p class="text-[10px] text-blue-400 font-bold">ติดต่อผ่านหน้าเพจโดยตรง</p></div>
+                </a>
+                
+                <a href="https://lin.ee/YdAzm8t" target="_blank" class="flex items-center p-3 mb-5 bg-green-50 rounded-2xl hover:bg-green-100 transition border-2 border-green-100">
+                    <div class="w-12 h-12 rounded-xl bg-green-500 text-white flex items-center justify-center text-xl mr-3">
+                        <i class="fa-brands fa-line"></i>
+                    </div>
+                    <div><h4 class="font-black text-green-600">Line Official</h4><p class="text-[10px] text-green-400 font-bold">แชทผ่านไลน์กับแอดมิน</p></div>
+                </a>
+                
+                <button onclick="closeContact()" class="w-full py-3 rounded-2xl bg-[#ffe4e9] text-[#ff8da1] font-black text-xs uppercase tracking-widest hover:bg-[#ffcdd6] transition">
+                    ดันป้ายเก็บขึ้นไป
+                </button>
             </div>
-            <a href="https://www.facebook.com/share/1KVCB1cc5c/?mibextid=wwXIfr" target="_blank" class="contact-item bg-blue-50">
-                <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl shadow-lg">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </div>
-                <div><h4 class="font-black text-blue-600">Facebook Page</h4><p class="text-[10px] text-blue-400 font-bold">ติดต่อผ่านหน้าเพจโดยตรง</p></div>
-            </a>
-            <a href="https://lin.ee/YdAzm8t" target="_blank" class="contact-item bg-green-50">
-                <div class="w-12 h-12 rounded-xl bg-green-500 text-white flex items-center justify-center text-xl shadow-lg">
-                    <i class="fa-brands fa-line"></i>
-                </div>
-                <div><h4 class="font-black text-green-600">Line Official</h4><p class="text-[10px] text-green-400 font-bold">แชทผ่านไลน์กับแอดมิน</p></div>
-            </a>
-            <button onclick="closeContact()" class="w-full mt-4 py-3 rounded-2xl bg-gray-100 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
         </div>
     </div>
 
@@ -174,23 +180,23 @@
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        // Contact Logic
+        // Chibi Contact Logic
         window.openContact = () => {
-            const drip = document.getElementById('chocolate-melt');
             const modal = document.getElementById('contact-modal');
-            const card = modal.querySelector('.contact-card');
-            drip.classList.add('melting');
+            const container = document.getElementById('chibi-pull-container');
+            modal.style.display = 'flex';
             setTimeout(() => {
-                modal.style.display = 'flex';
-                setTimeout(() => card.classList.add('show'), 50);
-                setTimeout(() => drip.classList.remove('melting'), 500);
-            }, 300);
+                container.classList.remove('-translate-y-[150%]');
+                container.classList.add('translate-y-0');
+            }, 50);
         };
+
         window.closeContact = () => {
             const modal = document.getElementById('contact-modal');
-            const card = modal.querySelector('.contact-card');
-            card.classList.remove('show');
-            setTimeout(() => modal.style.display = 'none', 300);
+            const container = document.getElementById('chibi-pull-container');
+            container.classList.remove('translate-y-0');
+            container.classList.add('-translate-y-[150%]');
+            setTimeout(() => { modal.style.display = 'none'; }, 700);
         };
 
         const candyIcons = ["fa-lollipop", "fa-ice-cream", "fa-cookie", "fa-lemon", "fa-candy-cane"];
@@ -202,6 +208,7 @@
             document.getElementById('toast-i').className = type === 'success' ? "fa-solid fa-check-circle" : "fa-solid fa-circle-exclamation";
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
         };
+
         window.openAuth = () => document.getElementById('auth-modal').style.display = 'flex';
         window.closeAuth = () => document.getElementById('auth-modal').style.display = 'none';
         window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
@@ -232,20 +239,17 @@
                 const email = `${user}@candymarket.com`;
                 if(isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, pass);
-                    showCandyAlert("สำเร็จ!", "ยินดีต้อนรับกลับสู่ร้านขนมนะคะ");
+                    showCandyAlert("สำเร็จ!", "ยินดีต้อนรับกลับสู่ CandyMarket นะคะ");
                     closeAuth();
                 } else {
                     await createUserWithEmailAndPassword(auth, email, pass);
                     const userStatRef = ref(db, 'stats/users');
                     await runTransaction(userStatRef, (currentValue) => (currentValue || 0) + 1);
-                    showCandyAlert("สมัครสำเร็จ!", "กรุณาเข้าสู่ระบบอีกครั้งเพื่อเข้าบ้านนะคะ");
+                    showCandyAlert("สมัครสำเร็จ!", "เข้าสู่ระบบได้เลยนะคะ");
                     isLoginMode = true; document.getElementById('auth-title').innerText = "Sign In";
-                    document.getElementById('pass-input').value = "";
                 }
             } catch (err) {
-                let errorMsg = "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ";
-                if(err.code === 'auth/invalid-credential') errorMsg = "ชื่อผู้ใช้หรือรหัสผ่านผิดพลาดค่ะ";
-                showCandyAlert("อุ๊ปส์!", errorMsg, "error");
+                showCandyAlert("อุ๊ปส์!", "ข้อมูลไม่ถูกต้องค่ะ", "error");
             } finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
