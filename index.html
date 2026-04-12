@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
+    <title>Peachweb-store | ระบบเช่าเว็บไซต์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
@@ -13,13 +13,7 @@
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* 🍫 Chocolate Drip & Contact Modal Styles */
-        .choco-drip {
-            position: fixed; top: -110%; left: 0; width: 100%; height: 130px;
-            background: #6D4C41; z-index: 20000; transition: all 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-            border-radius: 0 0 50% 50% / 0 0 100% 100%; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
-        }
-        .choco-drip.melting { top: 0; }
+        /* Contact Modal Styles (Keep only Modal, Removed Choco Drip) */
         .contact-overlay {
             position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4);
             backdrop-blur: 8px; z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px;
@@ -57,7 +51,6 @@
 </head>
 <body class="grid-bg pb-20">
 
-    <div id="chocolate-melt" class="choco-drip"></div>
     <div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
     <div id="candy-toast">
         <div id="toast-icon-bg" class="toast-icon"><i id="toast-i" class="fa-solid"></i></div>
@@ -66,7 +59,7 @@
     <div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
 
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
-        <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+        <h1 class="text-2xl font-black candy-text">Peachweb-store.</h1>
         <div id="auth-section" class="relative"></div>
         <div id="user-panel" class="control-panel">
             <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-user-gear"></i></div><span>จัดการโปรไฟล์</span></div>
@@ -92,7 +85,7 @@
 
     <div class="mx-5 mt-6 mb-4">
         <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-8 min-h-[220px] flex flex-col justify-center shadow-xl border-4 border-white">
-            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-tight">CANDY<br>RENTAL</h3>
+            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-tight">PEACH<br>RENTAL</h3>
             <p class="text-xs text-white/90 mt-2 font-medium">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
         </div>
     </div>
@@ -100,7 +93,7 @@
     <div class="px-5 mb-8">
         <div class="bg-white/80 rounded-3xl p-2 flex items-center gap-4 border-2 border-pink-50 shadow-sm">
             <div class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-5 py-2 rounded-2xl font-bold text-[10px] shrink-0 italic underline">ANNOUNCEMENT</div>
-            <marquee class="text-sm text-pink-400 font-bold" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่สดใสที่สุดในโลก! โปรโมชั่นเดือนนี้ลดราคาพิเศษนะคะ</marquee>
+            <marquee class="text-sm text-pink-400 font-bold" scrollamount="5">ยินดีต้อนรับสู่ Peachweb-store เว็บเช่าที่สดใสที่สุดในโลก! โปรโมชั่นเดือนนี้ลดราคาพิเศษนะคะ</marquee>
         </div>
     </div>
 
@@ -174,17 +167,12 @@
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        // Contact Logic
+        // Updated Contact Logic (Removed Choco Drip)
         window.openContact = () => {
-            const drip = document.getElementById('chocolate-melt');
             const modal = document.getElementById('contact-modal');
             const card = modal.querySelector('.contact-card');
-            drip.classList.add('melting');
-            setTimeout(() => {
-                modal.style.display = 'flex';
-                setTimeout(() => card.classList.add('show'), 50);
-                setTimeout(() => drip.classList.remove('melting'), 500);
-            }, 300);
+            modal.style.display = 'flex';
+            setTimeout(() => card.classList.add('show'), 50);
         };
         window.closeContact = () => {
             const modal = document.getElementById('contact-modal');
