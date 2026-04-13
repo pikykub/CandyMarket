@@ -28,6 +28,43 @@
             font-weight: 900;
         }
 
+        /* 🌈 Rainbow & Moving Animation สำหรับชื่อ Admin */
+        @keyframes rainbowMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .admin-rainbow-text {
+            background: linear-gradient(to right, #ff2400, #e81d1d, #e8b71d, #1de840, #1ddde8, #2b1de8, #dd1de8, #ff2400);
+            background-size: 400% 400%;
+            animation: rainbowMove 3s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900 !important;
+            filter: drop-shadow(0 0 5px rgba(255,192,203,0.5));
+        }
+
+        /* 👑 Owner Badge แบบดุ๊กดิ๊ก */
+        @keyframes badgeBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-3px) scale(1.05); }
+        }
+        .owner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            color: #ff4d6d;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 900;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.2);
+            animation: badgeBounce 2s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
         /* UI Components */
         .contact-overlay, .auth-overlay { position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4); backdrop-filter: blur(8px); z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
         .pop-card { background: white; width: 100%; max-width: 350px; border-radius: 3rem; padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2); transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -40,17 +77,8 @@
         
         #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(4px); z-index: 20000; display: none; align-items: center; justify-content: center; }
         
-        .cookie-spin { 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 60px; 
-            color: #f07ab0; 
-        }
-        .cookie-spin i {
-            display: inline-block;
-            animation: spin 1s infinite linear;
-        }
+        .cookie-spin { display: flex; justify-content: center; align-items: center; font-size: 60px; color: #f07ab0; }
+        .cookie-spin i { display: inline-block; animation: spin 1s infinite linear; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: white; border-radius: 25px; padding: 15px 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 3px solid #fff; z-index: 20001; transition: 0.5s; display: flex; align-items: center; gap: 15px; }
@@ -83,7 +111,7 @@
                     <div id="menu-avatar-temp" class="w-10 h-10 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-cookie text-xl"></i></div>
                     <div>
                         <h4 id="menu-nickname" class="user-name-animate text-lg leading-tight">Guest</h4>
-                        <div class="level-badge mt-0.5"><i class="fa-solid fa-crown text-[8px]"></i> MEMBER</div>
+                        <div id="menu-badge" class="level-badge mt-0.5"><i class="fa-solid fa-crown text-[8px]"></i> MEMBER</div>
                     </div>
                 </div>
                 <p class="text-[9px] text-gray-300 font-bold mt-2 tracking-widest uppercase">UID: <span id="menu-uid" class="text-pink-300">--------</span></p>
@@ -205,7 +233,6 @@
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getDatabase, ref, onValue, runTransaction, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         
-        // ✨ กุญแจใหม่ของคุณลูกพีช
         const firebaseConfig = {
             apiKey: "AIzaSyBJEO4o365sI4XFZD4IRIaDjetIMNtCMwU",
             authDomain: "candy-market-system.firebaseapp.com",
@@ -325,17 +352,39 @@
             }
         };
 
+        // ✨ อัปเดตส่วน Auth State: ปรับสีรุ้ง และ ยศ Owner ให้ AdminPeach
         onAuthStateChanged(auth, (user) => {
             const section = document.getElementById('auth-section');
             if(user) {
                 onValue(ref(db, `users/${user.uid}`), (snap) => {
                     const data = snap.val() || {};
-                    const displayName = data.nickname || data.username || "Guest";
-                    document.getElementById('menu-nickname').innerText = displayName;
+                    const nameElement = document.getElementById('menu-nickname');
+                    const badgeElement = document.getElementById('menu-badge');
+                    
+                    // ตรวจสอบว่าเป็นแอดมินหรือไม่
+                    if (data.username === "AdminPeach") {
+                        nameElement.innerText = "Admin Peach";
+                        nameElement.className = "admin-rainbow-text text-xl leading-tight";
+                        
+                        if(badgeElement) {
+                            badgeElement.className = "owner-badge mt-0.5";
+                            badgeElement.innerHTML = `<i class="fa-solid fa-crown"></i> OWNER`;
+                        }
+                    } else {
+                        nameElement.innerText = data.nickname || data.username || "Guest";
+                        nameElement.className = "user-name-animate text-lg leading-tight";
+                        
+                        if(badgeElement) {
+                            badgeElement.className = "level-badge mt-0.5";
+                            badgeElement.innerHTML = `<i class="fa-solid fa-crown text-[8px]"></i> MEMBER`;
+                        }
+                    }
+
                     document.getElementById('menu-uid').innerText = data.uid || "--------";
                     document.getElementById('profile-user-static').value = data.username || "";
                     document.getElementById('edit-nickname').value = data.nickname || "";
                     document.getElementById('profile-uid-val').innerText = data.uid || "--------";
+                    
                     if(data.profilePic) {
                         document.getElementById('menu-avatar').src = data.profilePic;
                         document.getElementById('menu-avatar').classList.remove('hidden');
