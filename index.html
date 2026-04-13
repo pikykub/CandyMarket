@@ -39,8 +39,21 @@
         .level-badge { display: flex; align-items: center; gap: 2px; text-[9px] font-black px-2 py-0.5 rounded-full bg-pink-50 text-pink-400 border border-pink-100; }
         
         #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(4px); z-index: 20000; display: none; align-items: center; justify-content: center; }
-        .cookie-spin { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
+        
+        /* แก้ไขการหมุนให้ตรงกลางเป๊ะ */
+        .cookie-spin { 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px; 
+            color: #f07ab0; 
+        }
+        .cookie-spin i {
+            display: inline-block;
+            animation: spin 1s infinite linear;
+        }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
         #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: white; border-radius: 25px; padding: 15px 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 3px solid #fff; z-index: 20001; transition: 0.5s; display: flex; align-items: center; gap: 15px; }
         #candy-toast.show { transform: translateX(-50%) translateY(0); }
         #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: 0.5s; }
@@ -191,7 +204,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, runTransaction, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.app";
+        
+        // ✅ แก้ไขเป็น .js ให้ถูกต้องเพื่อให้โค้ดทำงานต่อได้
+        import { getDatabase, ref, onValue, runTransaction, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         
         const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
@@ -259,7 +274,7 @@
             } finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
-        // --- Auth Logic (Updated: Register first then Login + Admin Block) ---
+        // --- Auth Logic (Updated: Admin Block + Email Mapping) ---
         let isLoginMode = true;
         document.getElementById('toggle-auth').onclick = () => {
             isLoginMode = !isLoginMode;
@@ -274,23 +289,18 @@
             
             if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
             
-            // 🚫 รายชื่อแอดมินที่ห้ามคนอื่นตั้ง
             const forbiddenNames = ["AdminPeach", "admin", "Admin"];
             
             document.getElementById('process-loader').style.display = 'flex';
             try {
-                // ตรวจสอบสถานะเจ้าของ (AdminPeach)
                 const isOwner = (user === "AdminPeach" || user === "feirnbiddu10@gmail.com");
                 const email = isOwner ? "feirnbiddu10@gmail.com" : `${user}@candymarket.com`;
 
                 if(isLoginMode) {
-                    // --- Login Mode ---
                     await signInWithEmailAndPassword(auth, email, pass);
                     showCandyAlert("เย้!", "ยินดีต้อนรับกลับมานะคะ");
                     closeModal('auth-modal');
                 } else {
-                    // --- Register Mode ---
-                    // ห้ามคนอื่นใช้ชื่อแอดมิน (ยกเว้นแอดมินตัวจริง)
                     if (forbiddenNames.includes(user) && user !== "AdminPeach") {
                         throw new Error("ชื่อนี้เป็นชื่อแอดมิน ห้ามใช้สมัครนะคะ!");
                     }
@@ -345,6 +355,7 @@
             }
         });
 
+        // Load Products & Stats
         onValue(ref(db, 'products'), snap => {
             const container = document.getElementById('product-container'); container.innerHTML = '';
             snap.forEach(child => {
@@ -359,7 +370,16 @@
             document.getElementById('stat-prods').innerText = d.prods||0;
         });
 
-        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display='none', 500); }, 800); };
+        // ✅ ปรับให้หน้าโหลดหายไปทันทีที่หน้าเว็บโหลดเสร็จ (กันค้าง)
+        window.onload = () => { 
+            setTimeout(() => { 
+                const loader = document.getElementById('loader');
+                if(loader) {
+                    loader.style.opacity = '0'; 
+                    setTimeout(() => loader.style.display='none', 500); 
+                }
+            }, 600); 
+        };
     </script>
 </body>
 </html>
