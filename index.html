@@ -21,83 +21,93 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900 !important;
-            filter: drop-shadow(0 0 5px rgba(255,192,203,0.3));
         }
 
-        /* 👑 Owner Badge */
-        @keyframes badgeBounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-3px) scale(1.05); } }
+        /* 👑 Owner Badge ตามแบบในรูป */
         .owner-badge {
             display: inline-flex; align-items: center; gap: 4px;
-            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%);
-            color: #ff4d6d; padding: 2px 10px; border-radius: 50px;
-            font-size: 10px; font-weight: 900; border: 2px solid #fff;
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.2);
-            animation: badgeBounce 2s ease-in-out infinite;
+            background: #ffb6c1; color: white; padding: 2px 12px; border-radius: 50px;
+            font-size: 11px; font-weight: 900; box-shadow: 0 2px 5px rgba(255, 182, 193, 0.4);
         }
 
-        /* UI Helpers */
+        /* UI Elements จากเวอร์ชันเดิม */
         .auth-overlay { position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4); backdrop-filter: blur(8px); z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .pop-card { background: white; width: 100%; max-width: 350px; border-radius: 3rem; padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2); transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .pop-card { background: white; width: 100%; max-width: 380px; border-radius: 2.5rem; padding: 30px; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.15); transform: scale(0.9); transition: 0.3s ease; }
         .pop-card.show { transform: scale(1); }
-        .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; background: #fffafa; margin-bottom: 15px; outline: none; }
-        .control-panel { position: absolute; top: 75px; right: 20px; width: 280px; background: white; border-radius: 2.5rem; padding: 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 4px solid #fff; display: none; z-index: 10000; }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; cursor: pointer; transition: 0.2s; color: #666; font-weight: 500; }
-        .menu-item:hover { background: #fff0f3; transform: translateX(5px); }
+        .auth-input { width: 100%; padding: 15px 20px; border-radius: 1.5rem; border: 1px solid #ffe4e9; background: #fffafa; margin-bottom: 15px; outline: none; transition: 0.2s; }
+        .auth-input:focus { border-color: #ff8da1; background: white; }
+
+        /* User Panel แบบในรูป */
+        .user-panel-card { background: white; border-radius: 2.5rem; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 340px; }
+        .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: 1.2rem; cursor: pointer; transition: 0.2s; color: #7a7a7a; font-weight: 600; }
+        .menu-item:hover { background: #fff8f9; color: #ff8da1; }
+
         #loader, #process-loader { position: fixed; inset: 0; background: #fff5f7; z-index: 99999; display: flex; justify-content: center; align-items: center; }
         #process-loader { background: rgba(255, 255, 255, 0.7); z-index: 20000; display: none; }
-        .cookie-spin { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
+        .cookie-spin { font-size: 50px; color: #f07ab0; animation: spin 1s infinite linear; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="grid-bg pb-20">
+<body class="grid-bg">
 
     <div id="loader"><i class="fa-solid fa-cookie-bite cookie-spin"></i></div>
     <div id="process-loader"><i class="fa-solid fa-cookie-bite cookie-spin"></i></div>
 
-    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
-        <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+    <header class="flex justify-between items-center px-6 py-5 sticky top-0 bg-white/60 backdrop-blur-md z-50">
+        <h1 class="text-3xl font-black candy-text tracking-tighter">CandyMarket.</h1>
         <div id="auth-section"></div>
-
-        <div id="user-panel" class="control-panel">
-            <div class="px-2 py-3 border-b border-pink-50 mb-2">
-                <div class="flex items-center gap-2">
-                    <img id="menu-avatar" src="" class="w-10 h-10 rounded-full border-2 border-pink-100 object-cover hidden">
-                    <div id="menu-avatar-temp" class="w-10 h-10 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-cookie text-xl"></i></div>
-                    <div>
-                        <h4 id="menu-nickname" class="text-lg leading-tight font-black">Guest</h4>
-                        <div id="menu-badge" class="mt-0.5 text-[9px] font-black px-2 py-0.5 rounded-full bg-pink-50 text-pink-400 border border-pink-100 uppercase">MEMBER</div>
-                    </div>
-                </div>
-                <p class="text-[9px] text-gray-300 font-bold mt-2 uppercase">UID: <span id="menu-uid" class="text-pink-300">--------</span></p>
-            </div>
-            <div onclick="openProfile()" class="menu-item"><i class="fa-solid fa-user-gear text-pink-400"></i><span>จัดการโปรไฟล์</span></div>
-            <button onclick="handleLogout()" class="w-full mt-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-pink-400">Logout</button>
-        </div>
     </header>
+
+    <main id="main-content" class="px-6 py-4 flex justify-center hidden">
+        <div class="user-panel-card text-center relative">
+            <p class="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-4">Welcome Back!</p>
+            
+            <div class="flex flex-col items-center gap-2 mb-8">
+                <div class="relative">
+                    <img id="display-avatar" src="" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
+                </div>
+                <div>
+                    <h2 id="display-name" class="text-2xl font-black">Guest</h2>
+                    <div id="display-badge" class="owner-badge mt-1 uppercase">MEMBER</div>
+                </div>
+                <p class="text-[9px] font-bold text-pink-300 tracking-wider mt-1">UID: <span id="display-uid">--------</span></p>
+            </div>
+
+            <div class="space-y-1 text-left border-t border-pink-50 pt-6">
+                <div onclick="openModal('profile-modal')" class="menu-item"><i class="fa-solid fa-user-pen text-pink-300 text-xl"></i><span>จัดการโปรไฟล์</span></div>
+                <div class="menu-item"><i class="fa-solid fa-desktop text-blue-300 text-xl"></i><span>สถานะเว็บ</span></div>
+                <div class="menu-item"><i class="fa-solid fa-wallet text-yellow-300 text-xl"></i><span>เติมเงิน</span></div>
+                <div class="menu-item"><i class="fa-solid fa-clock-rotate-left text-purple-300 text-xl"></i><span>ประวัติการเช่า</span></div>
+                <div class="menu-item text-red-400"><i class="fa-solid fa-circle-exclamation text-xl"></i><span>ติดต่อด่วน</span></div>
+            </div>
+
+            <button onclick="handleLogout()" class="mt-10 text-[11px] font-black text-gray-300 hover:text-pink-400 uppercase tracking-[0.2em] transition-colors">Logout</button>
+        </div>
+    </main>
 
     <div id="profile-modal" class="auth-overlay">
         <div class="pop-card">
-            <h2 class="text-2xl font-black text-center mb-6 candy-text italic uppercase">My Profile</h2>
-            <div class="flex flex-col items-center mb-6">
+            <h2 class="text-2xl font-black text-center mb-8 candy-text italic uppercase">Edit Profile</h2>
+            <div class="flex flex-col items-center mb-8">
                 <div class="relative">
-                    <img id="profile-img-view" src="https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg" class="w-24 h-24 rounded-[2.5rem] border-4 border-white shadow-lg object-cover bg-pink-50">
-                    <label for="img-upload" class="absolute bottom-0 right-0 w-8 h-8 bg-[#f07ab0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-md border-2 border-white"><i class="fa-solid fa-camera text-[10px]"></i></label>
+                    <img id="profile-img-view" src="" class="w-28 h-28 rounded-3xl border-4 border-white shadow-xl object-cover bg-pink-50">
+                    <label for="img-upload" class="absolute -bottom-2 -right-2 w-10 h-10 bg-[#f07ab0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-white"><i class="fa-solid fa-camera"></i></label>
                     <input type="file" id="img-upload" class="hidden" accept="image/*">
                 </div>
             </div>
-            <input type="text" id="edit-nickname" class="auth-input" placeholder="Nickname (ชื่อเล่น)...">
-            <button id="save-profile" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg">บันทึกการเปลี่ยนแปลง</button>
-            <button onclick="closeModal('profile-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase">Maybe Later</button>
+            <input type="text" id="edit-nickname" class="auth-input text-center font-bold" placeholder="ชื่อเล่นใหม่ของคุณ...">
+            <button id="save-profile" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg hover:opacity-90 transition-all">บันทึกการเปลี่ยนแปลง</button>
+            <button onclick="closeModal('profile-modal')" class="block mx-auto mt-6 text-gray-400 text-xs font-black uppercase tracking-widest">Close</button>
         </div>
     </div>
 
     <div id="auth-modal" class="auth-overlay">
         <div class="pop-card">
-            <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text uppercase">Sign In</h2>
+            <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text uppercase italic">Login</h2>
             <input type="text" id="user-input" class="auth-input" placeholder="Username...">
             <input type="password" id="pass-input" class="auth-input" placeholder="Password...">
             <button id="auth-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg">ยืนยัน</button>
-            <p id="toggle-auth" class="text-center mt-5 text-sm text-pink-400 font-bold cursor-pointer underline">สมัครสมาชิกที่นี่</p>
+            <p id="toggle-auth" class="text-center mt-6 text-sm text-pink-400 font-black cursor-pointer">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</p>
         </div>
     </div>
 
@@ -119,9 +129,9 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
-        const IMGBB_API_KEY = "80a545f5d148fe3f87841ab333c6ea6a"; // ✨ ใส่ให้แล้วจ้า!
+        const IMGBB_KEY = "80a545f5d148fe3f87841ab333c6ea6a";
 
-        // UI Logic
+        // Global UI Functions
         window.openModal = (id) => { 
             const el = document.getElementById(id); el.style.display = 'flex';
             setTimeout(() => el.querySelector('.pop-card').classList.add('show'), 10);
@@ -130,11 +140,9 @@
             const el = document.getElementById(id); el.querySelector('.pop-card').classList.remove('show');
             setTimeout(() => el.style.display = 'none', 300);
         };
-        window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
-        window.openProfile = () => { document.getElementById('user-panel').style.display = 'none'; openModal('profile-modal'); };
-        window.handleLogout = () => signOut(auth).then(() => location.reload());
+        window.handleLogout = () => signOut(auth);
 
-        // ✨ อัปโหลดรูปไป ImgBB
+        // Preview Profile Image
         document.getElementById('img-upload').onchange = function(e) {
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
@@ -143,6 +151,7 @@
             }
         };
 
+        // Save Profile Logic (ImgBB)
         document.getElementById('save-profile').onclick = async () => {
             const nick = document.getElementById('edit-nickname').value.trim();
             const imgData = document.getElementById('profile-img-view').src;
@@ -153,7 +162,7 @@
                 if (imgData.startsWith('data:image')) {
                     const formData = new FormData();
                     formData.append("image", imgData.split(',')[1]);
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
                     const result = await res.json();
                     if (result.success) profilePicUrl = result.data.url;
                 }
@@ -161,9 +170,8 @@
                 const updates = { nickname: nick };
                 if (profilePicUrl) updates.profilePic = profilePicUrl;
                 await update(ref(db, `users/${auth.currentUser.uid}`), updates);
-                alert("อัปเดตโปรไฟล์สำเร็จแล้วค่ะ!");
                 closeModal('profile-modal');
-            } catch (e) { alert("เกิดข้อผิดพลาด: " + e.message); }
+            } catch (e) { alert("Error: " + e.message); }
             finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
@@ -171,14 +179,14 @@
         let isLogin = true;
         document.getElementById('toggle-auth').onclick = () => {
             isLogin = !isLogin;
-            document.getElementById('auth-title').innerText = isLogin ? "Sign In" : "Register";
-            document.getElementById('toggle-auth').innerText = isLogin ? "สมัครสมาชิกที่นี่" : "มีบัญชีแล้ว? เข้าสู่ระบบ";
+            document.getElementById('auth-title').innerText = isLogin ? "Login" : "Register";
+            document.getElementById('toggle-auth').innerText = isLogin ? "ไม่มีบัญชี? สมัครสมาชิกที่นี่" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
         };
 
         document.getElementById('auth-btn').onclick = async () => {
             const user = document.getElementById('user-input').value.trim();
             const pass = document.getElementById('pass-input').value.trim();
-            const email = user === "AdminPeach" ? "feirnbiddu10@gmail.com" : `${user}@candymarket.com`;
+            const email = user === "AdminPeach" ? "feirnbiddu10@gmail.com" : `${user}@candy.com`;
             
             try {
                 if(isLogin) {
@@ -187,50 +195,50 @@
                     const res = await createUserWithEmailAndPassword(auth, email, pass);
                     await set(ref(db, `users/${res.user.uid}`), { 
                         username: user, 
-                        uid: Math.floor(Math.random() * 90000000) + 10000000,
+                        uid: Math.floor(Math.random() * 900000000) + 100000000,
                         level: user === "AdminPeach" ? "Admin" : "Member"
                     });
                 }
                 closeModal('auth-modal');
-            } catch (e) { alert("ข้อมูลไม่ถูกต้องค่ะ"); }
+            } catch (e) { alert("ข้อมูลไม่ถูกต้อง หรือบัญชีนี้มีอยู่แล้วค่ะ"); }
         };
 
-        // State Tracking (ยศ & ชื่อเรนโบว์)
+        // Sync Data & Roles
         onAuthStateChanged(auth, (user) => {
-            const section = document.getElementById('auth-section');
             if(user) {
+                document.getElementById('main-content').classList.remove('hidden');
+                document.getElementById('auth-section').innerHTML = `<div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-400 border-2 border-white shadow-sm"><i class="fa-solid fa-cookie"></i></div>`;
+                
                 onValue(ref(db, `users/${user.uid}`), (snap) => {
                     const data = snap.val() || {};
-                    const nameEl = document.getElementById('menu-nickname');
-                    const badgeEl = document.getElementById('menu-badge');
+                    const nameEl = document.getElementById('display-name');
+                    const badgeEl = document.getElementById('display-badge');
                     
+                    // ✨ จัดการยศ OWNER และ ชื่อเรนโบว์ตามรูป
                     if (data.username === "AdminPeach" || data.level === "Admin") {
                         nameEl.innerText = "Admin Peach";
-                        nameEl.className = "admin-rainbow-text text-xl leading-tight";
-                        badgeEl.className = "owner-badge mt-0.5";
-                        badgeEl.innerHTML = `<i class="fa-solid fa-crown"></i> OWNER`;
+                        nameEl.className = "admin-rainbow-text text-2xl font-black";
+                        badgeEl.innerHTML = `<i class="fa-solid fa-crown text-[9px]"></i> OWNER`;
+                        badgeEl.className = "owner-badge mt-1 uppercase";
                     } else {
                         nameEl.innerText = data.nickname || data.username || "Guest";
-                        nameEl.className = "text-lg font-black";
-                        badgeEl.className = "text-[9px] font-black px-2 py-0.5 rounded-full bg-pink-50 text-pink-400 border border-pink-100 uppercase";
+                        nameEl.className = "text-2xl font-black text-gray-700";
                         badgeEl.innerHTML = "MEMBER";
+                        badgeEl.className = "mt-1 text-[11px] font-black text-gray-400 uppercase tracking-widest";
                     }
 
-                    document.getElementById('menu-uid').innerText = data.uid || "--------";
-                    if(data.profilePic) {
-                        document.getElementById('menu-avatar').src = data.profilePic;
-                        document.getElementById('menu-avatar').classList.remove('hidden');
-                        document.getElementById('menu-avatar-temp').classList.add('hidden');
-                        document.getElementById('profile-img-view').src = data.profilePic;
-                    }
+                    document.getElementById('display-uid').innerText = data.uid || "--------";
+                    const avatar = data.profilePic || "https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg";
+                    document.getElementById('display-avatar').src = avatar;
+                    document.getElementById('profile-img-view').src = avatar;
                 });
-                section.innerHTML = `<button onclick="togglePanel()" class="w-12 h-12 rounded-full bg-white border-2 border-pink-200 text-pink-400 flex items-center justify-center shadow-md"><i class="fa-solid fa-cookie text-2xl"></i></button>`;
             } else {
-                section.innerHTML = `<button onclick="openModal('auth-modal')" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2.5 rounded-full text-xs font-black shadow-lg">Sign In</button>`;
+                document.getElementById('main-content').classList.add('hidden');
+                document.getElementById('auth-section').innerHTML = `<button onclick="openModal('auth-modal')" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-8 py-2.5 rounded-full text-xs font-black shadow-lg">SIGN IN</button>`;
             }
         });
 
-        window.onload = () => setTimeout(() => document.getElementById('loader').style.display='none', 600);
+        window.onload = () => setTimeout(() => document.getElementById('loader').style.display='none', 800);
     </script>
 </body>
 </html>
