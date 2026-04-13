@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
+    <title>Peachweb-store | Brightest Rental</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -28,120 +28,114 @@
         .pop-card { background: white; width: 100%; max-width: 340px; border-radius: 2.5rem; padding: 25px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); transform: scale(0.9); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: none; }
         .pop-card.show { transform: scale(1); }
         
-        /* New Menu Floating Style */
+        /* Menu Style */
         .menu-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; border-radius: 1.2rem; cursor: pointer; transition: 0.2s; color: #6b7280; font-weight: 600; }
         .menu-item:hover { background: #fdf2f8; color: #f07ab0; }
-        .menu-icon-box { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .badge-owner { background: #ffe4e6; color: #fb7185; padding: 2px 10px; border-radius: 99px; font-size: 10px; font-weight: 900; display: flex; align-items: center; gap: 4px; }
 
-        /* Banner & Announcement */
+        /* Banner & Sections */
         .hero-banner { background: linear-gradient(135deg, #bfe9ff, #ffcaf2, #ffbdc7); border-radius: 3.5rem; padding: 40px; border: 4px solid white; box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
-        .announcement-box { background: white; border-radius: 2rem; padding: 15px 25px; border: 2px solid #fff0f3; margin: 20px; display: flex; align-items: center; gap: 15px; overflow: hidden; }
-
-        /* Loader System */
-        #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: 0.5s; }
+        .build-store-card { background: linear-gradient(135deg, #ff9a9e, #fad0c4); border-radius: 2.5rem; padding: 30px; color: white; position: relative; overflow: hidden; }
+        
+        /* Loader */
         #action-loader { position: fixed; inset: 0; background: rgba(255,255,255,0.6); backdrop-filter: blur(4px); z-index: 20000; display: none; align-items: center; justify-content: center; }
         .cookie-spin { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="grid-bg pb-20">
+<body class="grid-bg pb-24">
 
     <div id="action-loader"><i class="fa-solid fa-cookie-bite cookie-spin"></i></div>
-    <div id="loader"><i class="fa-solid fa-cookie-bite cookie-spin"></i></div>
 
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
-        <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+        <h1 class="text-2xl font-black candy-text">Peachweb-store.</h1>
         <div id="auth-section"></div>
     </header>
 
     <div class="mx-5 mt-6 mb-4">
-        <div class="hero-banner relative flex flex-col justify-center min-h-[220px]">
-            <h3 class="text-5xl font-black italic tracking-tighter text-white drop-shadow-lg leading-[0.9]">CANDY<br>RENTAL</h3>
-            <p class="text-[10px] text-white/90 mt-4 font-bold uppercase tracking-widest">สดใสที่สุดในโลก!</p>
+        <div class="hero-banner relative flex flex-col justify-center min-h-[200px]">
+            <h3 class="text-4xl font-black italic tracking-tighter text-white drop-shadow-lg leading-tight uppercase">PEACH<br>RENTAL</h3>
+            <p class="text-[10px] text-white/90 mt-2 font-bold uppercase">Brightest web rental in the world!</p>
         </div>
-    </div>
-
-    <div class="announcement-box shadow-sm">
-        <div class="w-10 h-10 rounded-2xl bg-pink-100 text-pink-500 flex items-center justify-center shrink-0 shadow-inner"><i class="fa-solid fa-bullhorn"></i></div>
-        <marquee class="text-[13px] font-bold text-gray-500" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าอัตโนมัติ 24 ชม. ✨</marquee>
     </div>
 
     <div class="grid grid-cols-2 gap-4 px-5 mb-8 text-center">
         <div class="bg-white p-6 rounded-[2.5rem] border-2 border-pink-50 shadow-sm">
-            <p class="text-pink-300 text-[9px] font-black uppercase tracking-widest mb-1">Users</p>
-            <h4 class="text-3xl font-black text-[#f07ab0]" id="stat-users">1,240</h4>
+            <p class="text-pink-300 text-[9px] font-black uppercase tracking-widest mb-1">ลูกค้าที่น่ารัก</p>
+            <h4 class="text-3xl font-black text-[#f07ab0]">57</h4>
         </div>
         <div class="bg-white p-6 rounded-[2.5rem] border-2 border-blue-50 shadow-sm">
-            <p class="text-blue-300 text-[9px] font-black uppercase tracking-widest mb-1">Stores</p>
-            <h4 class="text-3xl font-black text-[#7db9f9]" id="stat-prods">850</h4>
+            <p class="text-blue-300 text-[9px] font-black uppercase tracking-widest mb-1">ขนมในร้าน</p>
+            <h4 class="text-3xl font-black text-[#7db9f9]">1</h4>
         </div>
     </div>
 
-    <div id="user-overlay" class="overlay" onclick="closeModal('user-overlay')">
-        <div class="pop-card" onclick="event.stopPropagation()">
-            <div class="flex flex-col items-center text-center mb-6">
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3">Welcome back!</p>
-                <div class="flex items-center gap-4 w-full px-2 text-left">
-                    <img id="menu-avatar" src="" class="w-14 h-14 rounded-full bg-pink-100 object-cover border-2 border-white shadow-sm">
-                    <div>
-                        <h4 id="menu-nickname" class="text-lg font-black leading-tight">User</h4>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span id="display-badge" class="badge-owner">MEMBER</span>
-                        </div>
-                        <p class="text-[9px] text-pink-300 font-bold mt-1">UID: <span id="menu-uid">000000</span></p>
-                    </div>
-                </div>
+    <div class="px-5 mb-8">
+        <div class="build-store-card shadow-lg">
+            <h2 class="text-3xl font-black mb-1">Build Your Store</h2>
+            <div class="flex gap-1 text-yellow-200 mb-4"><i class="fa-solid fa-sparkles"></i><i class="fa-solid fa-sparkles text-[10px]"></i></div>
+            <p class="text-sm font-medium opacity-90 mb-6">เริ่มต้นสร้างธุรกิจออนไลน์ด้วยเว็บไซต์คุณภาพดีที่สุด</p>
+            <button class="bg-white text-pink-400 px-8 py-2 rounded-full font-black text-sm shadow-md active:scale-95 transition">เริ่มเลย</button>
+            <i class="fa-solid fa-store absolute -bottom-4 -right-4 text-9xl opacity-10"></i>
+        </div>
+    </div>
+
+    <div class="px-6 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-gift text-pink-400"></i>
+        <h3 class="text-lg font-black text-gray-700">รายการแนะนำ</h3>
+    </div>
+    <div class="px-5 grid grid-cols-1 gap-6">
+        <div class="bg-white p-4 rounded-[2.5rem] shadow-sm border border-pink-50">
+            <img src="https://i.pinimg.com/736x/01/f9/f2/01f9f2b8b9b8b9b8b9b8b9b8b9b8b9b8.jpg" class="w-full h-48 object-cover rounded-[2rem] mb-4 bg-gray-100">
+            <h4 class="text-xl font-black text-gray-800 ml-2">Template001</h4>
+            <div class="flex justify-between items-center mt-1 px-2">
+                <p class="text-[#f07ab0] font-black text-lg">฿50</p>
+                <button class="bg-pink-50 text-pink-400 px-4 py-1 rounded-full text-xs font-black">ดูรายละเอียด</button>
             </div>
-            <hr class="border-gray-50 mb-4">
-            <div class="space-y-1">
-                <div onclick="openModal('profile-edit-modal')" class="menu-item"><div class="menu-icon-box bg-pink-50 text-pink-400"><i class="fa-solid fa-user-gear"></i></div><span class="text-sm">จัดการโปรไฟล์</span></div>
-                <div class="menu-item"><div class="menu-icon-box bg-blue-50 text-blue-400"><i class="fa-solid fa-desktop"></i></div><span class="text-sm">สถานะเว็บ</span></div>
-                <div class="menu-item"><div class="menu-icon-box bg-yellow-50 text-yellow-500"><i class="fa-solid fa-wallet"></i></div><span class="text-sm">เติมเงิน</span></div>
-                <div class="menu-item"><div class="menu-icon-box bg-purple-50 text-purple-400"><i class="fa-solid fa-clock-rotate-left"></i></div><span class="text-sm">ประวัติการเช่า</span></div>
-                <div id="admin-btn" class="menu-item hidden"><div class="menu-icon-box bg-green-50 text-green-500"><i class="fa-solid fa-gears"></i></div><span class="text-sm font-bold text-green-600">ระบบหลังบ้าน</span></div>
-                <div class="menu-item"><div class="menu-icon-box bg-red-50 text-red-400"><i class="fa-solid fa-circle-exclamation"></i></div><span class="text-sm text-red-400">ติดต่อด่วน</span></div>
-            </div>
-            <button onclick="handleLogout()" class="w-full mt-6 py-2 text-[10px] font-black text-gray-300 hover:text-red-400 uppercase tracking-widest transition">Logout</button>
         </div>
     </div>
 
     <div id="auth-modal" class="overlay">
         <div class="pop-card">
             <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text italic uppercase">Login</h2>
-            <input type="text" id="user-input" class="auth-input w-full p-4 rounded-2xl bg-gray-50 border-2 border-white mb-3 outline-none" placeholder="Username...">
-            <input type="password" id="pass-input" class="auth-input w-full p-4 rounded-2xl bg-gray-50 border-2 border-white mb-4 outline-none" placeholder="Password...">
+            <input type="text" id="user-input" class="w-full p-4 rounded-2xl bg-gray-50 border-2 border-white mb-3 outline-none" placeholder="Username...">
+            <input type="password" id="pass-input" class="w-full p-4 rounded-2xl bg-gray-50 border-2 border-white mb-4 outline-none" placeholder="Password...">
+            
             <button id="auth-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg active:scale-95 transition">เข้าสู่ระบบ</button>
+            
             <p id="toggle-auth" class="text-center mt-6 text-xs text-pink-400 font-black cursor-pointer uppercase">ไม่มีบัญชี? สมัครสมาชิก</p>
+            
+            <button onclick="closeModal('auth-modal')" class="w-full mt-4 text-[10px] font-black text-gray-300 uppercase tracking-widest hover:text-gray-500">Close</button>
         </div>
     </div>
 
-    <div id="profile-edit-modal" class="overlay">
-        <div class="pop-card">
-            <h2 class="text-2xl font-black text-center mb-6 candy-text uppercase">Edit Profile</h2>
-            <div class="flex flex-col items-center mb-6">
-                <div class="relative">
-                    <img id="profile-img-view" src="" class="w-24 h-24 rounded-3xl border-4 border-white shadow-xl object-cover bg-pink-50">
-                    <label for="img-upload" class="absolute -bottom-2 -right-2 w-8 h-8 bg-[#f07ab0] text-white rounded-full flex items-center justify-center cursor-pointer border-2 border-white shadow-md"><i class="fa-solid fa-camera text-xs"></i></label>
-                    <input type="file" id="img-upload" class="hidden" accept="image/*">
+    <div id="user-overlay" class="overlay" onclick="closeModal('user-overlay')">
+        <div class="pop-card" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-4 mb-6">
+                <img id="menu-avatar" src="" class="w-14 h-14 rounded-full border-2 border-pink-100 object-cover">
+                <div>
+                    <h4 id="menu-nickname" class="text-lg font-black leading-tight">User</h4>
+                    <span id="display-badge" class="badge-owner">MEMBER</span>
                 </div>
             </div>
-            <input type="text" id="edit-nickname" class="w-full p-4 rounded-2xl bg-gray-50 border-2 border-white mb-4 text-center font-bold" placeholder="ชื่อเล่นใหม่...">
-            <button id="save-profile" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg">บันทึก</button>
-            <button onclick="closeModal('profile-edit-modal')" class="block mx-auto mt-4 text-gray-300 text-[10px] font-black uppercase">Cancel</button>
+            <hr class="border-gray-50 mb-4">
+            <div class="space-y-1">
+                <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-pink-50 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-user-gear text-xs"></i></div><span>จัดการโปรไฟล์</span></div>
+                <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-desktop text-xs"></i></div><span>สถานะเว็บ</span></div>
+                <div class="menu-item"><div class="w-8 h-8 rounded-lg bg-yellow-50 text-yellow-500 flex items-center justify-center"><i class="fa-solid fa-wallet text-xs"></i></div><span>เติมเงิน</span></div>
+            </div>
+            <button onclick="handleLogout()" class="w-full mt-8 py-2 text-[10px] font-black text-gray-300 uppercase">Logout</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         
         const firebaseConfig = { apiKey: "AIzaSyBJEO4o365sI4XFZD4IRIaDjetIMNtCMwU", authDomain: "candy-market-system.firebaseapp.com", databaseURL: "https://candy-market-system-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "candy-market-system", storageBucket: "candy-market-system.firebasestorage.app", messagingSenderId: "955686244672", appId: "1:955686244672:web:484fdc3d7192d3074c2aa5" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
-        const IMGBB_KEY = "80a545f5d148fe3f87841ab333c6ea6a";
 
-        // Loader Toggle
         const showLoading = () => document.getElementById('action-loader').style.display = 'flex';
         const hideLoading = () => document.getElementById('action-loader').style.display = 'none';
 
@@ -156,29 +150,7 @@
 
         window.handleLogout = () => { showLoading(); signOut(auth).then(() => location.reload()); };
 
-        // Save Profile with Loading
-        document.getElementById('save-profile').onclick = async () => {
-            showLoading();
-            const nick = document.getElementById('edit-nickname').value.trim();
-            const imgData = document.getElementById('profile-img-view').src;
-            try {
-                let profilePicUrl = "";
-                if (imgData.startsWith('data:image')) {
-                    const formData = new FormData();
-                    formData.append("image", imgData.split(',')[1]);
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
-                    const result = await res.json();
-                    if (result.success) profilePicUrl = result.data.url;
-                }
-                const updates = { nickname: nick };
-                if (profilePicUrl) updates.profilePic = profilePicUrl;
-                await update(ref(db, `users/${auth.currentUser.uid}`), updates);
-                closeModal('profile-edit-modal');
-            } catch (e) { alert("Error"); }
-            finally { hideLoading(); }
-        };
-
-        // Auth Logic with Toggle & Loading
+        // ✅ แก้ไขระบบสลับหน้า Login/Register และปุ่มกด
         let isLogin = true;
         document.getElementById('toggle-auth').onclick = () => {
             isLogin = !isLogin;
@@ -188,7 +160,7 @@
         };
 
         document.getElementById('auth-btn').onclick = async () => {
-            showLoading();
+            showLoading(); // หมุนคุกกี้!
             const user = document.getElementById('user-input').value.trim();
             const pass = document.getElementById('pass-input').value.trim();
             const email = user === "AdminPeach" ? "feirnbiddu10@gmail.com" : `${user}@candy.com`;
@@ -199,41 +171,30 @@
                     await set(ref(db, `users/${res.user.uid}`), { username: user, uid: Math.floor(Math.random() * 900000) + 100000 });
                 }
                 closeModal('auth-modal');
-            } catch (e) { alert("Error!"); }
+            } catch (e) { alert("เกิดข้อผิดพลาด: ข้อมูลไม่ถูกต้องหรือมีบัญชีนี้อยู่แล้วค่ะ"); }
             finally { hideLoading(); }
         };
 
-        // State Sync
         onAuthStateChanged(auth, (user) => {
             const section = document.getElementById('auth-section');
             if(user) {
                 onValue(ref(db, `users/${user.uid}`), (snap) => {
                     const data = snap.val() || {};
                     const nameEl = document.getElementById('menu-nickname');
-                    const badgeEl = document.getElementById('display-badge');
                     if (data.username === "AdminPeach") {
                         nameEl.innerText = "Admin Peach";
-                        nameEl.className = "admin-rainbow-text text-lg font-black leading-tight";
-                        badgeEl.innerHTML = `<i class="fa-solid fa-crown text-[8px]"></i> OWNER`;
-                        document.getElementById('admin-btn').classList.remove('hidden');
+                        nameEl.className = "admin-rainbow-text text-lg font-black";
+                        document.getElementById('display-badge').innerHTML = `<i class="fa-solid fa-crown text-[8px]"></i> OWNER`;
                     } else {
                         nameEl.innerText = data.nickname || data.username || "User";
-                        badgeEl.innerText = "MEMBER";
                     }
-                    document.getElementById('menu-uid').innerText = data.uid || "--------";
-                    const avatar = data.profilePic || "https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg";
-                    document.getElementById('menu-avatar').src = avatar;
-                    document.getElementById('profile-img-view').src = avatar;
+                    document.getElementById('menu-avatar').src = data.profilePic || "https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg";
                 });
                 section.innerHTML = `<button onclick="openModal('user-overlay')" class="w-10 h-10 rounded-full bg-white border-2 border-pink-100 flex items-center justify-center text-pink-400 shadow-sm"><i class="fa-solid fa-cookie"></i></button>`;
             } else {
                 section.innerHTML = `<button onclick="openModal('auth-modal')" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2 rounded-full text-xs font-black shadow-lg uppercase">SIGN IN</button>`;
             }
         });
-
-        // Force Close Loader
-        window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').style.display='none', 800));
-        setTimeout(() => document.getElementById('loader').style.display='none', 2500);
     </script>
 </body>
 </html>
