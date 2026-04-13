@@ -6,297 +6,169 @@
     <title>CandyMarket | ระบบเช่าเว็บไซต์ & สถานะ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background-color: #fff5f7; font-family: 'Kanit', sans-serif; color: #5a5a5a; overflow-x: hidden; }
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* ✨ Animated Gradient Name */
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .user-name-animate {
-            background: linear-gradient(-45deg, #7db9f9, #f07ab0, #ffffff, #bfe9ff);
-            background-size: 300% 300%;
-            animation: gradientMove 3s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900;
+        /* ✨ Fixed Floating Panel (แก้ปัญหาที่พีชเจอ) */
+        .user-panel-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 192, 203, 0.2);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            display: none; /* ปิดไว้ก่อน */
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 80px;
         }
 
-        /* 🌈 Rainbow & Moving Animation สำหรับชื่อ Admin */
-        @keyframes rainbowMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .control-panel {
+            width: 90%;
+            max-width: 320px;
+            background: white;
+            border-radius: 2.5rem;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(240, 122, 176, 0.25);
+            border: 5px solid #fff;
+            transform: translateY(-20px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
+        .user-panel-overlay.active { display: flex; }
+        .user-panel-overlay.active .control-panel { transform: translateY(0); }
+
+        /* 🌈 Rainbow Name & Animations */
         .admin-rainbow-text {
             background: linear-gradient(to right, #ff2400, #e81d1d, #e8b71d, #1de840, #1ddde8, #2b1de8, #dd1de8, #ff2400);
             background-size: 400% 400%;
-            animation: rainbowMove 3s linear infinite;
+            animation: rainbow 3s linear infinite;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900 !important;
-            filter: drop-shadow(0 0 5px rgba(255,192,203,0.5));
         }
+        @keyframes rainbow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* 👑 Owner Badge แบบดุ๊กดิ๊ก */
-        @keyframes badgeBounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-3px) scale(1.05); }
-        }
         .owner-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
             color: #ff4d6d;
-            padding: 2px 10px;
+            padding: 2px 12px;
             border-radius: 50px;
             font-size: 10px;
             font-weight: 900;
             border: 2px solid #fff;
             box-shadow: 0 4px 10px rgba(255, 77, 109, 0.2);
-            animation: badgeBounce 2s ease-in-out infinite;
-            letter-spacing: 1px;
         }
 
-        /* UI Components */
-        .contact-overlay, .auth-overlay, .admin-overlay { position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4); backdrop-filter: blur(8px); z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .pop-card { background: white; width: 100%; max-width: 450px; border-radius: 3rem; padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2); transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto; }
-        .pop-card.show { transform: scale(1); }
-        .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; background: #fffafa; margin-bottom: 15px; outline: none; font-size: 14px; transition: 0.3s; }
-        .auth-input:focus { border-color: #ffcad4; box-shadow: 0 0 10px rgba(255, 202, 212, 0.3); }
+        /* Status UI */
+        .status-card { background: white; border-radius: 2rem; border: 3px solid #fff; transition: 0.3s; margin-bottom: 12px; }
+        .dot-online { background: #22c55e; box-shadow: 0 0 10px #22c55e; animation: pulse 2s infinite; }
+        .dot-offline { background: #ef4444; }
+        .dot-pending { background: #eab308; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
+
+        .menu-item { display: flex; align-items: center; gap: 15px; padding: 14px; border-radius: 20px; cursor: pointer; transition: 0.3s; color: #666; font-weight: 500; }
+        .menu-item:hover { background: #fff0f3; transform: scale(1.02); }
         
-        .control-panel { position: absolute; top: 75px; right: 20px; width: 280px; background: white; border-radius: 2.5rem; padding: 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 4px solid #fff; display: none; z-index: 10000; }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; font-family: 'Kanit', sans-serif; font-weight: 500; cursor: pointer; transition: 0.2s; color: #666; }
-        .menu-item:hover { background: #fff0f3; transform: translateX(5px); }
-        .level-badge { display: flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 900; px-2 py-0.5 rounded-full bg-pink-50 text-pink-400 border border-pink-100; }
-        
-        #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(4px); z-index: 20000; display: none; align-items: center; justify-content: center; }
-        
-        .cookie-spin { display: flex; justify-content: center; align-items: center; font-size: 60px; color: #f07ab0; }
-        .cookie-spin i { display: inline-block; animation: spin 1s infinite linear; }
+        #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 999999; display: flex; justify-content: center; align-items: center; }
+        .cookie-spin i { font-size: 50px; color: #f07ab0; animation: spin 1s infinite linear; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: white; border-radius: 25px; padding: 15px 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 3px solid #fff; z-index: 20001; transition: 0.5s; display: flex; align-items: center; gap: 15px; }
-        #candy-toast.show { transform: translateX(-50%) translateY(0); }
-        #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: 0.5s; }
-        
-        .announcement-box { background: white; border-radius: 2rem; padding: 15px 25px; border: 2px solid #fff0f3; margin: 20px; display: flex; align-items: center; gap: 15px; overflow: hidden; }
-        .quick-btn { background: white; border-radius: 2.5rem; padding: 20px; border: 2px solid #fff0f3; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; width: 100%; cursor: pointer; }
-        .quick-btn:hover { border-color: #ffcad4; transform: translateY(-3px); }
-
-        /* 🔌 Status Items Decoration */
-        .status-card { background: white; border-radius: 2.5rem; padding: 20px; border: 3px solid #fff; box-shadow: 0 10px 25px rgba(240, 122, 176, 0.05); }
-        .dot-pulse { width: 8px; height: 8px; border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
+        .admin-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .pop-card { background: white; border-radius: 3rem; padding: 30px; width: 100%; max-width: 450px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="grid-bg pb-20">
 
-    <div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
-    <div id="candy-toast">
-        <div id="toast-icon-bg" class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0"><i id="toast-i" class="fa-solid"></i></div>
-        <div><h4 id="toast-title" class="font-black text-sm text-gray-700"></h4><p id="toast-msg" class="text-xs text-gray-500 font-medium"></p></div>
-    </div>
     <div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
 
-    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
-        <h1 class="text-2xl font-black candy-text cursor-pointer" onclick="location.reload()">CandyMarket.</h1>
-        
-        <div id="auth-section" class="relative">
+    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/90 backdrop-blur-md z-[50] border-b border-pink-100">
+        <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+        <div id="auth-section">
             </div>
-
-        <div id="user-panel" class="control-panel">
-            <div class="px-2 py-3 border-b border-pink-50 mb-2">
-                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Welcome back!</p>
-                <div class="flex items-center gap-2">
-                    <img id="menu-avatar" src="" class="w-10 h-10 rounded-full border-2 border-pink-100 object-cover hidden">
-                    <div id="menu-avatar-temp" class="w-10 h-10 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-cookie text-xl"></i></div>
-                    <div>
-                        <h4 id="menu-nickname" class="user-name-animate text-lg leading-tight">Guest</h4>
-                        <div id="menu-badge" class="level-badge mt-0.5"><i class="fa-solid fa-crown text-[8px]"></i> MEMBER</div>
-                    </div>
-                </div>
-                <p class="text-[9px] text-gray-300 font-bold mt-2 tracking-widest uppercase">UID: <span id="menu-uid" class="text-pink-300">--------</span></p>
-            </div>
-            
-            <div onclick="openProfile()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-gear"></i></div><span>จัดการโปรไฟล์</span></div>
-            <div onclick="openStatusPage()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-desktop"></i></div><span>สถานะเว็บ</span></div>
-            <div class="menu-item"><div class="w-9 h-9 rounded-xl bg-yellow-50 text-yellow-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-wallet"></i></div><span>เติมเงิน</span></div>
-            <div class="menu-item"><div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-history"></i></div><span>ประวัติการเช่า</span></div>
-            
-            <div id="admin-menu-section" class="hidden">
-                <hr class="my-2 border-pink-50/50">
-                <div onclick="openAdminPanel()" class="menu-item text-blue-600 font-bold">
-                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-hammer"></i></div>
-                    <span>จัดการหลังบ้าน (Admin)</span>
-                </div>
-            </div>
-
-            <hr class="my-2 border-pink-50/50">
-            <div onclick="openContact()" class="menu-item text-red-400"><div class="w-9 h-9 rounded-xl bg-red-50 text-red-400 flex items-center justify-center shadow-sm"><i class="fa-solid fa-circle-exclamation text-sm"></i></div><span>ติดต่อด่วน</span></div>
-            <button onclick="handleLogout()" class="w-full mt-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-pink-400 transition">Logout</button>
-        </div>
     </header>
 
-    <div class="mx-5 mt-6 mb-4">
-        <div class="relative rounded-[3.5rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-10 min-h-[240px] flex flex-col justify-center shadow-xl border-4 border-white">
-            <h3 class="text-6xl font-black italic tracking-tighter text-white drop-shadow-lg leading-[0.9]">CANDY<br>RENTAL</h3>
-            <p class="text-[11px] text-white/90 mt-4 font-bold uppercase tracking-widest">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
+    <div id="user-panel-overlay" class="user-panel-overlay" onclick="togglePanel()">
+        <div class="control-panel" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-4 pb-4 border-b border-pink-50 mb-4">
+                <img id="panel-img" src="" class="w-14 h-14 rounded-full border-4 border-pink-100 object-cover shadow-sm">
+                <div>
+                    <p class="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-none mb-1">Welcome back!</p>
+                    <h4 id="panel-name" class="text-lg leading-tight">Guest</h4>
+                    <div id="panel-badge" class="mt-1"></div>
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <div onclick="alert('ไปหน้าโปรไฟล์')" class="menu-item">
+                    <div class="w-10 h-10 rounded-2xl bg-pink-50 text-pink-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-pen"></i></div>
+                    <span class="text-sm">จัดการโปรไฟล์</span>
+                </div>
+                <div onclick="openStatusPage()" class="menu-item">
+                    <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-desktop"></i></div>
+                    <span class="text-sm">สถานะเว็บ</span>
+                </div>
+                <div class="menu-item">
+                    <div class="w-10 h-10 rounded-2xl bg-yellow-50 text-yellow-400 flex items-center justify-center shadow-sm"><i class="fa-solid fa-wallet"></i></div>
+                    <span class="text-sm">เติมเงิน</span>
+                </div>
+                
+                <div id="admin-only-tools" class="hidden pt-2">
+                    <hr class="mb-3 border-pink-50">
+                    <div onclick="openAdminModal()" class="menu-item text-blue-600 font-bold bg-blue-50/50">
+                        <div class="w-10 h-10 rounded-2xl bg-blue-500 text-white flex items-center justify-center shadow-md"><i class="fa-solid fa-hammer"></i></div>
+                        <span class="text-sm italic">จัดการหลังบ้าน</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="handleLogout()" class="w-full mt-6 py-3 text-[10px] font-black text-gray-400 uppercase tracking-[3px] border-t border-pink-50 pt-4 hover:text-pink-500 transition">Logout</button>
         </div>
     </div>
 
-    <div class="announcement-box shadow-sm">
-        <div class="w-10 h-10 rounded-2xl bg-pink-100 text-pink-500 flex items-center justify-center shrink-0 shadow-inner"><i class="fa-solid fa-bullhorn"></i></div>
-        <marquee class="text-[13px] font-bold text-gray-500" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่สดใสที่สุดในโลก! ✨</marquee>
+    <div class="p-5">
+        <div class="rounded-[3rem] bg-gradient-to-br from-[#ffcad4] to-[#ff8da1] p-10 text-white shadow-xl relative overflow-hidden border-4 border-white">
+            <h2 class="text-5xl font-black italic leading-[0.8] mb-2">CANDY<br>RENTAL</h2>
+            <p class="text-xs font-bold opacity-80 tracking-widest uppercase">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
+            <div class="absolute -bottom-5 -right-5 opacity-20 text-9xl rotate-12"><i class="fa-solid fa-cookie-bite"></i></div>
+        </div>
     </div>
 
-    <div id="status-page" class="admin-overlay overflow-y-auto">
-        <div class="pop-card w-full max-w-lg">
+    <div id="status-modal" class="admin-modal">
+        <div class="pop-card overflow-y-auto max-h-[80vh]">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-black candy-text italic uppercase">Web Services Status</h2>
-                <button onclick="closeModal('status-page')" class="w-8 h-8 rounded-full bg-pink-50 text-pink-400"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="text-2xl font-black candy-text italic">WEB STATUS</h3>
+                <button onclick="closeModal('status-modal')" class="text-gray-300"><i class="fa-solid fa-circle-xmark text-2xl"></i></button>
             </div>
-            
-            <div id="status-list-container" class="space-y-4">
-                <div class="text-center py-10 text-gray-400 italic">กำลังโหลดข้อมูลสถานะ...</div>
-            </div>
+            <div id="status-list" class="space-y-4">
+                </div>
         </div>
     </div>
 
-    <div id="admin-panel" class="admin-overlay overflow-y-auto">
-        <div class="pop-card w-full max-w-xl">
-            <h2 class="text-2xl font-black candy-text italic uppercase mb-6 text-center">Admin Control Panel</h2>
-            
-            <div class="bg-pink-50 p-4 rounded-3xl mb-6">
-                <h3 class="font-black text-pink-500 text-xs mb-3 uppercase tracking-widest italic">เพิ่มเว็บผู้เช่าใหม่</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="text" id="adm-web-name" class="auth-input mb-2" placeholder="ชื่อเว็บ...">
-                    <input type="text" id="adm-web-owner" class="auth-input mb-2" placeholder="ชื่อผู้เช่า...">
-                    <input type="text" id="adm-web-url" class="auth-input mb-2" placeholder="ลิ้งค์เว็บ...">
-                    <input type="date" id="adm-web-exp" class="auth-input mb-2">
-                </div>
-                <select id="adm-web-status" class="auth-input mb-3">
-                    <option value="online">Online (ออนไลน์)</option>
-                    <option value="offline">Offline (ปิดปรับปรุง)</option>
-                    <option value="pending">Payment (รอชำระเงิน)</option>
+    <div id="admin-modal" class="admin-modal">
+        <div class="pop-card">
+            <h3 class="text-xl font-black text-gray-700 mb-6 uppercase text-center italic">Admin Peach Manager</h3>
+            <div class="space-y-3">
+                <input type="text" id="add-web-name" class="w-full p-4 bg-gray-50 rounded-2xl outline-none text-sm font-bold" placeholder="ชื่อเว็บไซต์">
+                <input type="date" id="add-web-exp" class="w-full p-4 bg-gray-50 rounded-2xl outline-none text-sm font-bold">
+                <select id="add-web-status" class="w-full p-4 bg-gray-50 rounded-2xl outline-none text-sm font-bold">
+                    <option value="online">Online</option>
+                    <option value="pending">Pending</option>
+                    <option value="offline">Offline</option>
                 </select>
-                <button onclick="addWebStatus()" class="w-full py-4 bg-blue-500 text-white rounded-2xl font-black shadow-md active:scale-95 transition">เพิ่มเข้าระบบ</button>
+                <button onclick="saveNewWeb()" class="w-full py-4 bg-pink-500 text-white rounded-2xl font-black shadow-lg">บันทึกข้อมูล</button>
             </div>
-
-            <h3 class="font-black text-gray-400 text-[10px] mb-3 uppercase tracking-widest text-center">จัดการรายการทั้งหมด</h3>
-            <div id="admin-web-list" class="space-y-2">
-                </div>
-
-            <button onclick="closeModal('admin-panel')" class="w-full mt-6 py-3 text-gray-400 font-bold uppercase tracking-widest text-xs">กลับหน้าหลัก</button>
-        </div>
-    </div>
-
-    <div id="profile-modal" class="auth-overlay">
-        <div class="pop-card">
-            <h2 class="text-2xl font-black text-center mb-6 candy-text italic uppercase">My Profile</h2>
-            <div class="flex flex-col items-center mb-6">
-                <div class="relative">
-                    <img id="profile-img-view" src="https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg" class="w-24 h-24 rounded-[2.5rem] border-4 border-white shadow-lg object-cover bg-pink-50">
-                    <label for="img-upload" class="absolute bottom-0 right-0 w-8 h-8 bg-[#f07ab0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-md border-2 border-white"><i class="fa-solid fa-camera text-[10px]"></i></label>
-                    <input type="file" id="img-upload" class="hidden" accept="image/*">
-                </div>
-                <p class="text-[10px] text-gray-400 mt-4 font-black uppercase tracking-widest">UID: <span id="profile-uid-val" class="text-pink-400">--------</span></p>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[9px] font-black text-gray-400 ml-4 uppercase">Username (สมัครโดย)</label>
-                    <input type="text" id="profile-user-static" class="auth-input mb-0 bg-gray-50/50 text-gray-400 cursor-not-allowed" readonly>
-                </div>
-                <div>
-                    <label class="text-[9px] font-black text-pink-400 ml-4 uppercase italic">Nickname (ชื่อเล่น)</label>
-                    <input type="text" id="edit-nickname" class="auth-input mb-0" placeholder="ไม่ใส่ก็ได้นะคะ...">
-                </div>
-                <div>
-                    <label class="text-[9px] font-black text-blue-400 ml-4 uppercase">Change Password</label>
-                    <input type="password" id="new-password-val" class="auth-input mb-0" placeholder="ระบุรหัสใหม่เพื่อเปลี่ยน...">
-                </div>
-                <button id="save-profile" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95 mt-2">บันทึกการเปลี่ยนแปลง</button>
-            </div>
-            <button onclick="closeModal('profile-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase tracking-widest">Maybe Later</button>
-        </div>
-    </div>
-
-    <div class="px-5 grid grid-cols-2 gap-4 mb-8">
-        <div class="quick-btn shadow-sm" onclick="openContact()">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center text-md shadow-inner"><i class="fa-solid fa-comment-dots"></i></div>
-                <div><h4 class="font-black text-blue-500 text-sm leading-tight uppercase italic">CHAT</h4><p class="text-[8px] font-bold text-blue-300">แจ้งปัญหา</p></div>
-            </div>
-        </div>
-        <div class="quick-btn shadow-sm" onclick="openStatusPage()">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-xl bg-green-100 text-green-500 flex items-center justify-center text-md shadow-inner"><i class="fa-solid fa-signal"></i></div>
-                <div><h4 class="font-black text-green-500 text-sm leading-tight uppercase italic">STATUS</h4><p class="text-[8px] font-bold text-green-300">สถานะเว็บ</p></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
-        <div class="bg-white p-6 rounded-[2.5rem] border-2 border-pink-50 shadow-sm flex flex-col items-center">
-            <p class="text-pink-300 text-[10px] font-black uppercase tracking-widest mb-1">ลูกค้าที่น่ารัก</p>
-            <h4 class="text-4xl font-black text-[#f07ab0]" id="stat-users">0</h4>
-        </div>
-        <div class="bg-white p-6 rounded-[2.5rem] border-2 border-blue-50 shadow-sm flex flex-col items-center">
-            <p class="text-blue-300 text-[10px] font-black uppercase tracking-widest mb-1">ขนมในร้าน</p>
-            <h4 class="text-4xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
-        </div>
-    </div>
-
-    <div class="px-5">
-        <h3 class="text-lg font-black text-gray-600 mb-6 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
-        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
-    </div>
-
-    <div id="auth-modal" class="auth-overlay">
-        <div class="pop-card">
-            <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text italic uppercase">Sign In</h2>
-            <input type="text" id="user-input" class="auth-input" placeholder="Username...">
-            <input type="password" id="pass-input" class="auth-input" placeholder="Password...">
-            <button id="auth-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95">เข้าสู่ระบบ</button>
-            <p id="toggle-auth" class="text-center mt-5 text-sm text-pink-400 font-bold cursor-pointer hover:underline">ยังไม่มีบัญชี? สมัครที่นี่นะ</p>
-            <button onclick="closeModal('auth-modal')" class="block mx-auto mt-4 text-gray-400 text-xs font-bold uppercase tracking-widest">Close</button>
-        </div>
-    </div>
-
-    <div id="contact-modal" class="contact-overlay" onclick="closeModal('contact-modal')">
-        <div class="pop-card" onclick="event.stopPropagation()">
-            <div class="text-center mb-6">
-                <div class="inline-block p-4 bg-pink-50 rounded-full text-pink-400 mb-3 shadow-inner"><i class="fa-solid fa-heart-pulse fa-bounce text-2xl"></i></div>
-                <h3 class="text-2xl font-black text-gray-700 italic uppercase">Contact Us</h3>
-            </div>
-            <a href="https://www.facebook.com/share/1KVCB1cc5c/" target="_blank" class="flex items-center gap-4 p-4 bg-blue-50 rounded-3xl mb-3 border-2 border-white shadow-sm transition hover:scale-[1.02]">
-                <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-xl shadow-md"><i class="fa-brands fa-facebook-f"></i></div>
-                <div><h4 class="font-black text-blue-600 uppercase italic">Facebook</h4><p class="text-[10px] text-blue-400 font-bold tracking-widest">ติดต่อเพจ</p></div>
-            </a>
-            <a href="https://line.me/ti/p/@candymarket" target="_blank" class="flex items-center gap-4 p-4 bg-green-50 rounded-3xl mb-3 border-2 border-white shadow-sm transition hover:scale-[1.02]">
-                <div class="w-12 h-12 rounded-2xl bg-green-500 text-white flex items-center justify-center text-xl shadow-md"><i class="fa-brands fa-line"></i></div>
-                <div><h4 class="font-black text-green-600 uppercase italic">Line Official</h4><p class="text-[10px] text-green-400 font-bold tracking-widest">แชทไลน์</p></div>
-            </a>
-            <button onclick="closeModal('contact-modal')" class="w-full mt-4 py-3 rounded-2xl bg-gray-50 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
+            <button onclick="closeModal('admin-modal')" class="w-full mt-4 text-xs font-bold text-gray-300 uppercase">Close</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, runTransaction, set, update, push, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-        
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyBJEO4o365sI4XFZD4IRIaDjetIMNtCMwU",
             authDomain: "candy-market-system.firebaseapp.com",
@@ -307,314 +179,95 @@
             appId: "1:955686244672:web:484fdc3d7192d3074c2aa5"
         };
 
-        const app = initializeApp(firebaseConfig); 
-        const auth = getAuth(app); 
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // --- GLOBAL UTILS ---
-        window.openModal = (id) => {
-            const el = document.getElementById(id); el.style.display = 'flex';
-            setTimeout(() => el.querySelector('.pop-card').classList.add('show'), 10);
+        // --- Utils ---
+        window.togglePanel = () => {
+            const overlay = document.getElementById('user-panel-overlay');
+            overlay.classList.toggle('active');
         };
-        window.closeModal = (id) => {
-            const el = document.getElementById(id);
-            const card = el.querySelector('.pop-card');
-            if(card) card.classList.remove('show');
-            setTimeout(() => el.style.display = 'none', 300);
-        };
-        window.showCandyAlert = (title, msg, type = 'success') => {
-            const toast = document.getElementById('candy-toast');
-            document.getElementById('toast-title').innerText = title;
-            document.getElementById('toast-msg').innerText = msg;
-            const bg = document.getElementById('toast-icon-bg');
-            bg.className = type === 'success' ? "w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 bg-green-100 text-green-500 shadow-inner" : "w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 bg-red-100 text-red-500 shadow-inner";
-            document.getElementById('toast-i').className = type === 'success' ? "fa-solid fa-check-circle" : "fa-solid fa-circle-exclamation";
-            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
-        };
+        window.openStatusPage = () => { document.getElementById('status-modal').style.display = 'flex'; };
+        window.openAdminModal = () => { document.getElementById('admin-modal').style.display = 'flex'; };
+        window.closeModal = (id) => { document.getElementById(id).style.display = 'none'; };
+        window.handleLogout = () => signOut(auth).then(() => location.reload());
 
-        // --- AUTH & PROFILE ---
-        function generateUID() { return Math.floor(1000000000 + Math.random() * 9000000000).toString(); }
-
-        window.openContact = () => openModal('contact-modal');
-        window.openAuth = () => openModal('auth-modal');
-        window.openProfile = () => { document.getElementById('user-panel').style.display = 'none'; openModal('profile-modal'); };
-        window.openAdminPanel = () => { document.getElementById('user-panel').style.display = 'none'; openModal('admin-panel'); };
-        window.openStatusPage = () => { if(document.getElementById('user-panel')) document.getElementById('user-panel').style.display = 'none'; openModal('status-page'); };
-        window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
-        window.handleLogout = () => { signOut(auth).then(() => window.location.reload()); };
-
-        // Handle Profile Image Upload
-        document.getElementById('img-upload').onchange = function(e) {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('profile-img-view').src = e.target.result;
-                    if(document.getElementById('menu-avatar')) document.getElementById('menu-avatar').src = e.target.result;
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
+        // --- Save Data (Admin) ---
+        window.saveNewWeb = async () => {
+            const name = document.getElementById('add-web-name').value;
+            const exp = document.getElementById('add-web-exp').value;
+            const status = document.getElementById('add-web-status').value;
+            if(!name || !exp) return alert('กรอกให้ครบนะคะพีช!');
+            await push(ref(db, 'rentals'), { name, exp, status });
+            alert('เพิ่มข้อมูลสำเร็จแล้วค่ะ!');
+            closeModal('admin-modal');
         };
 
-        document.getElementById('save-profile').onclick = async () => {
-            const nick = document.getElementById('edit-nickname').value.trim();
-            const newPass = document.getElementById('new-password-val').value.trim();
-            document.getElementById('process-loader').style.display = 'flex';
-            try {
-                const updates = { nickname: nick };
-                const imgData = document.getElementById('profile-img-view').src;
-                if(imgData.startsWith('data:image')) updates.profilePic = imgData;
-                await update(ref(db, `users/${auth.currentUser.uid}`), updates);
-                if(newPass) {
-                    if(newPass.length < 6) throw new Error("รหัสผ่านต้องมีอย่างน้อย 6 ตัวค่ะ");
-                    await updatePassword(auth.currentUser, newPass);
-                }
-                showCandyAlert("สำเร็จ!", "อัปเดตข้อมูลเรียบร้อยแล้วค่ะ");
-                closeModal('profile-modal');
-            } catch (e) { 
-                showCandyAlert("อุ๊ปส์!", e.message, "error"); 
-            } finally { document.getElementById('process-loader').style.display = 'none'; }
-        };
-
-        // --- AUTH LOGIC (LOGIN/REG) ---
-        let isLoginMode = true;
-        document.getElementById('toggle-auth').onclick = () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('auth-title').innerText = isLoginMode ? "Sign In" : "Register";
-            document.getElementById('toggle-auth').innerText = isLoginMode ? "ยังไม่มีบัญชี? สมัครที่นี่นะ" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
-            document.getElementById('auth-btn').innerText = isLoginMode ? "เข้าสู่ระบบ" : "สมัครสมาชิก";
-        };
-
-        document.getElementById('auth-btn').onclick = async () => {
-            const user = document.getElementById('user-input').value.trim();
-            const pass = document.getElementById('pass-input').value.trim();
-            if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
-            
-            document.getElementById('process-loader').style.display = 'flex';
-            try {
-                const isOwner = (user === "AdminPeach" || user === "feirnbiddu10@gmail.com");
-                const email = isOwner ? "feirnbiddu10@gmail.com" : `${user}@candymarket.com`;
-
-                if(isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                    showCandyAlert("เย้!", "ยินดีต้อนรับกลับมานะคะ");
-                    closeModal('auth-modal');
-                } else {
-                    const res = await createUserWithEmailAndPassword(auth, email, pass);
-                    const uid = generateUID();
-                    await set(ref(db, `users/${res.user.uid}`), { 
-                        username: user, 
-                        uid: uid, 
-                        nickname: user === "AdminPeach" ? "Admin Peach" : "", 
-                        profilePic: "", 
-                        level: user === "AdminPeach" ? "Admin" : "Member" 
-                    });
-                    await runTransaction(ref(db, 'stats/users'), (curr) => (curr || 0) + 1);
-                    showCandyAlert("ยินดีต้อนรับ!", "สมัครสมาชิกเรียบร้อยแล้วค่ะ");
-                    closeModal('auth-modal');
-                }
-            } catch (err) { 
-                showCandyAlert("ผิดพลาด", "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ", "error"); 
-            } finally { document.getElementById('process-loader').style.display = 'none'; }
-        };
-
-        // --- WEB STATUS DASHBOARD LOGIC ---
-        function calculateDaysLeft(expiryDate) {
-            const diff = new Date(expiryDate) - new Date();
-            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-            return days > 0 ? `เหลืออีก ${days} วัน` : "หมดอายุแล้ว";
-        }
-
-        window.addWebStatus = async () => {
-            const name = document.getElementById('adm-web-name').value.trim();
-            const owner = document.getElementById('adm-web-owner').value.trim();
-            const url = document.getElementById('adm-web-url').value.trim();
-            const exp = document.getElementById('adm-web-exp').value;
-            const status = document.getElementById('adm-web-status').value;
-
-            if(!name || !exp) return showCandyAlert("Error", "กรุณากรอกชื่อและวันหมดอายุ", "error");
-
-            try {
-                await push(ref(db, 'rentals'), { name, owner, url, exp, status });
-                showCandyAlert("สำเร็จ", "เพิ่มข้อมูลผู้เช่าเรียบร้อย");
-                // Clear form
-                document.getElementById('adm-web-name').value = '';
-                document.getElementById('adm-web-owner').value = '';
-            } catch (e) { showCandyAlert("Error", e.message, "error"); }
-        };
-
-        window.deleteRental = async (id) => {
-            if(confirm('ยืนยันการลบรายการนี้?')) {
-                await remove(ref(db, `rentals/${id}`));
-                showCandyAlert("Deleted", "ลบรายการเรียบร้อย");
-            }
-        };
-
-        // Sync Status for Users & Admin
+        // --- Sync Status List ---
         onValue(ref(db, 'rentals'), (snap) => {
-            const container = document.getElementById('status-list-container');
-            const adminContainer = document.getElementById('admin-web-list');
-            container.innerHTML = '';
-            adminContainer.innerHTML = '';
-
-            if(!snap.exists()) {
-                container.innerHTML = '<div class="text-center py-10 text-gray-400">ยังไม่มีข้อมูลผู้เช่าในขณะนี้</div>';
-                return;
-            }
-
-            snap.forEach((child) => {
+            const list = document.getElementById('status-list');
+            list.innerHTML = '';
+            snap.forEach(child => {
                 const data = child.val();
-                const id = child.key;
-                const days = calculateDaysLeft(data.exp);
+                const diff = new Date(data.exp) - new Date();
+                const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
                 
-                let statusColor = "bg-green-500";
-                let statusBg = "bg-green-50";
-                let statusText = "Online";
-                let statusIcon = "fa-earth-asia";
-                
-                if(data.status === 'offline') {
-                    statusColor = "bg-red-500"; statusBg = "bg-red-50"; statusText = "Offline"; statusIcon = "fa-plug-circle-xmark";
-                } else if(data.status === 'pending') {
-                    statusColor = "bg-yellow-500"; statusBg = "bg-yellow-50"; statusText = "Pending"; statusIcon = "fa-clock";
-                }
-
-                // Append to User View
-                container.innerHTML += `
-                    <div class="status-card p-5">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-2xl ${statusBg} flex items-center justify-center text-xl shadow-sm border border-white/50">
-                                    <i class="fa-solid ${statusIcon}"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-black text-gray-700 leading-tight">${data.name}</h3>
-                                    <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest italic">Owner: ${data.owner || 'Guest'}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2 px-3 py-1 ${statusBg} rounded-full border border-white">
-                                <div class="dot-pulse ${statusColor}"></div>
-                                <span class="text-[9px] font-black uppercase" style="color:${statusColor.replace('bg-','')}">${statusText}</span>
+                list.innerHTML += `
+                    <div class="status-card p-5 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-black text-gray-700">${data.name}</h4>
+                            <div class="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full">
+                                <div class="w-2 h-2 rounded-full dot-${data.status}"></div>
+                                <span class="text-[10px] font-black uppercase text-gray-400">${data.status}</span>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 mb-4">
-                            <div class="bg-gray-50/50 p-3 rounded-2xl border border-white">
-                                <p class="text-[8px] text-gray-400 font-bold uppercase mb-1">สถานะวันหมดอายุ</p>
-                                <p class="text-[11px] font-black text-gray-600"><i class="fa-solid fa-hourglass-half mr-1"></i> ${days}</p>
-                            </div>
-                            <div class="bg-gray-50/50 p-3 rounded-2xl border border-white text-right">
-                                <p class="text-[8px] text-gray-400 font-bold uppercase mb-1">วันที่สิ้นสุด</p>
-                                <p class="text-[11px] font-black text-gray-600">${data.exp}</p>
-                            </div>
+                        <div class="flex justify-between text-[11px] font-bold text-gray-400">
+                            <span>วันหมดอายุ: ${data.exp}</span>
+                            <span class="text-pink-400 italic">${days > 0 ? 'เหลือ '+days+' วัน' : 'หมดอายุแล้ว'}</span>
                         </div>
-                        ${data.url ? `<a href="${data.url}" target="_blank" class="block w-full py-3 bg-pink-50 text-pink-500 rounded-xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-pink-100 transition shadow-sm border border-white">Visit Website</a>` : ''}
-                    </div>
-                `;
-
-                // Append to Admin Control List
-                adminContainer.innerHTML += `
-                    <div class="flex items-center justify-between p-3 bg-white border border-pink-50 rounded-2xl">
-                        <div class="text-[11px]">
-                            <span class="font-black text-gray-700">${data.name}</span>
-                            <span class="text-gray-300 mx-1">|</span>
-                            <span class="text-pink-400 font-bold">${data.exp}</span>
-                        </div>
-                        <button onclick="deleteRental('${id}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-400 flex items-center justify-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
                     </div>
                 `;
             });
         });
 
-        // --- MAIN APP SYNC ---
+        // --- Auth & Profile Sync ---
         onAuthStateChanged(auth, (user) => {
             const section = document.getElementById('auth-section');
             if(user) {
                 onValue(ref(db, `users/${user.uid}`), (snap) => {
                     const data = snap.val() || {};
-                    const isAdmin = data.username === "AdminPeach";
+                    const isAdmin = (data.username === "AdminPeach" || user.email === "feirnbiddu10@gmail.com");
                     
-                    // Update Dropdown Panel
-                    const nameEl = document.getElementById('menu-nickname');
-                    const badgeEl = document.getElementById('menu-badge');
-                    const adminMenu = document.getElementById('admin-menu-section');
+                    // Header Image (ที่พีชวง)
+                    const profileImg = data.profilePic || 'https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg';
+                    section.innerHTML = `
+                        <button onclick="togglePanel()" class="w-12 h-12 rounded-full border-2 border-pink-200 overflow-hidden shadow-lg active:scale-90 transition">
+                            <img src="${profileImg}" class="w-full h-full object-cover">
+                        </button>
+                    `;
+
+                    // Panel Details
+                    document.getElementById('panel-img').src = profileImg;
+                    const nameTag = document.getElementById('panel-name');
+                    const badgeTag = document.getElementById('panel-badge');
                     
                     if(isAdmin) {
-                        nameEl.innerText = "Admin Peach";
-                        nameEl.className = "admin-rainbow-text text-xl leading-tight";
-                        if(badgeEl) {
-                            badgeEl.className = "owner-badge mt-0.5";
-                            badgeEl.innerHTML = `<i class="fa-solid fa-crown"></i> OWNER`;
-                        }
-                        if(adminMenu) adminMenu.classList.remove('hidden');
+                        nameTag.innerText = "Admin Peach";
+                        nameTag.className = "admin-rainbow-text text-xl italic";
+                        badgeTag.innerHTML = `<span class="owner-badge"><i class="fa-solid fa-crown mr-1"></i> OWNER</span>`;
+                        document.getElementById('admin-only-tools').classList.remove('hidden');
                     } else {
-                        nameEl.innerText = data.nickname || data.username || "Guest";
-                        nameEl.className = "user-name-animate text-lg leading-tight";
-                        if(badgeEl) {
-                            badgeEl.className = "level-badge mt-0.5";
-                            badgeEl.innerHTML = `<i class="fa-solid fa-crown text-[8px]"></i> MEMBER`;
-                        }
-                    }
-
-                    document.getElementById('menu-uid').innerText = data.uid || "--------";
-                    document.getElementById('profile-user-static').value = data.username || "";
-                    document.getElementById('edit-nickname').value = data.nickname || "";
-                    document.getElementById('profile-uid-val').innerText = data.uid || "--------";
-                    
-                    if(data.profilePic) {
-                        document.getElementById('menu-avatar').src = data.profilePic;
-                        document.getElementById('menu-avatar').classList.remove('hidden');
-                        document.getElementById('menu-avatar-temp').classList.add('hidden');
-                        document.getElementById('profile-img-view').src = data.profilePic;
-
-                        // ✨ Update Top Navbar Profile Circle (ที่พีชวงมา)
-                        section.innerHTML = `
-                            <button onclick="togglePanel()" class="w-12 h-12 rounded-full border-2 border-pink-200 shadow-md active:scale-95 transition overflow-hidden">
-                                <img src="${data.profilePic}" class="w-full h-full object-cover">
-                            </button>
-                        `;
-                    } else {
-                        section.innerHTML = `
-                            <button onclick="togglePanel()" class="w-12 h-12 rounded-full bg-white border-2 border-pink-200 text-pink-400 flex items-center justify-center shadow-md active:scale-95 transition">
-                                <i class="fa-solid fa-cookie text-2xl"></i>
-                            </button>
-                        `;
+                        nameTag.innerText = data.nickname || data.username || "Member";
+                        badgeTag.innerHTML = `<span class="text-[10px] font-bold text-pink-300 uppercase tracking-widest">Customer</span>`;
                     }
                 });
             } else {
-                section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2.5 rounded-full text-xs font-black shadow-lg active:scale-95 transition uppercase tracking-widest">Sign In</button>`;
+                section.innerHTML = `<button onclick="alert('กรุณาเข้าสู่ระบบก่อนน้า')" class="bg-pink-500 text-white px-6 py-2 rounded-full text-xs font-black shadow-lg">Sign In</button>`;
             }
+            // Hide Loader
+            setTimeout(() => document.getElementById('loader').style.display = 'none', 800);
         });
-
-        // Sync Product & Stats
-        onValue(ref(db, 'products'), snap => {
-            const container = document.getElementById('product-container'); 
-            container.innerHTML = '';
-            snap.forEach(child => {
-                const p = child.val();
-                container.innerHTML += `
-                    <div class="bg-white border-2 border-pink-50 rounded-[3rem] p-4 flex flex-col shadow-sm transition hover:shadow-md">
-                        <img src="${p.image}" class="rounded-[2.2rem] mb-4 aspect-square object-cover border-2 border-pink-50 shadow-inner">
-                        <h4 class="font-black text-sm text-gray-700 truncate px-2 mb-1">${p.name}</h4>
-                        <p class="text-pink-500 font-black text-2xl mb-4 px-2 tracking-tighter">฿${p.price}</p>
-                        <a href="${p.demo||'#'}" class="bg-pink-50 text-pink-500 text-center text-[10px] font-black py-4 rounded-2xl uppercase tracking-widest active:scale-95 transition shadow-sm border border-white">View Demo</a>
-                    </div>
-                `;
-            });
-        });
-
-        onValue(ref(db, 'stats'), snap => {
-            const d = snap.val()||{};
-            document.getElementById('stat-users').innerText = d.users||0;
-            document.getElementById('stat-prods').innerText = d.prods||0;
-        });
-
-        window.onload = () => { 
-            setTimeout(() => { 
-                const loader = document.getElementById('loader');
-                if(loader) {
-                    loader.style.opacity = '0'; 
-                    setTimeout(() => loader.style.display='none', 500); 
-                }
-            }, 600); 
-        };
     </script>
 </body>
 </html>
