@@ -40,7 +40,6 @@
         
         #process-loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(4px); z-index: 20000; display: none; align-items: center; justify-content: center; }
         
-        /* แก้ไขการหมุนให้ตรงกลางเป๊ะ */
         .cookie-spin { 
             display: flex;
             justify-content: center;
@@ -204,11 +203,19 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        
-        // ✅ แก้ไขเป็น .js ให้ถูกต้องเพื่อให้โค้ดทำงานต่อได้
         import { getDatabase, ref, onValue, runTransaction, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         
-        const firebaseConfig = { apiKey: "AIzaSyBORnXLQdZnETh9AMFMUx50FlLylKCVc2w", authDomain: "web-rental-system-d8894.firebaseapp.com", projectId: "web-rental-system-d8894", databaseURL: "https://web-rental-system-d8894-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        // ✨ กุญแจใหม่ของคุณลูกพีช
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJEO4o365sI4XFZD4IRIaDjetIMNtCMwU",
+            authDomain: "candy-market-system.firebaseapp.com",
+            databaseURL: "https://candy-market-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "candy-market-system",
+            storageBucket: "candy-market-system.firebasestorage.app",
+            messagingSenderId: "955686244672",
+            appId: "1:955686244672:web:484fdc3d7192d3074c2aa5"
+        };
+
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
         // --- UI Utilities ---
@@ -238,7 +245,6 @@
         window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
         window.handleLogout = () => { signOut(auth); window.location.reload(); };
 
-        // Profile Pic Preview
         document.getElementById('img-upload').onchange = function(e) {
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
@@ -250,7 +256,6 @@
             }
         };
 
-        // Save Profile
         document.getElementById('save-profile').onclick = async () => {
             const nick = document.getElementById('edit-nickname').value.trim();
             const newPass = document.getElementById('new-password-val').value.trim();
@@ -259,14 +264,11 @@
                 const updates = { nickname: nick };
                 const imgData = document.getElementById('profile-img-view').src;
                 if(imgData.startsWith('data:image')) updates.profilePic = imgData;
-                
                 await update(ref(db, `users/${auth.currentUser.uid}`), updates);
-                
                 if(newPass) {
                     if(newPass.length < 6) throw new Error("รหัสผ่านต้องมีอย่างน้อย 6 ตัวค่ะ");
                     await updatePassword(auth.currentUser, newPass);
                 }
-
                 showCandyAlert("สำเร็จ!", "อัปเดตข้อมูลเรียบร้อยแล้วค่ะ");
                 closeModal('profile-modal');
             } catch (e) { 
@@ -274,7 +276,6 @@
             } finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
-        // --- Auth Logic (Updated: Admin Block + Email Mapping) ---
         let isLoginMode = true;
         document.getElementById('toggle-auth').onclick = () => {
             isLoginMode = !isLoginMode;
@@ -286,11 +287,9 @@
         document.getElementById('auth-btn').onclick = async () => {
             const user = document.getElementById('user-input').value.trim();
             const pass = document.getElementById('pass-input').value.trim();
-            
             if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
             
             const forbiddenNames = ["AdminPeach", "admin", "Admin"];
-            
             document.getElementById('process-loader').style.display = 'flex';
             try {
                 const isOwner = (user === "AdminPeach" || user === "feirnbiddu10@gmail.com");
@@ -304,10 +303,8 @@
                     if (forbiddenNames.includes(user) && user !== "AdminPeach") {
                         throw new Error("ชื่อนี้เป็นชื่อแอดมิน ห้ามใช้สมัครนะคะ!");
                     }
-
                     const res = await createUserWithEmailAndPassword(auth, email, pass);
                     const uid = generateUID();
-                    
                     await set(ref(db, `users/${res.user.uid}`), { 
                         username: user, 
                         uid: uid, 
@@ -315,7 +312,6 @@
                         profilePic: "", 
                         level: user === "AdminPeach" ? "Admin" : "Member" 
                     });
-                    
                     await runTransaction(ref(db, 'stats/users'), (curr) => (curr || 0) + 1);
                     showCandyAlert("ยินดีต้อนรับ!", "สมัครสมาชิกเรียบร้อยแล้วค่ะ");
                     closeModal('auth-modal');
@@ -329,7 +325,6 @@
             }
         };
 
-        // --- Sync Data ---
         onAuthStateChanged(auth, (user) => {
             const section = document.getElementById('auth-section');
             if(user) {
@@ -341,7 +336,6 @@
                     document.getElementById('profile-user-static').value = data.username || "";
                     document.getElementById('edit-nickname').value = data.nickname || "";
                     document.getElementById('profile-uid-val').innerText = data.uid || "--------";
-                    
                     if(data.profilePic) {
                         document.getElementById('menu-avatar').src = data.profilePic;
                         document.getElementById('menu-avatar').classList.remove('hidden');
@@ -355,7 +349,6 @@
             }
         });
 
-        // Load Products & Stats
         onValue(ref(db, 'products'), snap => {
             const container = document.getElementById('product-container'); container.innerHTML = '';
             snap.forEach(child => {
@@ -370,7 +363,6 @@
             document.getElementById('stat-prods').innerText = d.prods||0;
         });
 
-        // ✅ ปรับให้หน้าโหลดหายไปทันทีที่หน้าเว็บโหลดเสร็จ (กันค้าง)
         window.onload = () => { 
             setTimeout(() => { 
                 const loader = document.getElementById('loader');
