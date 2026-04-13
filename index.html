@@ -13,7 +13,6 @@
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* ✨ Animated Gradient Name */
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -28,7 +27,6 @@
             font-weight: 900;
         }
 
-        /* 🌈 Rainbow & Moving Animation สำหรับชื่อ Admin */
         @keyframes rainbowMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -44,7 +42,6 @@
             filter: drop-shadow(0 0 5px rgba(255,192,203,0.5));
         }
 
-        /* 👑 Owner Badge แบบดุ๊กดิ๊ก */
         @keyframes badgeBounce {
             0%, 100% { transform: translateY(0) scale(1); }
             50% { transform: translateY(-3px) scale(1.05); }
@@ -65,7 +62,6 @@
             letter-spacing: 1px;
         }
 
-        /* UI Components */
         .contact-overlay, .auth-overlay { position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4); backdrop-filter: blur(8px); z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
         .pop-card { background: white; width: 100%; max-width: 350px; border-radius: 3rem; padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2); transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .pop-card.show { transform: scale(1); }
@@ -120,6 +116,17 @@
             <div class="menu-item"><div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-desktop"></i></div><span>สถานะเว็บ</span></div>
             <div class="menu-item"><div class="w-9 h-9 rounded-xl bg-yellow-50 text-yellow-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-wallet"></i></div><span>เติมเงิน</span></div>
             <div class="menu-item"><div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-history"></i></div><span>ประวัติการเช่า</span></div>
+            
+            <div id="admin-menu" style="display: none;">
+                <hr class="my-2 border-pink-50/50">
+                <div onclick="location.href='/admin'" class="menu-item text-blue-600 font-bold">
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-hammer"></i>
+                    </div>
+                    <span>จัดการหลังบ้าน (Admin)</span>
+                </div>
+            </div>
+
             <hr class="my-2 border-pink-50/50">
             <div onclick="openContact()" class="menu-item text-red-400"><div class="w-9 h-9 rounded-xl bg-red-50 text-red-400 flex items-center justify-center shadow-sm"><i class="fa-solid fa-circle-exclamation text-sm"></i></div><span>ติดต่อด่วน</span></div>
             <button onclick="handleLogout()" class="w-full mt-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-pink-400 transition">Logout</button>
@@ -245,7 +252,6 @@
 
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        // --- UI Utilities ---
         window.openModal = (id) => {
             const el = document.getElementById(id); el.style.display = 'flex';
             setTimeout(() => el.querySelector('.pop-card').classList.add('show'), 10);
@@ -263,7 +269,6 @@
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
         };
 
-        // --- Profile & Logic ---
         function generateUID() { return (Math.floor(Math.random() * 9000000000) + 1000000000).toString(); }
 
         window.openContact = () => openModal('contact-modal');
@@ -352,7 +357,7 @@
             }
         };
 
-        // ✨ อัปเดตส่วน Auth State: ปรับสีรุ้ง และ ยศ Owner ให้ AdminPeach
+        // ✨ อัปเดตส่วน Auth State: ปรับรูปใน Navbar และเปิดเมนูหลังบ้านให้ Admin
         onAuthStateChanged(auth, (user) => {
             const section = document.getElementById('auth-section');
             if(user) {
@@ -360,11 +365,12 @@
                     const data = snap.val() || {};
                     const nameElement = document.getElementById('menu-nickname');
                     const badgeElement = document.getElementById('menu-badge');
+                    const adminMenu = document.getElementById('admin-menu');
                     
-                    // ตรวจสอบว่าเป็นแอดมินหรือไม่
                     if (data.username === "AdminPeach") {
                         nameElement.innerText = "Admin Peach";
                         nameElement.className = "admin-rainbow-text text-xl leading-tight";
+                        if(adminMenu) adminMenu.style.display = 'block'; // แสดงเมนูหลังบ้านให้พีช
                         
                         if(badgeElement) {
                             badgeElement.className = "owner-badge mt-0.5";
@@ -373,6 +379,7 @@
                     } else {
                         nameElement.innerText = data.nickname || data.username || "Guest";
                         nameElement.className = "user-name-animate text-lg leading-tight";
+                        if(adminMenu) adminMenu.style.display = 'none';
                         
                         if(badgeElement) {
                             badgeElement.className = "level-badge mt-0.5";
@@ -390,9 +397,16 @@
                         document.getElementById('menu-avatar').classList.remove('hidden');
                         document.getElementById('menu-avatar-temp').classList.add('hidden');
                         document.getElementById('profile-img-view').src = data.profilePic;
+
+                        // ✨ อัปเดตรูปในปุ่มวงกลมด้านบน (แทนที่ไอคอนคุ้กกี้)
+                        section.innerHTML = `
+                            <button onclick="togglePanel()" class="w-12 h-12 rounded-full border-2 border-pink-200 shadow-md active:scale-95 transition overflow-hidden">
+                                <img src="${data.profilePic}" class="w-full h-full object-cover">
+                            </button>`;
+                    } else {
+                        section.innerHTML = `<button onclick="togglePanel()" class="w-12 h-12 rounded-full bg-white border-2 border-pink-200 text-pink-400 flex items-center justify-center shadow-md active:scale-95 transition"><i class="fa-solid fa-cookie text-2xl"></i></button>`;
                     }
                 });
-                section.innerHTML = `<button onclick="togglePanel()" class="w-12 h-12 rounded-full bg-white border-2 border-pink-200 text-pink-400 flex items-center justify-center shadow-md active:scale-95 transition"><i class="fa-solid fa-cookie text-2xl"></i></button>`;
             } else {
                 section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2.5 rounded-full text-xs font-black shadow-lg active:scale-95 transition uppercase tracking-widest">Sign In</button>`;
             }
