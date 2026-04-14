@@ -66,7 +66,7 @@
         .pop-card { background: white; width: 100%; max-width: 350px; border-radius: 3rem; padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2); transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .pop-card.show { transform: scale(1); }
         .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; background: #fffafa; margin-bottom: 15px; outline: none; font-size: 14px; }
-        .control-panel { position: absolute; top: 75px; right: 20px; width: 280px; background: white; border-radius: 2.5rem; padding: 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 4px solid #fff; display: none; z-index: 10000; }
+        .control-panel { position: absolute; top: 75px; right: 20px; width: 280px; background: white; border-radius: 2.5rem; padding: 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 4px solid #fff; display: none; z-index: 10000; max-height: 80vh; overflow-y: auto; overscroll-behavior: contain; }
         .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; font-family: 'Kanit', sans-serif; font-weight: 500; cursor: pointer; transition: 0.2s; color: #666; }
         .menu-item:hover { background: #fff0f3; transform: translateX(5px); }
         .level-badge { display: flex; align-items: center; gap: 2px; text-[9px] font-black px-2 py-0.5 rounded-full bg-pink-50 text-pink-400 border border-pink-100; }
@@ -104,7 +104,7 @@
         <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
         <div id="auth-section" class="relative"></div>
 
-        <div id="user-panel" class="control-panel">
+        <div id="user-panel" class="control-panel custom-scrollbar">
             <div class="px-2 py-3 border-b border-pink-50 mb-2">
                 <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Welcome back!</p>
                 <div class="flex items-center gap-2">
@@ -273,7 +273,7 @@
 
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
 
-        let currentUserDataGlobal = null; // ตัวแปรเก็บข้อมูล User ปัจจุบันเพื่อเช็กยศ
+        let currentUserDataGlobal = null; 
 
         window.openModal = (id) => {
             const el = document.getElementById(id); el.style.display = 'flex';
@@ -300,7 +300,6 @@
         window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
         window.handleLogout = () => { signOut(auth); window.location.reload(); };
 
-        // ฟังก์ชันคำนวณเวลาที่เหลือ
         const calculateRemaining = (expireTimestamp) => {
             const now = Date.now();
             const diff = expireTimestamp - now;
@@ -484,7 +483,7 @@
             if(user) {
                 onValue(ref(db, `users/${user.uid}`), (snap) => {
                     const data = snap.val() || {};
-                    currentUserDataGlobal = data; // อัปเดตข้อมูล User ลงตัวแปร Global
+                    currentUserDataGlobal = data; 
                     
                     const nameElement = document.getElementById('menu-nickname');
                     const badgeElement = document.getElementById('menu-badge');
