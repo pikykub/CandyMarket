@@ -89,7 +89,6 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #fff0f3; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #ffcad4; border-radius: 10px; }
 
-        /* Payment Styles */
         .payment-card { background: #fffafa; border: 2px dashed #ffcad4; border-radius: 2rem; padding: 15px; margin-bottom: 12px; }
         .qr-area { width: 130px; height: 130px; background: white; margin: 10px auto; border-radius: 1.2rem; border: 3px solid #fff0f3; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .qr-area img { width: 100%; height: 100%; object-fit: cover; }
@@ -151,7 +150,7 @@
             </div>
             <div class="payment-card">
                 <div class="flex items-center gap-2 mb-1"><div class="w-7 h-7 rounded-lg bg-[#5d2d91] text-white flex items-center justify-center text-[10px] font-bold">KKP</div><span class="text-[11px] font-black text-gray-600">ธนาคารเกียรนาคินภัทร</span></div>
-                <div class="qr-area"><img src="ใส่ลิ้งรูปQRธนาคารของคุณที่นี่" alt="Bank QR"></div>
+                <div class="qr-area"><img src="https://placehold.co/300x300?text=BANK+QR" alt="Bank QR"></div>
                 <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-pink-50 mt-2">
                     <span class="text-[10px] font-bold text-gray-400">2012028169</span>
                     <div class="copy-chip" onclick="copyToClipboard('2012028169')">COPY</div>
@@ -159,7 +158,7 @@
             </div>
             <div class="payment-card">
                 <div class="flex items-center gap-2 mb-1"><div class="w-7 h-7 rounded-lg bg-[#ff8c00] text-white flex items-center justify-center text-[10px] font-bold"><i class="fa-solid fa-wallet"></i></div><span class="text-[11px] font-black text-gray-600">TrueMoney Wallet</span></div>
-                <div class="qr-area"><img src="ใส่ลิ้งรูปQRวอเลทของคุณที่นี่" alt="Wallet QR"></div>
+                <div class="qr-area"><img src="https://placehold.co/300x300?text=WALLET+QR" alt="Wallet QR"></div>
                 <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-pink-50 mt-2">
                     <span class="text-[10px] font-bold text-gray-400">061-615-5601</span>
                     <div class="copy-chip" onclick="copyToClipboard('0616155601')">COPY</div>
@@ -306,7 +305,6 @@
             setTimeout(() => el.style.display = 'none', 300);
         };
         
-        // ฟังก์ชันใหม่: เปิดหน้าเติมเงินพร้อมโหลดคุกกี้
         window.openTopup = () => {
             document.getElementById('user-panel').style.display = 'none';
             document.getElementById('process-loader').style.display = 'flex';
@@ -369,7 +367,7 @@
                 await update(ref(db, `users/${auth.currentUser.uid}`), updates);
                 if(newPass) await updatePassword(auth.currentUser, newPass);
                 showCandyAlert("สำเร็จ!", "อัปเดตข้อมูลเรียบร้อยแล้วค่ะ"); closeModal('profile-modal');
-            } catch (e) { showCandyAlert("อุ๊ปส์!", "บันทึกไม่ได้ ลองใหม่อีกครั้งนะ", "error"); } finally { document.getElementById('process-loader').style.display = 'none'; }
+            } catch (e) { showCandyAlert("อุ๊ปส์!", "บันทึกไม่ได้ ลองใหมีกครั้งนะ", "error"); } finally { document.getElementById('process-loader').style.display = 'none'; }
         };
 
         let isLoginMode = true;
@@ -419,7 +417,18 @@
         });
 
         onValue(ref(db, 'stats'), snap => { const d = snap.val()||{}; document.getElementById('stat-users').innerText = d.users||0; document.getElementById('stat-prods').innerText = d.prods||0; });
-        window.onload = () => { setTimeout(() => { const l = document.getElementById('loader'); if(l) { l.style.opacity = '0'; setTimeout(() => l.style.display='none', 500); } }, 600); };
+
+        // แก้ไข Loader ใหม่ให้หายไปเร็วขึ้นและไม่ค้าง
+        const hideLoader = () => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }
+        };
+        // ถ้าโหลดเสร็จหมด หรือถ้าผ่านไป 3 วินาทีแล้วยังหมุนอยู่ ให้บังคับปิด Loader เลยค่ะ
+        window.addEventListener('load', hideLoader);
+        setTimeout(hideLoader, 3000); 
     </script>
 </body>
 </html>
