@@ -619,14 +619,71 @@
                 section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2.5 rounded-full text-xs font-black shadow-lg active:scale-95 transition uppercase tracking-widest">Sign In</button>`;
             }
         });
+ 
+// --- ระบบหักเงิน และ แสดงผลสินค้า ---
+window.handleRentWeb = async (productId, productName, price) => {
+    if (!auth.currentUser || !currentUserDataGlobal) {
+        return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนเช่านะคะ", "error");
+    }
 
-        onValue(ref(db, 'products'), snap => {
-            const container = document.getElementById('product-container'); container.innerHTML = '';
-            snap.forEach(child => {
-                const p = child.val();
-                container.innerHTML += `<div class="bg-white border-2 border-pink-50 rounded-[3rem] p-4 flex flex-col shadow-sm transition hover:shadow-md"><img src="${p.image}" class="rounded-[2.2rem] mb-4 aspect-square object-cover border-2 border-pink-50 shadow-inner"><h4 class="font-black text-sm text-gray-700 truncate px-2 mb-1">${p.name}</h4><p class="text-pink-500 font-black text-2xl mb-4 px-2 tracking-tighter">฿${p.price}</p><a href="${p.demo||'#'}" class="bg-pink-50 text-pink-500 text-center text-[10px] font-black py-4 rounded-2xl uppercase tracking-widest active:scale-95 transition shadow-sm">View Demo</a></div>`;
-            });
+    const confirmRent = confirm(`ยืนยันการเช่าเว็บไซต์ ${productName}\nราคา ${price} บาท ใช่หรือไม่?`);
+    if (!confirmRent) return;
+
+    document.getElementById('process-loader').style.display = 'flex';
+
+    try {
+        const userRef = ref(db, `users/${auth.currentUser.uid}`);
+        const currentBalance = currentUserDataGlobal.balance || 0;
+
+        if (currentBalance < price) {
+            showCandyAlert("ยอดเงินไม่เพียงพอ", "กรุณาเติมเงินก่อนทำรายการนะคะ", "error");
+            return;
+        }
+
+        const newBalance = currentBalance - price;
+        const now = Date.now();
+        const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+        
+        const newRentalRef = push(ref(db, 'rentals'));
+        await update(userRef, { balance: newBalance });
+        await set(newRentalRef, {
+            uid: auth.currentUser.uid,
+            webName: productName,
+            price: price,
+            startDate: now,
+            expireAt: now + thirtyDays,
+            status: "active",
+            customerName: currentUserDataGlobal.nickname || currentUserDataGlobal.username,
+            adminName: "Peach Admin"
         });
+
+        showCandyAlert("เช่าเว็บสำเร็จ!", `เช่า ${productName} เรียบร้อยแล้วค่ะ`, "success");
+
+    } catch (err) {
+        showCandyAlert("เกิดข้อผิดพลาด", "ลองใหม่อีกครั้งนะ", "error");
+    } finally {
+        document.getElementById('process-loader').style.display = 'none';
+    }
+};
+
+onValue(ref(db, 'products'), snap => {
+    const container = document.getElementById('product-container'); 
+    container.innerHTML = '';
+    snap.forEach(child => {
+        const p = child.val();
+        const pId = child.key;
+        container.innerHTML += `
+            <div class="bg-white border-2 border-pink-50 rounded-[3rem] p-4 flex flex-col shadow-sm transition hover:shadow-md">
+                <img src="${p.image}" class="rounded-[2.2rem] mb-4 aspect-square object-cover border-2 border-pink-50 shadow-inner">
+                <h4 class="font-black text-sm text-gray-700 truncate px-2 mb-1">${p.name}</h4>
+                <p class="text-pink-500 font-black text-2xl mb-4 px-2 tracking-tighter">฿${p.price}</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="${p.demo||'#'}" target="_blank" class="bg-blue-50 text-blue-500 text-center text-[9px] font-black py-3 rounded-2xl uppercase tracking-widest active:scale-95 transition">Demo</a>
+                    <button onclick="handleRentWeb('${pId}', '${p.name}', ${p.price})" class="bg-pink-50 text-pink-500 text-center text-[9px] font-black py-3 rounded-2xl uppercase tracking-widest active:scale-95 transition shadow-sm">เช่าเว็บ</button>
+                </div>
+            </div>`;
+    });
+});
 
         onValue(ref(db, 'stats'), snap => {
             const d = snap.val()||{};
