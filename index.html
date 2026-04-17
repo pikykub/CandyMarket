@@ -411,24 +411,7 @@
                 document.getElementById('process-loader').style.display = 'none';
             }
         };
-// --- ส่วนแจ้งสลิปโอนเงิน (วางต่อจากระบบเติมเงินเดิม) ---
-let selectedBase64 = "";
-
-// ฟังก์ชันแปลงรูปภาพ
-document.getElementById('slip-file').onchange = function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            selectedBase64 = event.target.result;
-            document.getElementById('slip-preview').src = selectedBase64;
-            document.getElementById('slip-preview').classList.remove('hidden');
-            document.getElementById('upload-placeholder').classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
-    }
-};
-
+// 
 // ฟังก์ชันส่งข้อมูลแจ้งสลิป
 document.getElementById('submit-slip-btn').onclick = async () => {
     const amount = parseInt(document.getElementById('slip-amount').value);
