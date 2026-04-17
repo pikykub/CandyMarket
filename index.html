@@ -411,6 +411,58 @@
                 document.getElementById('process-loader').style.display = 'none';
             }
         };
+// --- ส่วนแจ้งสลิปโอนเงิน (วางต่อจากระบบเติมเงินเดิม) ---
+let selectedBase64 = "";
+
+// ฟังก์ชันแปลงรูปภาพ
+document.getElementById('slip-file').onchange = function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            selectedBase64 = event.target.result;
+            document.getElementById('slip-preview').src = selectedBase64;
+            document.getElementById('slip-preview').classList.remove('hidden');
+            document.getElementById('upload-placeholder').classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+// ฟังก์ชันส่งข้อมูลแจ้งสลิป
+document.getElementById('submit-slip-btn').onclick = async () => {
+    const amount = parseInt(document.getElementById('slip-amount').value);
+    
+    if (!auth.currentUser) return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
+    if (!amount || amount <= 0) return showCandyAlert("อุ๊ปส์!", "กรุณาระบุจำนวนเงินค่ะ", "error");
+    if (!selectedBase64) return showCandyAlert("อุ๊ปส์!", "ยังไม่ได้เลือกรูปสลิปเลยค่ะ", "error");
+
+    document.getElementById('process-loader').style.display = 'flex';
+
+    try {
+        await set(push(ref(db, 'topup_requests')), {
+            uid: auth.currentUser.uid,
+            customerName: currentUserDataGlobal.nickname || currentUserDataGlobal.username,
+            amount: amount,
+            slipImage: selectedBase64,
+            status: "pending",
+            date: Date.now()
+        });
+
+        showCandyAlert("ส่งแล้ว!", "รอแอดมินตรวจสอบสลิปสักครู่นะคะ", "success");
+        closeModal('slip-modal');
+        
+        // ล้างค่าฟอร์ม
+        document.getElementById('slip-amount').value = '';
+        document.getElementById('slip-preview').classList.add('hidden');
+        document.getElementById('upload-placeholder').classList.remove('hidden');
+        selectedBase64 = "";
+    } catch (err) {
+        showCandyAlert("ผิดพลาด", "ไม่สามารถส่งข้อมูลได้ค่ะ", "error");
+    } finally {
+        document.getElementById('process-loader').style.display = 'none';
+    }
+};
 
         const calculateRemaining = (expireTimestamp) => {
             const now = Date.now();
