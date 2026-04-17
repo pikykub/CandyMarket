@@ -391,7 +391,16 @@
                 await update(userRef, {
                     balance: newBalance
                 });
-
+                // บันทึกประวัติลง Firebase Node "topups"
+                const topupRef = ref(db, 'topups');
+                await set(push(topupRef), {
+                        uid: auth.currentUser.uid,
+                        amount: amount,
+                        date: Date.now(),
+                        method: "manual",
+                        status: "Completed"
+                });
+                
                 showCandyAlert("เติมเงินสำเร็จ!", `เพิ่มยอดเงิน ${amount} บาท เรียบร้อยแล้วค่ะ`, "success");
                 closeModal('topup-modal');
                 
