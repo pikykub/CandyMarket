@@ -1,834 +1,873 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CandyMarket | ระบบเช่าเว็บไซต์</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+```
+<link href="[https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Mali:wght@400;700&display=swap](https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Mali:wght@400;700&display=swap)" rel="stylesheet">
+
+<style>
+    :root {
+        --pixel-border: #8B4513;
+        --pixel-bg: #E2E9AD;
+        --pixel-card: #FFF9C4;
+        --pixel-accent: #E67E22;
+    }
+
+    body { 
+        background-color: var(--pixel-bg) !important; 
+        font-family: 'Mali', cursive !important; 
+        color: #5d4037 !important; 
+        overflow-x: hidden; 
+        image-rendering: pixelated !important;
+    }
+
+    .grid-bg { 
+        background-image: radial-gradient(#c5ce8a 2px, transparent 2px) !important; 
+        background-size: 20px 20px !important; 
+    }
+
+    .candy-text { 
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
+        color: #e91e63 !important;
+        font-family: 'Press Start 2P', cursive !important;
+        text-shadow: 2px 2px 0px #fff !important;
+        font-size: 1.2rem !important;
+        font-style: normal !important;
+    }
+
+    .user-name-animate { 
+        background: none !important; 
+        -webkit-text-fill-color: initial !important;
+        color: #e91e63 !important; 
+        font-family: 'Press Start 2P', cursive !important;
+        font-size: 0.7rem !important;
+        text-shadow: none !important;
+    }
+
+    @keyframes badgeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    .owner-badge { 
+        border-radius: 0px !important; 
+        border: 2px solid var(--pixel-border) !important; 
+        box-shadow: 2px 2px 0px var(--pixel-border) !important;
+        font-family: 'Press Start 2P', cursive !important; 
+        font-size: 6px !important; 
+        background: white !important; 
+        color: #e91e63 !important; 
+        animation: badgeBounce 1s steps(4) infinite !important;
+    }
+
+    .contact-overlay, .auth-overlay { position: fixed; inset: 0; background: rgba(139, 69, 19, 0.4) !important; backdrop-filter: blur(0px) !important; z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
     
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Mali:wght@400;700&display=swap" rel="stylesheet">
+    .pop-card { 
+        background: var(--pixel-card) !important; 
+        width: 100%; max-width: 350px; 
+        border-radius: 0px !important; 
+        padding: 30px; 
+        border: 4px solid var(--pixel-border) !important; 
+        box-shadow: 8px 8px 0px var(--pixel-border) !important; 
+        transform: scale(0.8); transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        position: relative;
+    }
+    .pop-card.show { transform: scale(1); }
     
-    <style>
-        /* =========================================
-           PIXEL ART OVERRIDE 
-           (เขียนทับสไตล์เดิมโดยไม่แก้โครงสร้าง HTML)
-           ========================================= */
-        :root {
-            --pixel-border: #8B4513;
-            --pixel-bg: #E2E9AD;
-            --pixel-card: #FFF9C4;
-            --pixel-accent: #E67E22;
-        }
+    .pop-card::before {
+        content: '--- [X]';
+        display: block;
+        background: var(--pixel-accent);
+        color: white;
+        padding: 8px 10px;
+        text-align: right;
+        border-bottom: 4px solid var(--pixel-border);
+        margin: -30px -30px 20px -30px;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
 
-        body { 
-            background-color: var(--pixel-bg) !important; 
-            font-family: 'Mali', cursive !important; 
-            color: #5d4037 !important; 
-            overflow-x: hidden; 
-            image-rendering: pixelated !important;
-        }
+    .auth-input { 
+        width: 100%; padding: 15px 20px; 
+        border-radius: 0px !important; 
+        border: 3px solid var(--pixel-border) !important; 
+        background: white !important; 
+        margin-bottom: 15px; outline: none; 
+        font-size: 14px; 
+        font-family: 'Mali', cursive !important; 
+        box-shadow: inset 3px 3px 0px rgba(0,0,0,0.05) !important;
+    }
+    
+    .control-panel { 
+        position: absolute; top: 75px; right: 20px; width: 280px; 
+        background: white !important; 
+        border-radius: 0px !important; 
+        padding: 20px; 
+        box-shadow: 6px 6px 0px var(--pixel-border) !important; 
+        border: 4px solid var(--pixel-border) !important; 
+        display: none; z-index: 10000; max-height: 80vh; overflow-y: auto; overscroll-behavior: contain; 
+    }
+    .control-panel::before {
+        content: '--- [X]';
+        display: block;
+        background: var(--pixel-accent);
+        color: white;
+        padding: 5px 10px;
+        text-align: right;
+        border-bottom: 4px solid var(--pixel-border);
+        margin: -20px -20px 10px -20px;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
 
-        .grid-bg { 
-            background-image: radial-gradient(#c5ce8a 2px, transparent 2px) !important; 
-            background-size: 20px 20px !important; 
-        }
+    .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 0px !important; font-family: 'Mali', sans-serif !important; font-weight: 700 !important; cursor: pointer; transition: 0.1s !important; color: #5d4037 !important; border: 2px solid transparent !important; }
+    .menu-item:hover { background: var(--pixel-card) !important; border: 2px solid var(--pixel-border) !important; transform: translateX(0) !important; box-shadow: 2px 2px 0px var(--pixel-border) !important; }
+    
+    .level-badge { border-radius: 0px !important; border: 2px solid var(--pixel-border) !important; background: white !important; color: #e91e63 !important; font-family: 'Press Start 2P', cursive !important; font-size: 6px !important; padding: 2px 4px; display: inline-block; }
+    
+    #process-loader { position: fixed; inset: 0; background: rgba(226, 233, 173, 0.8) !important; z-index: 20000; display: none; align-items: center; justify-content: center; }
+    
+    .cookie-spin { display: flex; justify-content: center; align-items: center; font-size: 60px; color: var(--pixel-accent) !important; }
+    .cookie-spin i { display: inline-block; animation: spin 1s steps(4) infinite !important; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .candy-text { 
-            background: none !important;
-            -webkit-text-fill-color: initial !important;
-            color: #e91e63 !important;
-            font-family: 'Press Start 2P', cursive !important;
-            text-shadow: 2px 2px 0px #fff !important;
-            font-size: 1.2rem !important;
-            font-style: normal !important;
-        }
+    #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: var(--pixel-card) !important; border-radius: 0px !important; padding: 15px 20px; box-shadow: 6px 6px 0px var(--pixel-border) !important; border: 4px solid var(--pixel-border) !important; z-index: 20001; transition: 0.5s; display: flex; align-items: center; gap: 15px; }
+    #candy-toast.show { transform: translateX(-50%) translateY(0); }
+    #loader { position: fixed; inset: 0; background: var(--pixel-bg) !important; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: 0.5s; }
+    
+    .announcement-box { background: white !important; border-radius: 0px !important; padding: 15px 25px; border: 4px solid var(--pixel-border) !important; margin: 20px; display: flex; align-items: center; gap: 15px; overflow: hidden; box-shadow: 4px 4px 0px var(--pixel-border) !important; }
+    
+    .quick-btn { background: white !important; border-radius: 0px !important; padding: 20px; border: 4px solid var(--pixel-border) !important; display: flex; align-items: center; justify-content: space-between; transition: 0.1s !important; width: 100%; box-shadow: 4px 4px 0px var(--pixel-border) !important; cursor: pointer; }
+    .quick-btn:hover { border-color: var(--pixel-border) !important; transform: translate(2px, 2px) !important; box-shadow: 2px 2px 0px var(--pixel-border) !important; }
+    .quick-btn:active { transform: translate(4px, 4px) !important; box-shadow: 0px 0px 0px var(--pixel-border) !important; }
 
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .user-name-animate { 
-            background: none !important; 
-            -webkit-text-fill-color: initial !important;
-            color: #e91e63 !important; 
-            font-family: 'Press Start 2P', cursive !important;
-            font-size: 0.7rem !important;
-            text-shadow: none !important;
-        }
+    .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #eee; border-left: 2px solid var(--pixel-border); border-radius: 0px !important; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--pixel-border); border-radius: 0px !important; }
 
-        @keyframes rainbowMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .admin-rainbow-text { 
-            background: none !important; 
-            -webkit-text-fill-color: initial !important;
-            color: #ff2400 !important; 
-            font-family: 'Press Start 2P', cursive !important; 
-        }
+    .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-\[2\.5rem\], .rounded-\[3\.5rem\], .rounded-full {
+        border-radius: 0px !important;
+    }
 
-        @keyframes badgeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-        .owner-badge { 
-            border-radius: 0px !important; 
-            border: 2px solid var(--pixel-border) !important; 
-            box-shadow: 2px 2px 0px var(--pixel-border) !important;
-            font-family: 'Press Start 2P', cursive !important; 
-            font-size: 6px !important; 
-            background: white !important; 
-            color: #e91e63 !important; 
-            animation: badgeBounce 1s steps(4) infinite !important;
-        }
+    button, a[target="_blank"] {
+        border-radius: 0px !important;
+        border: 3px solid var(--pixel-border) !important;
+        box-shadow: 4px 4px 0px var(--pixel-border) !important;
+        transition: transform 0.1s, box-shadow 0.1s !important;
+    }
+    button:active, a[target="_blank"]:active {
+        transform: translate(2px, 2px) !important;
+        box-shadow: 2px 2px 0px var(--pixel-border) !important;
+    }
+    
+    header { 
+        border-bottom: 4px solid var(--pixel-border) !important; 
+        background: #FDF6B2 !important; 
+    }
 
-        .contact-overlay, .auth-overlay { position: fixed; inset: 0; background: rgba(139, 69, 19, 0.4) !important; backdrop-filter: blur(0px) !important; z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
-        
-        .pop-card { 
-            background: var(--pixel-card) !important; 
-            width: 100%; max-width: 350px; 
-            border-radius: 0px !important; 
-            padding: 30px; 
-            border: 4px solid var(--pixel-border) !important; 
-            box-shadow: 8px 8px 0px var(--pixel-border) !important; 
-            transform: scale(0.8); transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-        .pop-card.show { transform: scale(1); }
-        
-        /* ใส่แถบ Window ยุคเก่าให้ Pop-up */
-        .pop-card::before {
-            content: '--- [X]';
-            display: block;
-            background: var(--pixel-accent);
-            color: white;
-            padding: 8px 10px;
-            text-align: right;
-            border-bottom: 4px solid var(--pixel-border);
-            margin: -30px -30px 20px -30px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            letter-spacing: 2px;
-        }
+    .min-h-\[240px\] {
+        background: var(--pixel-accent) !important;
+        border: 4px solid var(--pixel-border) !important;
+        box-shadow: 8px 8px 0px rgba(0,0,0,0.1) !important;
+    }
+    .min-h-\[240px\] h3 {
+        font-family: 'Press Start 2P', cursive !important;
+        font-size: 2.2rem !important;
+        color: white !important;
+        text-shadow: 4px 4px 0px var(--pixel-border) !important;
+        font-style: normal !important;
+        letter-spacing: -2px !important;
+    }
 
-        .auth-input { 
-            width: 100%; padding: 15px 20px; 
-            border-radius: 0px !important; 
-            border: 3px solid var(--pixel-border) !important; 
-            background: white !important; 
-            margin-bottom: 15px; outline: none; 
-            font-size: 14px; 
-            font-family: 'Mali', cursive !important; 
-            box-shadow: inset 3px 3px 0px rgba(0,0,0,0.05) !important;
-        }
-        
-        .control-panel { 
-            position: absolute; top: 75px; right: 20px; width: 280px; 
-            background: white !important; 
-            border-radius: 0px !important; 
-            padding: 20px; 
-            box-shadow: 6px 6px 0px var(--pixel-border) !important; 
-            border: 4px solid var(--pixel-border) !important; 
-            display: none; z-index: 10000; max-height: 80vh; overflow-y: auto; overscroll-behavior: contain; 
-        }
-        .control-panel::before {
-            content: '--- [X]';
-            display: block;
-            background: var(--pixel-accent);
-            color: white;
-            padding: 5px 10px;
-            text-align: right;
-            border-bottom: 4px solid var(--pixel-border);
-            margin: -20px -20px 10px -20px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
+    .bg-white.p-6, .bg-white.border-2, #product-container > div {
+        border: 4px solid var(--pixel-border) !important;
+        box-shadow: 6px 6px 0px rgba(0,0,0,0.1) !important;
+        border-radius: 0px !important;
+    }
 
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 0px !important; font-family: 'Mali', sans-serif !important; font-weight: 700 !important; cursor: pointer; transition: 0.1s !important; color: #5d4037 !important; border: 2px solid transparent !important; }
-        .menu-item:hover { background: var(--pixel-card) !important; border: 2px solid var(--pixel-border) !important; transform: translateX(0) !important; box-shadow: 2px 2px 0px var(--pixel-border) !important; }
-        
-        .level-badge { border-radius: 0px !important; border: 2px solid var(--pixel-border) !important; background: white !important; color: #e91e63 !important; font-family: 'Press Start 2P', cursive !important; font-size: 6px !important; }
-        
-        #process-loader { position: fixed; inset: 0; background: rgba(226, 233, 173, 0.8) !important; z-index: 20000; display: none; align-items: center; justify-content: center; }
-        
-        .cookie-spin { display: flex; justify-content: center; align-items: center; font-size: 60px; color: var(--pixel-accent) !important; }
-        .cookie-spin i { display: inline-block; animation: spin 1s steps(4) infinite !important; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .italic { font-style: normal !important; }
+    h1, h2, h3, h4, p, span, label, input {
+        font-family: 'Mali', cursive !important;
+        font-weight: 700 !important;
+    }
+    h2.candy-text, h3.candy-text { font-family: 'Press Start 2P', cursive !important; }
+    
+    .shadow-inner, .shadow-lg, .shadow-xl, .shadow-sm { box-shadow: none !important; }
+    .bg-gradient-to-r, .bg-gradient-to-br { background: none !important; background-color: var(--pixel-card) !important; }
+    #auth-btn, #confirm-topup-btn, #submit-slip-btn, #save-profile {
+        background-color: var(--pixel-accent) !important;
+        color: white !important;
+    }
+    
+    .text-\[9px\], .text-\[10px\], .text-\[11px\], .text-xs {
+        font-family: 'Press Start 2P', cursive !important;
+        font-size: 8px !important;
+        line-height: 1.5 !important;
+    }
+    
+    img { image-rendering: pixelated !important; border-radius: 0px !important; }
+    .w-24.h-24 { border: 4px solid var(--pixel-border) !important; }
+</style>
 
-        #candy-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); width: 90%; max-width: 350px; background: var(--pixel-card) !important; border-radius: 0px !important; padding: 15px 20px; box-shadow: 6px 6px 0px var(--pixel-border) !important; border: 4px solid var(--pixel-border) !important; z-index: 20001; transition: 0.5s; display: flex; align-items: center; gap: 15px; }
-        #candy-toast.show { transform: translateX(-50%) translateY(0); }
-        #loader { position: fixed; inset: 0; background: var(--pixel-bg) !important; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: 0.5s; }
-        
-        .announcement-box { background: white !important; border-radius: 0px !important; padding: 15px 25px; border: 4px solid var(--pixel-border) !important; margin: 20px; display: flex; align-items: center; gap: 15px; overflow: hidden; box-shadow: 4px 4px 0px var(--pixel-border) !important; }
-        
-        .quick-btn { background: white !important; border-radius: 0px !important; padding: 20px; border: 4px solid var(--pixel-border) !important; display: flex; align-items: center; justify-content: space-between; transition: 0.1s !important; width: 100%; box-shadow: 4px 4px 0px var(--pixel-border) !important; cursor: pointer; }
-        .quick-btn:hover { border-color: var(--pixel-border) !important; transform: translate(2px, 2px) !important; box-shadow: 2px 2px 0px var(--pixel-border) !important; }
-        .quick-btn:active { transform: translate(4px, 4px) !important; box-shadow: 0px 0px 0px var(--pixel-border) !important; }
-
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #eee; border-left: 2px solid var(--pixel-border); border-radius: 0px !important; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--pixel-border); border-radius: 0px !important; }
-
-        /* =========================================
-           ล้างค่า Tailwind ให้เหลี่ยมเป็น Pixel Art
-           ========================================= */
-        .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-\[2\.5rem\], .rounded-\[3\.5rem\], .rounded-full {
-            border-radius: 0px !important;
-        }
-
-        /* Buttons & Clickables */
-        button, a[target="_blank"] {
-            border-radius: 0px !important;
-            border: 3px solid var(--pixel-border) !important;
-            box-shadow: 4px 4px 0px var(--pixel-border) !important;
-            transition: transform 0.1s, box-shadow 0.1s !important;
-        }
-        button:active, a[target="_blank"]:active {
-            transform: translate(2px, 2px) !important;
-            box-shadow: 2px 2px 0px var(--pixel-border) !important;
-        }
-        
-        /* Fix top header */
-        header { 
-            border-bottom: 4px solid var(--pixel-border) !important; 
-            background: #FDF6B2 !important; 
-        }
-
-        /* Big Banner Candy Rental */
-        .min-h-\[240px\] {
-            background: var(--pixel-accent) !important;
-            border: 4px solid var(--pixel-border) !important;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.1) !important;
-        }
-        .min-h-\[240px\] h3 {
-            font-family: 'Press Start 2P', cursive !important;
-            font-size: 2.2rem !important;
-            color: white !important;
-            text-shadow: 4px 4px 0px var(--pixel-border) !important;
-            font-style: normal !important;
-            letter-spacing: -2px !important;
-        }
-
-        /* Cards (Stats, Products) */
-        .bg-white.p-6, .bg-white.border-2, #product-container > div {
-            border: 4px solid var(--pixel-border) !important;
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.1) !important;
-            border-radius: 0px !important;
-        }
-
-        /* Typography & Color Overrides */
-        .italic { font-style: normal !important; }
-        h1, h2, h3, h4, p, span, label, input {
-            font-family: 'Mali', cursive !important;
-            font-weight: 700 !important;
-        }
-        h2.candy-text, h3.candy-text { font-family: 'Press Start 2P', cursive !important; }
-        
-        /* Remove Default Tailwind Gradients & Shadows */
-        .shadow-inner, .shadow-lg, .shadow-xl, .shadow-sm { box-shadow: none !important; }
-        .bg-gradient-to-r, .bg-gradient-to-br { background: none !important; background-color: var(--pixel-card) !important; }
-        #auth-btn, #confirm-topup-btn, #submit-slip-btn, #save-profile {
-            background-color: var(--pixel-accent) !important;
-            color: white !important;
-        }
-        
-        /* Small text fix */
-        .text-\[9px\], .text-\[10px\], .text-\[11px\], .text-xs {
-            font-family: 'Press Start 2P', cursive !important;
-            font-size: 8px !important;
-            line-height: 1.5 !important;
-        }
-        
-        /* Image sharpness */
-        img { image-rendering: pixelated !important; border-radius: 0px !important; }
-        .w-24.h-24 { border: 4px solid var(--pixel-border) !important; }
-    </style>
+```
 </head>
 <body class="grid-bg pb-20">
-
-    <div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
-    <div id="candy-toast">
-        <div id="toast-icon-bg" class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0"><i id="toast-i" class="fa-solid"></i></div>
-        <div><h4 id="toast-title" class="font-black text-sm text-gray-700"></h4><p id="toast-msg" class="text-xs text-gray-500 font-medium"></p></div>
-    </div>
-    <div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
-
-    <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
-        <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
-        <div id="auth-section" class="relative"></div>
-
-        <div id="user-panel" class="control-panel custom-scrollbar">
-            <div class="px-2 py-3 border-b border-pink-50 mb-2">
-                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Welcome back!</p>
-                <div class="flex items-center gap-2">
-                    <img id="menu-avatar" src="" class="w-10 h-10 rounded-full border-2 border-pink-100 object-cover hidden">
-                    <div id="menu-avatar-temp" class="w-10 h-10 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-cookie text-xl"></i></div>
-                    <div>
-                        <h4 id="menu-nickname" class="user-name-animate text-lg leading-tight">Guest</h4>
-                        <div id="menu-badge" class="level-badge mt-0.5"><i class="fa-solid fa-crown text-[8px]"></i> MEMBER</div>
-                    </div>
-                </div>
-                <p class="text-[9px] text-gray-300 font-bold mt-2 tracking-widest uppercase">UID: <span id="menu-uid" class="text-pink-300">--------</span></p>
-            </div>
-
-            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-3 mb-2 flex justify-between items-center border border-yellow-100 shadow-sm mt-2 mx-1">
-                <div>
-                    <p class="text-[9px] font-black text-yellow-500 uppercase tracking-widest"><i class="fa-solid fa-coins"></i> My Balance</p>
-                    <h4 class="text-xl font-black text-yellow-600 leading-none mt-1">฿<span id="menu-balance">0</span></h4>
-                </div>
-                <button onclick="openTopUp()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-[#ffd166] to-[#ffb347] text-white flex items-center justify-center shadow-md active:scale-95 transition hover:scale-105"><i class="fa-solid fa-plus"></i></button>
-            </div>
-
-            <div onclick="openProfile()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-gear"></i></div><span>จัดการโปรไฟล์</span></div>
-            <div onclick="openStatus()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-desktop"></i></div><span>สถานะเว็บ</span></div>
-            <div onclick="openTopUp()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-yellow-50 text-yellow-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-wallet"></i></div><span>เติมเงิน</span></div>
-            <div onclick="openHistory()" class="menu-item">
-            <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm">
-        <i class="fa-solid fa-history"></i>
-    </div>
-    <span>ประวัติการเติมเงิน</span>
+```
+<div id="process-loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
+<div id="candy-toast">
+    <div id="toast-icon-bg" class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0"><i id="toast-i" class="fa-solid"></i></div>
+    <div><h4 id="toast-title" class="font-black text-sm text-gray-700"></h4><p id="toast-msg" class="text-xs text-gray-500 font-medium"></p></div>
 </div>
-            
-            <div id="admin-menu" style="display: none;">
-                <hr class="my-2 border-pink-50/50">
-                <div onclick="location.href='/admin'" class="menu-item text-blue-600 font-bold">
-                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-hammer"></i>
-                    </div>
-                    <span>จัดการหลังบ้าน (Admin)</span>
-                </div>
-            </div>
+<div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
 
-            <hr class="my-2 border-pink-50/50">
-            <div onclick="openContact()" class="menu-item text-red-400"><div class="w-9 h-9 rounded-xl bg-red-50 text-red-400 flex items-center justify-center shadow-sm"><i class="fa-solid fa-circle-exclamation text-sm"></i></div><span>ติดต่อด่วน</span></div>
-            <button onclick="handleLogout()" class="w-full mt-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-pink-400 transition">Logout</button>
-        </div>
-    </header>
+<header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
+    <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
+    <div id="auth-section" class="relative"></div>
 
-    <div id="topup-modal" class="auth-overlay" onclick="closeModal('topup-modal')">
-        <div class="pop-card" onclick="event.stopPropagation()">
-            <h2 class="text-2xl font-black text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#ffb347] to-[#f07ab0] italic uppercase">Top Up</h2>
-            
-            <div class="bg-gray-50 border-2 border-white shadow-inner rounded-3xl p-4 flex flex-col items-center justify-center mb-6">
-                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">ยอดเงินของคุณ</p>
-                <h4 class="text-3xl font-black text-[#ffb347]">฿<span id="modal-current-balance">0</span></h4>
-            </div>
-
-            <div class="space-y-4">
+    <div id="user-panel" class="control-panel custom-scrollbar">
+        <div class="px-2 py-3 border-b border-pink-50 mb-2">
+            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Welcome back!</p>
+            <div class="flex items-center gap-2 mt-2 mb-2">
+                <img id="menu-avatar" src="" class="w-10 h-10 rounded-full border-2 border-pink-100 object-cover hidden">
+                <div id="menu-avatar-temp" class="w-10 h-10 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-cookie text-xl"></i></div>
                 <div>
-                    <label class="text-[9px] font-black text-[#ffb347] ml-4 uppercase">จำนวนเงิน (บาท)</label>
-                    <input type="number" id="topup-amount-val" class="auth-input mb-0 focus:border-[#ffb347]" placeholder="ระบุจำนวนเงินที่ต้องการเติม" min="1">
+                    <h4 id="menu-nickname" class="user-name-animate text-lg leading-tight">Guest</h4>
+                    <div id="menu-badge" class="level-badge mt-0.5"><i class="fa-solid fa-crown text-[8px]"></i> <span id="menu-role">MEMBER</span></div>
                 </div>
-                <button id="confirm-topup-btn" class="bg-gradient-to-r from-[#ffb347] to-[#f07ab0] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95 mt-2">ยืนยันการเติมเงิน</button>
-                
-                <button onclick="openModal('slip-modal')" class="w-full mt-3 py-3 bg-pink-50 text-pink-400 rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-white shadow-sm transition active:scale-95">
-                    <i class="fa-solid fa-file-invoice-dollar mr-1"></i> แจ้งโอนด้วยสลิป (Admin ตรวจสอบ)
-                </button>
             </div>
-            <button onclick="closeModal('topup-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase tracking-widest">Maybe Later</button>
+            <p class="text-[9px] text-gray-300 font-bold mt-2 tracking-widest uppercase">UID: <span id="menu-uid" class="text-pink-300">--------</span></p>
         </div>
-    </div>
 
-    <div id="slip-modal" class="auth-overlay" onclick="closeModal('slip-modal')">
-        <div class="pop-card w-full max-w-md" onclick="event.stopPropagation()">
-            <h2 class="text-2xl font-black text-center mb-6 candy-text italic uppercase">แจ้งสลิปโอนเงิน</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[9px] font-black text-pink-400 ml-4 uppercase italic">ยอดโอน (บาท)</label>
-                    <input type="number" id="slip-amount" class="auth-input mb-0" placeholder="ระบุจำนวนเงินที่โอน">
-                </div>
-                <div>
-                    <label class="text-[9px] font-black text-blue-400 ml-4 uppercase italic">แนบรูปสลิป</label>
-                    <div class="relative w-full h-44 bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-hidden">
-                        <img id="slip-preview" class="absolute inset-0 w-full h-full object-contain hidden">
-                        <div id="upload-placeholder" class="text-center">
-                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-2"></i>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase">คลิกเพื่อเลือกไฟล์รูป</p>
-                        </div>
-                        <input type="file" id="slip-file" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*">
-                    </div>
-                </div>
-                <button id="submit-slip-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95 mt-4">ยืนยันส่งข้อมูล</button>
-            </div>
-            <button onclick="closeModal('slip-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase tracking-widest">Close</button>
-        </div>
-    </div>
-
-    <div id="profile-modal" class="auth-overlay">
-        <div class="pop-card">
-            <h2 class="text-2xl font-black text-center mb-6 candy-text italic uppercase">My Profile</h2>
-            <div class="flex flex-col items-center mb-6">
-                <div class="relative">
-                    <img id="profile-img-view" src="https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg" class="w-24 h-24 rounded-[2.5rem] border-4 border-white shadow-lg object-cover bg-pink-50">
-                    <label for="img-upload" class="absolute bottom-0 right-0 w-8 h-8 bg-[#f07ab0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-md border-2 border-white"><i class="fa-solid fa-camera text-[10px]"></i></label>
-                    <input type="file" id="img-upload" class="hidden" accept="image/*">
-                </div>
-                <p class="text-[10px] text-gray-400 mt-4 font-black uppercase tracking-widest">UID: <span id="profile-uid-val" class="text-pink-400">--------</span></p>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[9px] font-black text-gray-400 ml-4 uppercase">Username (สมัครโดย)</label>
-                    <input type="text" id="profile-user-static" class="auth-input mb-0 bg-gray-50/50 text-gray-400 cursor-not-allowed" readonly>
-                </div>
-                <div>
-                    <label class="text-[9px] font-black text-pink-400 ml-4 uppercase italic">Nickname (ชื่อเล่น)</label>
-                    <input type="text" id="edit-nickname" class="auth-input mb-0" placeholder="ไม่ใส่ก็ได้นะคะ...">
-                </div>
-                <div>
-                    <label class="text-[9px] font-black text-blue-400 ml-4 uppercase">Change Password</label>
-                    <input type="password" id="new-password-val" class="auth-input mb-0" placeholder="ระบุรหัสใหม่เพื่อเปลี่ยน...">
-                </div>
-                <button id="save-profile" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95 mt-2">บันทึกการเปลี่ยนแปลง</button>
-            </div>
-            <button onclick="closeModal('profile-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase tracking-widest">Maybe Later</button>
-        </div>
-    </div>
-
-    <div class="mx-5 mt-6 mb-4">
-        <div class="relative rounded-[3.5rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-10 min-h-[240px] flex flex-col justify-center shadow-xl border-4 border-white">
-            <h3 class="text-6xl font-black italic tracking-tighter text-white drop-shadow-lg leading-[0.9]">CANDY<br>RENTAL</h3>
-            <p class="text-[11px] text-white/90 mt-4 font-bold uppercase tracking-widest">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
-        </div>
-    </div>
-
-    <div class="announcement-box shadow-sm">
-        <div class="w-10 h-10 rounded-2xl bg-pink-100 text-pink-500 flex items-center justify-center shrink-0 shadow-inner"><i class="fa-solid fa-bullhorn"></i></div>
-        <marquee class="text-[13px] font-bold text-gray-500" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่สดใสที่สุดในโลก! ✨</marquee>
-    </div>
-
-    <div class="px-5 grid grid-cols-2 gap-4 mb-8">
-        <div class="quick-btn shadow-sm" onclick="openContact()">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center text-md shadow-inner"><i class="fa-solid fa-comment-dots"></i></div>
-                <div><h4 class="font-black text-blue-500 text-sm leading-tight uppercase italic">CHAT</h4><p class="text-[8px] font-bold text-blue-300">แจ้งปัญหา</p></div>
-            </div>
-        </div>
-        <div class="quick-btn shadow-sm">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-500 flex items-center justify-center text-md shadow-inner"><i class="fa-solid fa-star"></i></div>
-                <div><h4 class="font-black text-pink-500 text-sm leading-tight uppercase italic">GUIDE</h4><p class="text-[8px] font-bold text-pink-300">วิธีสั่งซื้อ</p></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="status-modal" class="auth-overlay" onclick="closeModal('status-modal')">
-        <div class="pop-card w-full max-w-md" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center mb-6 border-b-2 border-pink-50 pb-3">
-                <div>
-                    <h2 id="status-title" class="text-2xl font-black candy-text italic uppercase">สถานะเว็บ</h2>
-                    <p id="status-subtitle" class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">My Rentals</p>
-                </div>
-                <button onclick="closeModal('status-modal')" class="w-8 h-8 rounded-full bg-gray-50 text-gray-400 hover:bg-pink-50 hover:text-pink-400 flex items-center justify-center transition"><i class="fa-solid fa-times"></i></button>
-            </div>
-            
-            <div id="status-content" class="max-h-[55vh] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-                <div class="cookie-spin py-10"><i class="fa-solid fa-cookie-bite"></i></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="auth-modal" class="auth-overlay">
-        <div class="pop-card">
-            <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text italic uppercase">Sign In</h2>
-            <input type="text" id="user-input" class="auth-input" placeholder="Username...">
-            <input type="password" id="pass-input" class="auth-input" placeholder="Password...">
-            <button id="auth-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95">เข้าสู่ระบบ</button>
-            <p id="toggle-auth" class="text-center mt-5 text-sm text-pink-400 font-bold cursor-pointer hover:underline">ยังไม่มีบัญชี? สมัครที่นี่นะ</p>
-            <button onclick="closeModal('auth-modal')" class="block mx-auto mt-4 text-gray-400 text-xs font-bold uppercase tracking-widest">Close</button>
-        </div>
-    </div>
-
-    <div id="contact-modal" class="contact-overlay" onclick="closeModal('contact-modal')">
-        <div class="pop-card" onclick="event.stopPropagation()">
-            <div class="text-center mb-6">
-                <div class="inline-block p-4 bg-pink-50 rounded-full text-pink-400 mb-3 shadow-inner"><i class="fa-solid fa-heart-pulse fa-bounce text-2xl"></i></div>
-                <h3 class="text-2xl font-black text-gray-700 italic uppercase">Contact Us</h3>
-            </div>
-            <a href="https://www.facebook.com/share/1KVCB1cc5c/" target="_blank" class="flex items-center gap-4 p-4 bg-blue-50 rounded-3xl mb-3 border-2 border-white shadow-sm transition hover:scale-[1.02]">
-                <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-xl shadow-md"><i class="fa-brands fa-facebook-f"></i></div>
-                <div><h4 class="font-black text-blue-600 uppercase italic">Facebook</h4><p class="text-[10px] text-blue-400 font-bold tracking-widest">ติดต่อเพจ</p></div>
-            </a>
-            <a href="https://line.me/ti/p/@candymarket" target="_blank" class="flex items-center gap-4 p-4 bg-green-50 rounded-3xl mb-3 border-2 border-white shadow-sm transition hover:scale-[1.02]">
-                <div class="w-12 h-12 rounded-2xl bg-green-500 text-white flex items-center justify-center text-xl shadow-md"><i class="fa-brands fa-line"></i></div>
-                <div><h4 class="font-black text-green-600 uppercase italic">Line Official</h4><p class="text-[10px] text-green-400 font-bold tracking-widest">แชทไลน์</p></div>
-            </a>
-            <button onclick="closeModal('contact-modal')" class="w-full mt-4 py-3 rounded-2xl bg-gray-50 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
-        </div>
-    </div>
-    
-<div id="history-modal" class="auth-overlay" onclick="closeModal('history-modal')">
-    <div class="pop-card w-full max-w-md" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-center mb-6 border-b-2 border-yellow-50 pb-3">
+        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-3 mb-2 flex justify-between items-center border border-yellow-100 shadow-sm mt-2 mx-1">
             <div>
-                <h2 class="text-2xl font-black text-yellow-500 italic uppercase">Topup History</h2>
-                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">ประวัติการเติมเงินของคุณ</p>
+                <p class="text-[9px] font-black text-yellow-500 uppercase tracking-widest"><i class="fa-solid fa-coins"></i> My Balance</p>
+                <h4 class="text-xl font-black text-yellow-600 leading-none mt-1">฿<span id="menu-balance">0</span></h4>
             </div>
-            <button onclick="closeModal('history-modal')" class="w-8 h-8 rounded-full bg-gray-50 text-gray-400 hover:bg-yellow-50 hover:text-yellow-500 flex items-center justify-center transition"><i class="fa-solid fa-times"></i></button>
+            <button onclick="openTopUp()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-[#ffd166] to-[#ffb347] text-white flex items-center justify-center shadow-md active:scale-95 transition hover:scale-105"><i class="fa-solid fa-plus"></i></button>
         </div>
-        <div id="history-content" class="max-h-[50vh] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-            <div class="text-center py-10 text-gray-400 text-xs">กำลังโหลดข้อมูล...</div>
+
+        <div onclick="openProfile()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-gear"></i></div><span>จัดการโปรไฟล์</span></div>
+        <div onclick="openStatus()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-desktop"></i></div><span>สถานะเว็บ</span></div>
+        <div onclick="openTopUp()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-yellow-50 text-yellow-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-wallet"></i></div><span>เติมเงิน</span></div>
+        <div onclick="openHistory()" class="menu-item">
+            <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm">
+                <i class="fa-solid fa-history"></i>
+            </div>
+            <span>ประวัติการเติมเงิน</span>
         </div>
-        <button onclick="closeModal('history-modal')" class="w-full mt-6 py-3 rounded-2xl bg-gray-50 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
+        
+        <div id="admin-menu" style="display: none;">
+            <hr class="my-2 border-pink-50/50">
+            <div onclick="location.href='/admin'" class="menu-item text-blue-600 font-bold">
+                <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-hammer"></i>
+                </div>
+                <span>จัดการหลังบ้าน (Admin)</span>
+            </div>
+        </div>
+
+        <hr class="my-2 border-pink-50/50">
+        <div onclick="openContact()" class="menu-item text-red-400"><div class="w-9 h-9 rounded-xl bg-red-50 text-red-400 flex items-center justify-center shadow-sm"><i class="fa-solid fa-circle-exclamation text-sm"></i></div><span>ติดต่อด่วน</span></div>
+        <button onclick="handleLogout()" class="w-full mt-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-pink-400 transition">Logout</button>
+    </div>
+</header>
+
+<div id="topup-modal" class="auth-overlay" onclick="closeModal('topup-modal')">
+    <div class="pop-card" onclick="event.stopPropagation()">
+        <h2 class="text-2xl font-black text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#ffb347] to-[#f07ab0] italic uppercase">Top Up</h2>
+        
+        <div class="bg-gray-50 border-2 border-white shadow-inner rounded-3xl p-4 flex flex-col items-center justify-center mb-6">
+            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">ยอดเงินของคุณ</p>
+            <h4 class="text-3xl font-black text-[#ffb347]">฿<span id="modal-current-balance">0</span></h4>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="text-[9px] font-black text-[#ffb347] ml-4 uppercase">จำนวนเงิน (บาท)</label>
+                <input type="number" id="topup-amount-val" class="auth-input mb-0 focus:border-[#ffb347]" placeholder="ระบุจำนวนเงินที่ต้องการเติม" min="1">
+            </div>
+            <button id="confirm-topup-btn" class="bg-gradient-to-r from-[#ffb347] to-[#f07ab0] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95 mt-2">ยืนยันการเติมเงิน</button>
+            
+            <button onclick="openModal('slip-modal')" class="w-full mt-3 py-3 bg-pink-50 text-pink-400 rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-white shadow-sm transition active:scale-95">
+                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> แจ้งโอนด้วยสลิป (Admin ตรวจสอบ)
+            </button>
+        </div>
+        <button onclick="closeModal('topup-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase tracking-widest">Maybe Later</button>
     </div>
 </div>
 
-    <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
-        <div class="bg-white p-6 rounded-[2.5rem] border-2 border-pink-50 shadow-sm flex flex-col items-center">
-            <p class="text-pink-300 text-[10px] font-black uppercase tracking-widest mb-1">ลูกค้าที่น่ารัก</p>
-            <h4 class="text-4xl font-black text-[#f07ab0]" id="stat-users">0</h4>
+<div id="slip-modal" class="auth-overlay" onclick="closeModal('slip-modal')">
+    <div class="pop-card w-full max-w-md" onclick="event.stopPropagation()">
+        <h2 class="text-2xl font-black text-center mb-6 candy-text italic uppercase">แจ้งสลิปโอนเงิน</h2>
+        <div class="space-y-4">
+            <div>
+                <label class="text-[9px] font-black text-pink-400 ml-4 uppercase italic">ยอดโอน (บาท)</label>
+                <input type="number" id="slip-amount" class="auth-input mb-0" placeholder="ระบุจำนวนเงินที่โอน">
+            </div>
+            <div>
+                <label class="text-[9px] font-black text-blue-400 ml-4 uppercase italic">แนบรูปสลิป</label>
+                <div class="relative w-full h-44 bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl flex flex-col items-center justify-center overflow-hidden">
+                    <img id="slip-preview" class="absolute inset-0 w-full h-full object-contain hidden">
+                    <div id="upload-placeholder" class="text-center">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-2"></i>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">คลิกเพื่อเลือกไฟล์รูป</p>
+                    </div>
+                    <input type="file" id="slip-file" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*">
+                </div>
+            </div>
+            <button id="submit-slip-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95 mt-4">ยืนยันส่งข้อมูล</button>
         </div>
-        <div class="bg-white p-6 rounded-[2.5rem] border-2 border-blue-50 shadow-sm flex flex-col items-center">
-            <p class="text-blue-300 text-[10px] font-black uppercase tracking-widest mb-1">ขนมในร้าน</p>
-            <h4 class="text-4xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
+        <button onclick="closeModal('slip-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase tracking-widest">Close</button>
+    </div>
+</div>
+
+<div id="profile-modal" class="auth-overlay">
+    <div class="pop-card">
+        <h2 class="text-2xl font-black text-center mb-6 candy-text italic uppercase">My Profile</h2>
+        <div class="flex flex-col items-center mb-6">
+            <div class="relative">
+                <img id="profile-img-view" src="[https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg](https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg)" class="w-24 h-24 rounded-[2.5rem] border-4 border-white shadow-lg object-cover bg-pink-50">
+                <label for="img-upload" class="absolute bottom-0 right-0 w-8 h-8 bg-[#f07ab0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-md border-2 border-white"><i class="fa-solid fa-camera text-[10px]"></i></label>
+                <input type="file" id="img-upload" class="hidden" accept="image/*">
+            </div>
+            <p class="text-[10px] text-gray-400 mt-4 font-black uppercase tracking-widest">UID: <span id="profile-uid-val" class="text-pink-400">--------</span></p>
+        </div>
+        <div class="space-y-4">
+            <div>
+                <label class="text-[9px] font-black text-gray-400 ml-4 uppercase">Username (สมัครโดย)</label>
+                <input type="text" id="profile-user-static" class="auth-input mb-0 bg-gray-50/50 text-gray-400 cursor-not-allowed" readonly>
+            </div>
+            <div>
+                <label class="text-[9px] font-black text-pink-400 ml-4 uppercase italic">Nickname (ชื่อเล่น)</label>
+                <input type="text" id="edit-nickname" class="auth-input mb-0" placeholder="ไม่ใส่ก็ได้นะคะ...">
+            </div>
+            <div>
+                <label class="text-[9px] font-black text-blue-400 ml-4 uppercase">Change Password</label>
+                <input type="password" id="new-password-val" class="auth-input mb-0" placeholder="ระบุรหัสใหม่เพื่อเปลี่ยน...">
+            </div>
+            <button id="save-profile" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95 mt-2">บันทึกการเปลี่ยนแปลง</button>
+        </div>
+        <button onclick="closeModal('profile-modal')" class="block mx-auto mt-6 text-gray-300 text-[10px] font-black uppercase tracking-widest">Maybe Later</button>
+    </div>
+</div>
+
+<div class="mx-5 mt-6 mb-4">
+    <div class="relative rounded-[3.5rem] overflow-hidden bg-gradient-to-br from-[#bfe9ff] via-[#ffcaf2] to-[#ffbdc7] p-10 min-h-[240px] flex flex-col justify-center shadow-xl border-4 border-white">
+        <h3 class="text-6xl font-black italic tracking-tighter text-white drop-shadow-lg leading-[0.9]">CANDY<br>RENTAL</h3>
+        <p class="text-[11px] text-white/90 mt-4 font-bold uppercase tracking-widest">รายวัน / รายเดือน สดใสที่สุดในโลก!</p>
+    </div>
+</div>
+
+<div class="announcement-box shadow-sm">
+    <div class="w-10 h-10 rounded-2xl bg-pink-100 text-pink-500 flex items-center justify-center shrink-0 shadow-inner"><i class="fa-solid fa-bullhorn"></i></div>
+    <marquee class="text-[13px] font-bold text-gray-500" scrollamount="5">ยินดีต้อนรับสู่ CandyMarket เว็บเช่าที่สดใสที่สุดในโลก! ✨</marquee>
+</div>
+
+<div class="px-5 grid grid-cols-2 gap-4 mb-8">
+    <div class="quick-btn shadow-sm" onclick="openContact()">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center text-md shadow-inner"><i class="fa-solid fa-comment-dots"></i></div>
+            <div><h4 class="font-black text-blue-500 text-sm leading-tight uppercase italic">CHAT</h4><p class="text-[8px] font-bold text-blue-300">แจ้งปัญหา</p></div>
         </div>
     </div>
-
-    <div class="px-5">
-        <h3 class="text-lg font-black text-gray-600 mb-6 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
-        <div class="grid grid-cols-2 gap-4" id="product-container"></div>
+    <div class="quick-btn shadow-sm">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-500 flex items-center justify-center text-md shadow-inner"><i class="fa-solid fa-star"></i></div>
+            <div><h4 class="font-black text-pink-500 text-sm leading-tight uppercase italic">GUIDE</h4><p class="text-[8px] font-bold text-pink-300">วิธีสั่งซื้อ</p></div>
+        </div>
     </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, runTransaction, get, set, update, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+<div id="status-modal" class="auth-overlay" onclick="closeModal('status-modal')">
+    <div class="pop-card w-full max-w-md" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center mb-6 border-b-2 border-pink-50 pb-3">
+            <div>
+                <h2 id="status-title" class="text-2xl font-black candy-text italic uppercase">สถานะเว็บ</h2>
+                <p id="status-subtitle" class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">My Rentals</p>
+            </div>
+            <button onclick="closeModal('status-modal')" class="w-8 h-8 rounded-full bg-gray-50 text-gray-400 hover:bg-pink-50 hover:text-pink-400 flex items-center justify-center transition"><i class="fa-solid fa-times"></i></button>
+        </div>
         
-        const firebaseConfig = {
-            apiKey: "AIzaSyBJEO4o365sI4XFZD4IRIaDjetIMNtCMwU",
-            authDomain: "candy-market-system.firebaseapp.com",
-            databaseURL: "https://candy-market-system-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "candy-market-system",
-            storageBucket: "candy-market-system.firebasestorage.app",
-            messagingSenderId: "955686244672",
-            appId: "1:955686244672:web:484fdc3d7192d3074c2aa5"
-        };
+        <div id="status-content" class="max-h-[55vh] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+            <div class="cookie-spin py-10"><i class="fa-solid fa-cookie-bite"></i></div>
+        </div>
+    </div>
+</div>
 
-        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
+<div id="auth-modal" class="auth-overlay">
+    <div class="pop-card">
+        <h2 id="auth-title" class="text-3xl font-black text-center mb-8 candy-text italic uppercase">Sign In</h2>
+        <input type="text" id="user-input" class="auth-input" placeholder="Username...">
+        <input type="password" id="pass-input" class="auth-input" placeholder="Password...">
+        <button id="auth-btn" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg transition active:scale-95">เข้าสู่ระบบ</button>
+        <p id="toggle-auth" class="text-center mt-5 text-sm text-pink-400 font-bold cursor-pointer hover:underline">ยังไม่มีบัญชี? สมัครที่นี่นะ</p>
+        <button onclick="closeModal('auth-modal')" class="block mx-auto mt-4 text-gray-400 text-xs font-bold uppercase tracking-widest">Close</button>
+    </div>
+</div>
 
-        let currentUserDataGlobal = null; 
+<div id="contact-modal" class="contact-overlay" onclick="closeModal('contact-modal')">
+    <div class="pop-card" onclick="event.stopPropagation()">
+        <div class="text-center mb-6">
+            <div class="inline-block p-4 bg-pink-50 rounded-full text-pink-400 mb-3 shadow-inner"><i class="fa-solid fa-heart-pulse fa-bounce text-2xl"></i></div>
+            <h3 class="text-2xl font-black text-gray-700 italic uppercase">Contact Us</h3>
+        </div>
+        <a href="[https://www.facebook.com/share/1KVCB1cc5c/](https://www.facebook.com/share/1KVCB1cc5c/)" target="_blank" class="flex items-center gap-4 p-4 bg-blue-50 rounded-3xl mb-3 border-2 border-white shadow-sm transition hover:scale-[1.02]">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-xl shadow-md"><i class="fa-brands fa-facebook-f"></i></div>
+            <div><h4 class="font-black text-blue-600 uppercase italic">Facebook</h4><p class="text-[10px] text-blue-400 font-bold tracking-widest">ติดต่อเพจ</p></div>
+        </a>
+        <a href="[https://line.me/ti/p/@candymarket](https://line.me/ti/p/@candymarket)" target="_blank" class="flex items-center gap-4 p-4 bg-green-50 rounded-3xl mb-3 border-2 border-white shadow-sm transition hover:scale-[1.02]">
+            <div class="w-12 h-12 rounded-2xl bg-green-500 text-white flex items-center justify-center text-xl shadow-md"><i class="fa-brands fa-line"></i></div>
+            <div><h4 class="font-black text-green-600 uppercase italic">Line Official</h4><p class="text-[10px] text-green-400 font-bold tracking-widest">แชทไลน์</p></div>
+        </a>
+        <button onclick="closeModal('contact-modal')" class="w-full mt-4 py-3 rounded-2xl bg-gray-50 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
+    </div>
+</div>
 
-        window.openModal = (id) => {
-            const el = document.getElementById(id); el.style.display = 'flex';
-            setTimeout(() => el.querySelector('.pop-card').classList.add('show'), 10);
-        };
-        window.closeModal = (id) => {
-            const el = document.getElementById(id); el.querySelector('.pop-card').classList.remove('show');
-            setTimeout(() => el.style.display = 'none', 300);
-        };
-        window.showCandyAlert = (title, msg, type = 'success') => {
-            const toast = document.getElementById('candy-toast');
-            document.getElementById('toast-title').innerText = title;
-            document.getElementById('toast-msg').innerText = msg;
-            document.getElementById('toast-icon-bg').className = type === 'success' ? "w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 bg-green-100 text-green-500 shadow-inner" : "w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 bg-red-100 text-red-500 shadow-inner";
-            document.getElementById('toast-i').className = type === 'success' ? "fa-solid fa-check-circle" : "fa-solid fa-circle-exclamation";
-            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
-        };
+```
+<div id="history-modal" class="auth-overlay" onclick="closeModal('history-modal')">
+<div class="pop-card w-full max-w-md" onclick="event.stopPropagation()">
+<div class="flex justify-between items-center mb-6 border-b-2 border-yellow-50 pb-3">
+<div>
+<h2 class="text-2xl font-black text-yellow-500 italic uppercase">Topup History</h2>
+<p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">ประวัติการเติมเงินของคุณ</p>
+</div>
+<button onclick="closeModal('history-modal')" class="w-8 h-8 rounded-full bg-gray-50 text-gray-400 hover:bg-yellow-50 hover:text-yellow-500 flex items-center justify-center transition"><i class="fa-solid fa-times"></i></button>
+</div>
+<div id="history-content" class="max-h-[50vh] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+<div class="text-center py-10 text-gray-400 text-xs">กำลังโหลดข้อมูล...</div>
+</div>
+<button onclick="closeModal('history-modal')" class="w-full mt-6 py-3 rounded-2xl bg-gray-50 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
+</div>
+</div>
+```
+<div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
+    <div class="bg-white p-6 rounded-[2.5rem] border-2 border-pink-50 shadow-sm flex flex-col items-center">
+        <p class="text-pink-300 text-[10px] font-black uppercase tracking-widest mb-1">ลูกค้าที่น่ารัก</p>
+        <h4 class="text-4xl font-black text-[#f07ab0]" id="stat-users">0</h4>
+    </div>
+    <div class="bg-white p-6 rounded-[2.5rem] border-2 border-blue-50 shadow-sm flex flex-col items-center">
+        <p class="text-blue-300 text-[10px] font-black uppercase tracking-widest mb-1">ขนมในร้าน</p>
+        <h4 class="text-4xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
+    </div>
+</div>
 
-        function generateUID() { return (Math.floor(Math.random() * 9000000000) + 1000000000).toString(); }
+<div class="px-5">
+    <h3 class="text-lg font-black text-gray-600 mb-6 flex items-center gap-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
+    <div class="grid grid-cols-2 gap-4" id="product-container"></div>
+</div>
 
-        window.openContact = () => openModal('contact-modal');
-        window.openAuth = () => openModal('auth-modal');
-        window.openProfile = () => { document.getElementById('user-panel').style.display = 'none'; openModal('profile-modal'); };
-        window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
-        window.handleLogout = () => { signOut(auth); window.location.reload(); };
+<script type="module">
+    import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js](https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js)";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from "[https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js](https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js)";
+    import { getDatabase, ref, onValue, runTransaction, get, set, update, push } from "[https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js](https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js)";
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJEO4o365sI4XFZD4IRIaDjetIMNtCMwU",
+        authDomain: "candy-market-system.firebaseapp.com",
+        databaseURL: "[https://candy-market-system-default-rtdb.asia-southeast1.firebasedatabase.app](https://candy-market-system-default-rtdb.asia-southeast1.firebasedatabase.app)",
+        projectId: "candy-market-system",
+        storageBucket: "candy-market-system.firebasestorage.app",
+        messagingSenderId: "955686244672",
+        appId: "1:955686244672:web:484fdc3d7192d3074c2aa5"
+    };
 
-        window.openTopUp = () => {
-            if (!auth.currentUser || !currentUserDataGlobal) {
-                return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
+    const app = initializeApp(firebaseConfig); 
+    const auth = getAuth(app); 
+    const db = getDatabase(app);
+
+    let currentUserDataGlobal = null; 
+
+    window.openModal = (id) => {
+        const el = document.getElementById(id); el.style.display = 'flex';
+        setTimeout(() => el.querySelector('.pop-card').classList.add('show'), 10);
+    };
+    window.closeModal = (id) => {
+        const el = document.getElementById(id); el.querySelector('.pop-card').classList.remove('show');
+        setTimeout(() => el.style.display = 'none', 300);
+    };
+    window.showCandyAlert = (title, msg, type = 'success') => {
+        const toast = document.getElementById('candy-toast');
+        document.getElementById('toast-title').innerText = title;
+        document.getElementById('toast-msg').innerText = msg;
+        document.getElementById('toast-icon-bg').className = type === 'success' ? "w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 bg-green-100 text-green-500 shadow-inner" : "w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 bg-red-100 text-red-500 shadow-inner";
+        document.getElementById('toast-i').className = type === 'success' ? "fa-solid fa-check-circle" : "fa-solid fa-circle-exclamation";
+        toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500);
+    };
+
+    function generateUID() { return (Math.floor(Math.random() * 9000000000) + 1000000000).toString(); }
+
+    window.openContact = () => openModal('contact-modal');
+    window.openAuth = () => {
+        document.getElementById('user-input').value = '';
+        document.getElementById('pass-input').value = '';
+        openModal('auth-modal');
+    };
+    window.openProfile = () => { 
+        document.getElementById('user-panel').style.display = 'none'; 
+        document.getElementById('edit-nickname').value = currentUserDataGlobal.nickname || '';
+        document.getElementById('new-password-val').value = '';
+        openModal('profile-modal'); 
+    };
+    window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
+    window.handleLogout = () => { signOut(auth); window.location.reload(); };
+
+    window.openTopUp = () => {
+        if (!auth.currentUser || !currentUserDataGlobal) {
+            return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
+        }
+        document.getElementById('user-panel').style.display = 'none';
+        document.getElementById('topup-amount-val').value = ''; 
+        document.getElementById('modal-current-balance').innerText = currentUserDataGlobal.balance || 0;
+        openModal('topup-modal');
+    };
+
+    document.getElementById('confirm-topup-btn').onclick = async () => {
+        const amountInput = document.getElementById('topup-amount-val').value;
+        const amount = parseInt(amountInput);
+
+        if (!amount || amount <= 0 || isNaN(amount)) {
+            return showCandyAlert("อุ๊ปส์!", "กรุณาระบุจำนวนเงินที่ถูกต้องค่ะ", "error");
+        }
+        if (!auth.currentUser) return;
+
+        document.getElementById('process-loader').style.display = 'flex';
+        try {
+            const userRef = ref(db, `users/${auth.currentUser.uid}`);
+            const snapshot = await get(userRef);
+            let currentBalance = 0;
+            if (snapshot.exists() && snapshot.val().balance) {
+                currentBalance = parseInt(snapshot.val().balance);
             }
-            document.getElementById('user-panel').style.display = 'none';
-            document.getElementById('topup-amount-val').value = ''; 
-            document.getElementById('modal-current-balance').innerText = currentUserDataGlobal.balance || 0;
-            openModal('topup-modal');
-        };
-
-        // --- ระบบยืนยันการเติมเงินแมนนวล ---
-        document.getElementById('confirm-topup-btn').onclick = async () => {
-            const amountInput = document.getElementById('topup-amount-val').value;
-            const amount = parseInt(amountInput);
-
-            if (!amount || amount <= 0 || isNaN(amount)) {
-                return showCandyAlert("อุ๊ปส์!", "กรุณาระบุจำนวนเงินที่ถูกต้องค่ะ", "error");
-            }
-            if (!auth.currentUser) return;
-
-            document.getElementById('process-loader').style.display = 'flex';
-            try {
-                const userRef = ref(db, `users/${auth.currentUser.uid}`);
-                const snapshot = await get(userRef);
-                let currentBalance = 0;
-                if (snapshot.exists() && snapshot.val().balance) {
-                    currentBalance = parseInt(snapshot.val().balance);
-                }
-                const newBalance = currentBalance + amount;
-                await update(userRef, { balance: newBalance });
-                
-                // บันทึกประวัติ
-                await set(push(ref(db, 'topups')), {
-                        uid: auth.currentUser.uid,
-                        amount: amount,
-                        date: Date.now(),
-                        method: "manual",
-                        status: "Completed"
-                });
-                
-                showCandyAlert("เติมเงินสำเร็จ!", `เพิ่มยอดเงิน ${amount} บาท เรียบร้อยแล้วค่ะ`, "success");
-                closeModal('topup-modal');
-            } catch (err) {
-                showCandyAlert("ผิดพลาด", "ไม่สามารถเติมเงินได้ ลองใหม่อีกครั้งนะคะ", "error");
-            } finally {
-                document.getElementById('process-loader').style.display = 'none';
-            }
-        };
-
-        // --- ระบบแจ้งสลิปโอนเงิน (เพิ่มใหม่) ---
-        let selectedBase64 = "";
-
-        // จัดการการเลือกรูปสลิป
-        document.getElementById('slip-file').onchange = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    selectedBase64 = event.target.result;
-                    document.getElementById('slip-preview').src = selectedBase64;
-                    document.getElementById('slip-preview').classList.remove('hidden');
-                    document.getElementById('upload-placeholder').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        // ส่งข้อมูลแจ้งสลิป
-        document.getElementById('submit-slip-btn').onclick = async () => {
-            const amount = parseInt(document.getElementById('slip-amount').value);
+            const newBalance = currentBalance + amount;
+            await update(userRef, { balance: newBalance });
             
-            if (!auth.currentUser) return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
-            if (!amount || amount <= 0) return showCandyAlert("อุ๊ปส์!", "กรุณาระบุจำนวนเงินค่ะ", "error");
-            if (!selectedBase64) return showCandyAlert("อุ๊ปส์!", "ยังไม่ได้เลือกรูปสลิปเลยค่ะ", "error");
-
-            document.getElementById('process-loader').style.display = 'flex';
-
-            try {
-                await set(push(ref(db, 'topup_requests')), {
+            await set(push(ref(db, 'topups')), {
                     uid: auth.currentUser.uid,
-                    customerName: currentUserDataGlobal.nickname || currentUserDataGlobal.username,
                     amount: amount,
-                    slipImage: selectedBase64,
-                    status: "pending",
-                    date: Date.now()
-                });
-
-                showCandyAlert("ส่งแล้ว!", "รอแอดมินตรวจสอบสลิปสักครู่นะคะ", "success");
-                closeModal('slip-modal');
-                closeModal('topup-modal');
-                
-                // ล้างค่าฟอร์ม
-                document.getElementById('slip-amount').value = '';
-                document.getElementById('slip-preview').classList.add('hidden');
-                document.getElementById('upload-placeholder').classList.remove('hidden');
-                selectedBase64 = "";
-            } catch (err) {
-                showCandyAlert("ผิดพลาด", "ไม่สามารถส่งข้อมูลได้ค่ะ", "error");
-            } finally {
-                document.getElementById('process-loader').style.display = 'none';
-            }
-        };
-
-        const calculateRemaining = (expireTimestamp) => {
-            const now = Date.now();
-            const diff = expireTimestamp - now;
-            if (diff <= 0) return { text: "หมดอายุแล้ว", color: "text-red-500", bg: "bg-red-50" };
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            return { text: `เหลือ ${days} วัน ${hours} ชม.`, color: "text-blue-500", bg: "bg-blue-50" };
-        };
-
-        window.openStatus = () => {
-            if (!auth.currentUser || !currentUserDataGlobal) {
-                return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
-            }
-            document.getElementById('user-panel').style.display = 'none';
-            openModal('status-modal');
-            const isAdmin = currentUserDataGlobal.username === "AdminPeach";
-            const contentDiv = document.getElementById('status-content');
-            contentDiv.innerHTML = '<div class="cookie-spin py-10"><i class="fa-solid fa-cookie-bite"></i></div>';
-
-            onValue(ref(db, 'rentals'), (snap) => {
-                contentDiv.innerHTML = ''; 
-                if (!snap.exists()) {
-                    contentDiv.innerHTML = '<div class="text-center py-10 text-gray-400 font-bold text-xs">ยังไม่มีข้อมูลการเช่าเว็บค่ะ 🥲</div>';
-                    return;
-                }
-                let html = '';
-                snap.forEach(child => {
-                    const data = child.val();
-                    if (!isAdmin && data.uid !== currentUserDataGlobal.uid) return;
-                    const remain = calculateRemaining(data.expireAt);
-                    const expireDate = new Date(data.expireAt).toLocaleDateString('th-TH');
-                    const statusBadge = data.status === 'active' 
-                        ? '<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-600 text-[9px] font-black tracking-widest"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</span>'
-                        : '<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[9px] font-black tracking-widest"><i class="fa-solid fa-lock"></i> ถูกระงับ</span>';
-                    html += `<div class="p-4 bg-white border-2 border-pink-50 rounded-2xl shadow-sm mb-3">...</div>`; // โครงสร้างย่อตามเดิมของคุณ
-                });
-                contentDiv.innerHTML = html || '<div class="text-center py-10 text-gray-400 font-bold text-xs">คุณยังไม่มีเว็บที่กำลังเช่าอยู่ค่ะ 🥺</div>';
+                    date: Date.now(),
+                    method: "manual",
+                    status: "Completed"
             });
-        };
+            
+            showCandyAlert("เติมเงินสำเร็จ!", `เพิ่มยอดเงิน ${amount} บาท เรียบร้อยแล้วค่ะ`, "success");
+            closeModal('topup-modal');
+        } catch (err) {
+            showCandyAlert("ผิดพลาด", "ไม่สามารถเติมเงินได้ ลองใหม่อีกครั้งนะคะ", "error");
+        } finally {
+            document.getElementById('process-loader').style.display = 'none';
+        }
+    };
 
-        document.getElementById('img-upload').onchange = function(e) {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('profile-img-view').src = e.target.result;
-                    document.getElementById('menu-avatar').src = e.target.result;
-                };
-                reader.readAsDataURL(this.files[0]);
+    let selectedBase64 = "";
+
+    document.getElementById('slip-file').onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                selectedBase64 = event.target.result;
+                document.getElementById('slip-preview').src = selectedBase64;
+                document.getElementById('slip-preview').classList.remove('hidden');
+                document.getElementById('upload-placeholder').classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    document.getElementById('submit-slip-btn').onclick = async () => {
+        const amount = parseInt(document.getElementById('slip-amount').value);
+        
+        if (!auth.currentUser) return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
+        if (!amount || amount <= 0) return showCandyAlert("อุ๊ปส์!", "กรุณาระบุจำนวนเงินค่ะ", "error");
+        if (!selectedBase64) return showCandyAlert("อุ๊ปส์!", "ยังไม่ได้เลือกรูปสลิปเลยค่ะ", "error");
+
+        document.getElementById('process-loader').style.display = 'flex';
+
+        try {
+            await set(push(ref(db, 'topup_requests')), {
+                uid: auth.currentUser.uid,
+                customerName: currentUserDataGlobal.nickname || currentUserDataGlobal.username,
+                amount: amount,
+                slipImage: selectedBase64,
+                status: "pending",
+                date: Date.now()
+            });
+
+            showCandyAlert("ส่งแล้ว!", "รอแอดมินตรวจสอบสลิปสักครู่นะคะ", "success");
+            closeModal('slip-modal');
+            closeModal('topup-modal');
+            
+            document.getElementById('slip-amount').value = '';
+            document.getElementById('slip-preview').classList.add('hidden');
+            document.getElementById('upload-placeholder').classList.remove('hidden');
+            selectedBase64 = "";
+        } catch (err) {
+            showCandyAlert("ผิดพลาด", "ไม่สามารถส่งข้อมูลได้ค่ะ", "error");
+        } finally {
+            document.getElementById('process-loader').style.display = 'none';
+        }
+    };
+
+    const calculateRemaining = (expireTimestamp) => {
+        const now = Date.now();
+        const diff = expireTimestamp - now;
+        if (diff <= 0) return { text: "หมดอายุแล้ว", color: "text-red-500", bg: "bg-red-50" };
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        return { text: `เหลือ ${days} วัน ${hours} ชม.`, color: "text-blue-500", bg: "bg-blue-50" };
+    };
+
+    window.openStatus = () => {
+        if (!auth.currentUser || !currentUserDataGlobal) {
+            return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
+        }
+        document.getElementById('user-panel').style.display = 'none';
+        openModal('status-modal');
+        
+        const isAdmin = currentUserDataGlobal.role === "admin" || currentUserDataGlobal.username.toLowerCase() === "adminpeach";
+        
+        const contentDiv = document.getElementById('status-content');
+        contentDiv.innerHTML = '<div class="cookie-spin py-10"><i class="fa-solid fa-cookie-bite"></i></div>';
+
+        onValue(ref(db, 'rentals'), (snap) => {
+            contentDiv.innerHTML = ''; 
+            if (!snap.exists()) {
+                contentDiv.innerHTML = '<div class="text-center py-10 text-gray-400 font-bold text-xs">ยังไม่มีข้อมูลการเช่าเว็บค่ะ 🥲</div>';
+                return;
             }
-        };
-
-        document.getElementById('save-profile').onclick = async () => {
-            const nick = document.getElementById('edit-nickname').value.trim();
-            const newPass = document.getElementById('new-password-val').value.trim();
-            document.getElementById('process-loader').style.display = 'flex';
-            try {
-                const updates = { nickname: nick };
-                const imgData = document.getElementById('profile-img-view').src;
-                if(imgData.startsWith('data:image')) updates.profilePic = imgData;
-                await update(ref(db, `users/${auth.currentUser.uid}`), updates);
-                if(newPass) {
-                    if(newPass.length < 6) throw new Error("รหัสผ่านต้องมีอย่างน้อย 6 ตัวค่ะ");
-                    await updatePassword(auth.currentUser, newPass);
-                }
-                showCandyAlert("สำเร็จ!", "อัปเดตข้อมูลเรียบร้อยแล้วค่ะ");
-                closeModal('profile-modal');
-            } catch (e) { 
-                showCandyAlert("อุ๊ปส์!", e.message || "บันทึกไม่ได้ ลองใหม่อีกครั้งนะ", "error"); 
-            } finally { document.getElementById('process-loader').style.display = 'none'; }
-        };
-
-        let isLoginMode = true;
-        document.getElementById('toggle-auth').onclick = () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('auth-title').innerText = isLoginMode ? "Sign In" : "Register";
-            document.getElementById('toggle-auth').innerText = isLoginMode ? "ยังไม่มีบัญชี? สมัครที่นี่นะ" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
-            document.getElementById('auth-btn').innerText = isLoginMode ? "เข้าสู่ระบบ" : "สมัครสมาชิก";
-        };
-
-        document.getElementById('auth-btn').onclick = async () => {
-            const user = document.getElementById('user-input').value.trim();
-            const pass = document.getElementById('pass-input').value.trim();
-            if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
-            document.getElementById('process-loader').style.display = 'flex';
-            try {
-                const isOwner = (user === "AdminPeach" || user === "feirnbiddu10@gmail.com");
-                const email = isOwner ? "feirnbiddu10@gmail.com" : `${user}@candymarket.com`;
-                if(isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                    showCandyAlert("เย้!", "ยินดีต้อนรับกลับมานะคะ");
-                    closeModal('auth-modal');
-                } else {
-                    const res = await createUserWithEmailAndPassword(auth, email, pass);
-                    const uid = generateUID();
-                    await set(ref(db, `users/${res.user.uid}`), { 
-                        username: user, 
-                        uid: uid, 
-                        nickname: user === "AdminPeach" ? "Admin Peach" : "", 
-                        profilePic: "", 
-                        level: user === "AdminPeach" ? "Admin" : "Member",
-                        balance: 0 
-                    });
-                    await runTransaction(ref(db, 'stats/users'), (curr) => (curr || 0) + 1);
-                    showCandyAlert("ยินดีต้อนรับ!", "สมัครสมาชิกเรียบร้อยแล้วค่ะ");
-                    closeModal('auth-modal');
-                }
-            } catch (err) { showCandyAlert("ผิดพลาด", "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ", "error"); }
-            finally { document.getElementById('process-loader').style.display = 'none'; }
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            const section = document.getElementById('auth-section');
-            if(user) {
-                onValue(ref(db, `users/${user.uid}`), (snap) => {
-                    const data = snap.val() || {};
-                    currentUserDataGlobal = data; 
-                    document.getElementById('menu-nickname').innerText = data.username === "AdminPeach" ? "Admin Peach" : (data.nickname || data.username || "Guest");
-                    document.getElementById('menu-balance').innerText = data.balance || 0;
-                    document.getElementById('menu-uid').innerText = data.uid || "--------";
-                    // ... โหลดรูปและ UI ตามเดิมของคุณ ...
-                    section.innerHTML = `<button onclick="togglePanel()" class="w-12 h-12 rounded-full bg-white border-2 border-pink-200 text-pink-400 flex items-center justify-center shadow-md"><i class="fa-solid fa-cookie text-2xl"></i></button>`;
-                });
-            } else {
-                currentUserDataGlobal = null;
-                section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2.5 rounded-full text-xs font-black shadow-lg">Sign In</button>`;
-            }
-        });
-
-        window.handleRentWeb = async (productId, productName, price) => {
-            if (!auth.currentUser || !currentUserDataGlobal) return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนเช่านะคะ", "error");
-            const confirmRent = confirm(`ยืนยันการเช่าเว็บไซต์ ${productName}\nราคา ${price} บาท?`);
-            if (!confirmRent) return;
-            if ((currentUserDataGlobal.balance || 0) < price) return showCandyAlert("ยอดเงินไม่เพียงพอ", "กรุณาเติมเงินก่อนนะคะ", "error");
-
-            document.getElementById('process-loader').style.display = 'flex';
-            try {
-                const userRef = ref(db, `users/${auth.currentUser.uid}`);
-                await update(userRef, { balance: currentUserDataGlobal.balance - price });
-                await set(push(ref(db, 'rentals')), {
-                    uid: auth.currentUser.uid,
-                    webName: productName,
-                    expireAt: Date.now() + (30 * 24 * 60 * 60 * 1000),
-                    status: "active",
-                    customerName: currentUserDataGlobal.username,
-                    adminName: "Peach Admin"
-                });
-                showCandyAlert("เช่าเว็บสำเร็จ!", productName, "success");
-            } catch (err) { showCandyAlert("เกิดข้อผิดพลาด", "ลองใหม่อีกครั้งนะ", "error"); }
-            finally { document.getElementById('process-loader').style.display = 'none'; }
-        };
-
-        onValue(ref(db, 'products'), snap => {
-            const container = document.getElementById('product-container'); 
-            container.innerHTML = '';
+            let html = '';
+            let hasItem = false;
             snap.forEach(child => {
-                const p = child.val();
-                container.innerHTML += `<div class="bg-white border-2 border-pink-50 rounded-[3rem] p-4 flex flex-col shadow-sm">
-                    <img src="${p.image}" class="rounded-[2.2rem] mb-4 aspect-square object-cover shadow-inner">
-                    <h4 class="font-black text-sm text-gray-700 truncate px-2 mb-1">${p.name}</h4>
-                    <p class="text-pink-500 font-black text-2xl mb-4 px-2 tracking-tighter">฿${p.price}</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="${p.demo||'#'}" target="_blank" class="bg-blue-50 text-blue-500 text-center text-[9px] font-black py-3 rounded-2xl uppercase">Demo</a>
-                        <button onclick="handleRentWeb('${child.key}', '${p.name}', ${p.price})" class="bg-pink-50 text-pink-500 text-center text-[9px] font-black py-3 rounded-2xl uppercase shadow-sm">เช่าเว็บ</button>
+                const data = child.val();
+                if (!isAdmin && data.uid !== auth.currentUser.uid) return;
+                hasItem = true;
+                
+                const remain = calculateRemaining(data.expireAt);
+                const expireDate = new Date(data.expireAt).toLocaleDateString('th-TH');
+                const statusBadge = data.status === 'active' 
+                    ? '<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-600 text-[9px] font-black tracking-widest"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</span>'
+                    : '<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[9px] font-black tracking-widest"><i class="fa-solid fa-lock"></i> ถูกระงับ</span>';
+                
+                html += `
+                <div class="p-4 bg-white border-4 border-pink-100 rounded-none shadow-[4px_4px_0px_#e91e63] mb-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-black text-gray-700 text-lg" style="font-family: 'Mali', cursive;">${data.webName}</h4>
+                            <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">EXP: ${expireDate}</p>
+                            ${isAdmin ? `<p class="text-[8px] text-pink-400 font-bold mt-1">User: ${data.customerName}</p>` : ''}
+                        </div>
+                        ${statusBadge}
+                    </div>
+                    <div class="mt-3 p-2 ${remain.bg} border-2 border-dashed border-gray-200 text-center">
+                        <p class="${remain.color} text-[11px] font-black uppercase tracking-widest">${remain.text}</p>
                     </div>
                 </div>`;
             });
+            
+            if(!hasItem) {
+                contentDiv.innerHTML = '<div class="text-center py-10 text-gray-400 font-bold text-xs">คุณยังไม่มีเว็บที่กำลังเช่าอยู่ค่ะ 🥺</div>';
+            } else {
+                contentDiv.innerHTML = html;
+            }
         });
+    };
 
-        onValue(ref(db, 'stats'), snap => {
-            const d = snap.val()||{};
-            document.getElementById('stat-users').innerText = d.users||0;
-            document.getElementById('stat-prods').innerText = d.prods||0;
-        });
+    document.getElementById('img-upload').onchange = function(e) {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('profile-img-view').src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    };
 
-        window.openHistory = () => {
-            if (!auth.currentUser) return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
-            document.getElementById('user-panel').style.display = 'none';
-            openModal('history-modal');
-            onValue(ref(db, 'topups'), (snapshot) => {
-                const content = document.getElementById('history-content');
-                content.innerHTML = '';
-                let hasData = false;
-                if (snapshot.exists()) {
-                    const myHistory = Object.values(snapshot.val()).filter(item => item.uid === auth.currentUser.uid).sort((a,b) => b.date - a.date);
-                    myHistory.forEach(item => {
-                        hasData = true;
-                        content.innerHTML += `<div class="p-4 bg-white border-2 border-yellow-50 rounded-2xl shadow-sm flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center"><i class="fa-solid fa-coins"></i></div>
-                                <div><h4 class="font-black text-gray-700 text-sm">฿${item.amount}</h4><p class="text-[10px] text-gray-400 font-bold">${new Date(item.date).toLocaleString('th-TH')}</p></div>
-                            </div>
-                            <span class="px-2 py-1 rounded-lg bg-green-50 text-green-500 text-[9px] font-black border border-green-100">Completed</span>
-                        </div>`;
-                    });
+    document.getElementById('save-profile').onclick = async () => {
+        const nick = document.getElementById('edit-nickname').value.trim();
+        const newPass = document.getElementById('new-password-val').value.trim();
+        document.getElementById('process-loader').style.display = 'flex';
+        try {
+            const updates = { nickname: nick };
+            const imgData = document.getElementById('profile-img-view').src;
+            if(imgData.startsWith('data:image')) updates.profilePic = imgData;
+            
+            await update(ref(db, `users/${auth.currentUser.uid}`), updates);
+            
+            if(newPass) {
+                if(newPass.length < 6) throw new Error("รหัสผ่านต้องมีอย่างน้อย 6 ตัวค่ะ");
+                await updatePassword(auth.currentUser, newPass);
+            }
+            showCandyAlert("สำเร็จ!", "อัปเดตข้อมูลเรียบร้อยแล้วค่ะ");
+            closeModal('profile-modal');
+        } catch (e) { 
+            showCandyAlert("อุ๊ปส์!", e.message || "บันทึกไม่ได้ ลองใหม่อีกครั้งนะ", "error"); 
+        } finally { document.getElementById('process-loader').style.display = 'none'; }
+    };
+
+    let isLoginMode = true;
+    document.getElementById('toggle-auth').onclick = () => {
+        isLoginMode = !isLoginMode;
+        document.getElementById('auth-title').innerText = isLoginMode ? "Sign In" : "Register";
+        document.getElementById('toggle-auth').innerText = isLoginMode ? "ยังไม่มีบัญชี? สมัครที่นี่นะ" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
+        document.getElementById('auth-btn').innerText = isLoginMode ? "เข้าสู่ระบบ" : "สมัครสมาชิก";
+    };
+
+    document.getElementById('auth-btn').onclick = async () => {
+        const user = document.getElementById('user-input').value.trim();
+        const pass = document.getElementById('pass-input').value.trim();
+        if(!user || !pass) return showCandyAlert("อุ๊ปส์!", "กรอกข้อมูลให้ครบก่อนน้า", "error");
+        document.getElementById('process-loader').style.display = 'flex';
+        try {
+            const email = `${user.toLowerCase()}@candymarket.com`;
+            
+            if(isLoginMode) {
+                await signInWithEmailAndPassword(auth, email, pass);
+                showCandyAlert("เย้!", "ยินดีต้อนรับกลับมานะคะ");
+                closeModal('auth-modal');
+            } else {
+                const res = await createUserWithEmailAndPassword(auth, email, pass);
+                const uid = generateUID();
+                const role = (user.toLowerCase() === "adminpeach") ? "admin" : "member";
+                
+                await set(ref(db, `users/${res.user.uid}`), { 
+                    username: user, 
+                    uid: uid, 
+                    nickname: user.toLowerCase() === "adminpeach" ? "Admin Peach" : "", 
+                    profilePic: "", 
+                    level: role === "admin" ? "Admin" : "Member",
+                    role: role,
+                    balance: 0 
+                });
+                await runTransaction(ref(db, 'stats/users'), (curr) => (curr || 0) + 1);
+                showCandyAlert("ยินดีต้อนรับ!", "สมัครสมาชิกเรียบร้อยแล้วค่ะ");
+                closeModal('auth-modal');
+            }
+        } catch (err) { 
+            showCandyAlert("ผิดพลาด", "ข้อมูลไม่ถูกต้องหรือบัญชีนี้มีอยู่แล้วค่ะ", "error"); 
+        } finally { document.getElementById('process-loader').style.display = 'none'; }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        const section = document.getElementById('auth-section');
+        if(user) {
+            onValue(ref(db, `users/${user.uid}`), (snap) => {
+                const data = snap.val() || {};
+                currentUserDataGlobal = data; 
+                
+                document.getElementById('menu-nickname').innerText = data.nickname || data.username || "Guest";
+                document.getElementById('menu-balance').innerText = data.balance || 0;
+                document.getElementById('menu-uid').innerText = data.uid || "--------";
+                document.getElementById('menu-role').innerText = (data.role || "MEMBER").toUpperCase();
+                document.getElementById('profile-user-static').value = data.username || "";
+                document.getElementById('profile-uid-val').innerText = data.uid || "--------";
+                
+                if(data.profilePic && data.profilePic.startsWith('data:image')) {
+                    document.getElementById('menu-avatar').src = data.profilePic;
+                    document.getElementById('menu-avatar').classList.remove('hidden');
+                    document.getElementById('menu-avatar-temp').classList.add('hidden');
+                    document.getElementById('profile-img-view').src = data.profilePic;
+                } else {
+                    document.getElementById('menu-avatar').classList.add('hidden');
+                    document.getElementById('menu-avatar-temp').classList.remove('hidden');
+                    document.getElementById('profile-img-view').src = "[https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg](https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg)";
                 }
-                if (!hasData) content.innerHTML = '<div class="text-center py-10 text-gray-400 text-xs">ยังไม่มีประวัติการเติมเงินค่ะ</div>';
-            });
-        };
 
-        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.display='none'; }, 600); };
-    </script>
+                if (data.role === "admin" || (data.username && data.username.toLowerCase() === "adminpeach")) {
+                    document.getElementById('admin-menu').style.display = 'block';
+                } else {
+                    document.getElementById('admin-menu').style.display = 'none';
+                }
+                
+                section.innerHTML = `<button onclick="togglePanel()" class="w-12 h-12 rounded-full bg-white border-2 border-pink-200 text-pink-400 flex items-center justify-center shadow-md"><i class="fa-solid fa-cookie text-2xl"></i></button>`;
+            });
+        } else {
+            currentUserDataGlobal = null;
+            section.innerHTML = `<button onclick="openAuth()" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2.5 rounded-full text-xs font-black shadow-lg">Sign In</button>`;
+        }
+    });
+
+    window.handleRentWeb = async (productId, productName, price) => {
+        if (!auth.currentUser || !currentUserDataGlobal) return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนเช่านะคะ", "error");
+        const confirmRent = confirm(`ยืนยันการเช่าเว็บไซต์ ${productName}\nราคา ${price} บาท?`);
+        if (!confirmRent) return;
+        if ((currentUserDataGlobal.balance || 0) < price) return showCandyAlert("ยอดเงินไม่เพียงพอ", "กรุณาเติมเงินก่อนนะคะ", "error");
+
+        document.getElementById('process-loader').style.display = 'flex';
+        try {
+            const userRef = ref(db, `users/${auth.currentUser.uid}`);
+            await update(userRef, { balance: currentUserDataGlobal.balance - price });
+            await set(push(ref(db, 'rentals')), {
+                uid: auth.currentUser.uid,
+                webName: productName,
+                expireAt: Date.now() + (30 * 24 * 60 * 60 * 1000),
+                status: "active",
+                customerName: currentUserDataGlobal.nickname || currentUserDataGlobal.username
+            });
+            showCandyAlert("เช่าเว็บสำเร็จ!", productName, "success");
+        } catch (err) { showCandyAlert("เกิดข้อผิดพลาด", "ลองใหม่อีกครั้งนะ", "error"); }
+        finally { document.getElementById('process-loader').style.display = 'none'; }
+    };
+
+    onValue(ref(db, 'products'), snap => {
+        const container = document.getElementById('product-container'); 
+        container.innerHTML = '';
+        if(!snap.exists()) {
+            container.innerHTML = `<div class="col-span-2 text-center text-gray-400 font-bold text-xs">ยังไม่มีสินค้าค่ะ</div>`;
+            return;
+        }
+        snap.forEach(child => {
+            const p = child.val();
+            container.innerHTML += `<div class="bg-white border-2 border-pink-50 rounded-[3rem] p-4 flex flex-col shadow-sm">
+                <img src="${p.image || '[https://via.placeholder.com/150](https://via.placeholder.com/150)'}" class="rounded-[2.2rem] mb-4 aspect-square object-cover shadow-inner">
+                <h4 class="font-black text-sm text-gray-700 truncate px-2 mb-1">${p.name}</h4>
+                <p class="text-pink-500 font-black text-2xl mb-4 px-2 tracking-tighter">฿${p.price}</p>
+                <div class="grid grid-cols-2 gap-2 mt-auto">
+                    <a href="${p.demo||'#'}" target="_blank" class="bg-blue-50 text-blue-500 text-center text-[9px] font-black py-3 rounded-2xl uppercase">Demo</a>
+                    <button onclick="handleRentWeb('${child.key}', '${p.name}', ${p.price})" class="bg-pink-50 text-pink-500 text-center text-[9px] font-black py-3 rounded-2xl uppercase shadow-sm">เช่าเว็บ</button>
+                </div>
+            </div>`;
+        });
+    });
+
+    onValue(ref(db, 'stats'), snap => {
+        const d = snap.val()||{};
+        document.getElementById('stat-users').innerText = d.users||0;
+        document.getElementById('stat-prods').innerText = d.prods||0;
+    });
+
+    window.openHistory = () => {
+        if (!auth.currentUser) return showCandyAlert("อุ๊ปส์!", "กรุณาเข้าสู่ระบบก่อนนะคะ", "error");
+        document.getElementById('user-panel').style.display = 'none';
+        openModal('history-modal');
+        onValue(ref(db, 'topups'), (snapshot) => {
+            const content = document.getElementById('history-content');
+            content.innerHTML = '';
+            let hasData = false;
+            if (snapshot.exists()) {
+                const myHistory = Object.values(snapshot.val()).filter(item => item.uid === auth.currentUser.uid).sort((a,b) => b.date - a.date);
+                myHistory.forEach(item => {
+                    hasData = true;
+                    content.innerHTML += `<div class="p-4 bg-white border-2 border-yellow-50 rounded-2xl shadow-sm flex justify-between items-center mb-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center"><i class="fa-solid fa-coins"></i></div>
+                            <div><h4 class="font-black text-gray-700 text-sm">฿${item.amount}</h4><p class="text-[10px] text-gray-400 font-bold">${new Date(item.date).toLocaleString('th-TH')}</p></div>
+                        </div>
+                        <span class="px-2 py-1 rounded-lg bg-green-50 text-green-500 text-[9px] font-black border border-green-100">${item.status}</span>
+                    </div>`;
+                });
+            }
+            if (!hasData) content.innerHTML = '<div class="text-center py-10 text-gray-400 text-xs font-bold">ยังไม่มีประวัติการเติมเงินค่ะ</div>';
+        });
+    };
+
+    window.onload = () => { setTimeout(() => { document.getElementById('loader').style.display='none'; }, 600); };
+</script>
+
+```
 </body>
 </html>
