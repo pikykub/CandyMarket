@@ -267,6 +267,22 @@
             <button onclick="closeModal('contact-modal')" class="w-full mt-4 py-3 rounded-2xl bg-gray-50 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
         </div>
     </div>
+    
+<div id="history-modal" class="auth-overlay" onclick="closeModal('history-modal')">
+    <div class="pop-card w-full max-w-md" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center mb-6 border-b-2 border-yellow-50 pb-3">
+            <div>
+                <h2 class="text-2xl font-black text-yellow-500 italic uppercase">Topup History</h2>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">ประวัติการเติมเงินของคุณ</p>
+            </div>
+            <button onclick="closeModal('history-modal')" class="w-8 h-8 rounded-full bg-gray-50 text-gray-400 hover:bg-yellow-50 hover:text-yellow-500 flex items-center justify-center transition"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div id="history-content" class="max-h-[50vh] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+            <div class="text-center py-10 text-gray-400 text-xs">กำลังโหลดข้อมูล...</div>
+        </div>
+        <button onclick="closeModal('history-modal')" class="w-full mt-6 py-3 rounded-2xl bg-gray-50 text-gray-400 font-black text-xs uppercase tracking-widest">Close</button>
+    </div>
+</div>
 
     <div class="grid grid-cols-2 gap-4 px-5 mb-10 text-center">
         <div class="bg-white p-6 rounded-[2.5rem] border-2 border-pink-50 shadow-sm flex flex-col items-center">
