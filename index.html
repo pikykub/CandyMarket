@@ -3,179 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Rent - Cutie Version</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Candy Web Rental - เช่าเว็บเมืองแคนดี้</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* CSS เดิมที่ปรับปรุงเรื่องเส้นขอบและสี */
-        :root {
-            --pixel-blue: #a3d8f4; /* ฟ้าพาสเทลนุ่มขึ้น */
-            --pixel-pink: #fbc6f5; /* ชมพูพาสเทลหวานขึ้น */
-            --dark-grey: #4a4a4a;
-            --white: #ffffff;
-            --border-style: 3px dotted #4a4a4a; /* เส้นขอบจุด */
-        }
-
+        /* --- ตั้งค่าพื้นฐาน --- */
         body {
-            background-color: #fdf2f8; /* พื้นหลังชมพูอ่อนมากๆ */
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'Sarabun', sans-serif; /* เปลี่ยนเป็นฟอนต์ไทยที่ดูน่ารัก */
             margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* ป้องกันแถบเลื่อนด้านข้าง */
+        }
+
+        /* --- ธีมสี --- */
+        :root {
+            --light-blue: #ADD8E6;
+            --pink: #FFB6C1;
+            --white: #FFFFFF;
+            --purple: #E6E6FA;
+            --candy-pink: #FF69B4;
+            --candy-blue: #87CEEB;
+        }
+
+        /* --- พื้นหลังเมืองแคนดี้ขยับดุ๊กดิ๊ก --- */
+        .candy-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.imgur.com/g8vJ3t4.png'); /* เปลี่ยนเป็น URL รูปพื้นหลังแคนดี้ของคุณ */
+            background-size: cover;
+            background-attachment: fixed;
+            z-index: -1; /* ให้อยู่ด้านหลังสุด */
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            from { background-position: 0 0; }
+            to { background-position: 100% 100%; }
+        }
+
+        /* --- แบนเนอร์ --- */
+        .banner {
+            background-color: var(--white);
             padding: 20px;
-            color: #333;
-        }
-
-        /* Container หลัก */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        /* หัวข้อเว็บ */
-        .header {
             text-align: center;
-            padding: 40px;
-            background: var(--pixel-blue);
-            border: var(--border-style);
-            border-radius: 15px; /* มุมโค้ง */
-            box-shadow: 5px 5px 0px var(--pixel-pink);
-            margin-bottom: 40px;
-            position: relative;
+            border-bottom: 5px solid var(--purple);
         }
 
-        /* ไอคอนหัวใจดุ๊กดิ๊ก */
-        .heart-icon {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 20px;
-            animation: wiggle 2s linear infinite; /* แอนิเมชัน */
+        .banner h1 {
+            color: var(--candy-pink);
+            font-size: 3em;
+            margin-bottom: 10px;
         }
 
-        /* ปรับเลย์เอาต์เป็น 2 คอลัมน์ (CSS Grid) */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* ปรับขนาดขั้นต่ำ */
-            gap: 25px;
+        .banner p {
+            color: var(--candy-blue);
+            font-size: 1.2em;
         }
 
-        /* การ์ดสินค้า */
-        .pixel-card {
-            background: var(--white);
-            border: var(--border-style);
-            border-radius: 15px;
-            padding: 25px;
-            position: relative;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 4px 4px 0px #000;
+        /* --- ส่วนเนื้อหาหลัก --- */
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* สีขาวโปร่งแสง */
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* เมื่อเอาเมาส์ชี้ การ์ดจะขยับ */
-        .pixel-card:hover {
-            transform: translate(-3px, -3px) rotate(1deg); /* ขยับและหมุนนิดหน่อย */
-            box-shadow: 6px 6px 0px var(--pixel-pink);
-        }
-
-        .pixel-card h3 {
-            font-size: 16px;
-            color: var(--dark-grey);
-            margin-top: 0;
-        }
-
-        .price {
-            color: #ff66b2;
-            margin: 20px 0;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        /* ไอคอนในแบนเนอร์ (ทำให้ดุ๊กดิ๊กได้) */
-        .banner-icon {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            width: 50px;
-            height: 50px;
-            /* แทนที่ด้วยรูป .png จริงๆ ของคุณ */
-            background-color: #ccc; 
-            border: 2px solid #000;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            animation: wiggle 1.5s ease-in-out infinite;
-        }
-
-        /* ปุ่มพิกเซลดุ๊กดิ๊ก */
-        .pixel-btn {
+        /* --- ปุ่ม --- */
+        .btn {
             display: inline-block;
-            padding: 12px 20px;
-            background: var(--pixel-pink);
-            border: var(--border-style);
-            border-radius: 10px;
-            text-decoration: none;
-            color: #000;
-            font-size: 12px;
+            padding: 15px 30px;
+            background-color: var(--candy-pink);
+            color: var(--white);
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 3px 3px 0px #000;
-            transition: background 0.2s, transform 0.1s;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none; /* เอาเส้นใต้ลิงก์ออก */
         }
 
-        .pixel-btn:hover {
-            background: #f8a8e8; /* ชมพูเข้มขึ้นเล็กน้อย */
-            transform: scale(1.05); /* ขยายใหญ่ขึ้น */
+        .btn:hover {
+            background-color: var(--candy-blue);
+            transform: scale(1.05); /* ขยายขนาดเล็กน้อยเมื่อเอาเมาส์ไปชี้ */
         }
 
-        .pixel-btn:active {
-            box-shadow: 0px 0px 0px #000;
-            transform: translate(3px, 3px);
+        /* --- หน้าโหลดหมุนๆ พิกเซล --- */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: none; /* ซ่อนไว้ตอนเริ่มต้น */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
 
-        /* ----- CSS Animations ----- */
+        .loader {
+            border: 10px solid var(--purple);
+            border-top: 10px solid var(--candy-pink);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+        }
 
-        /* แอนิเมชันดุ๊กดิ๊ก (Wiggle) */
-        @keyframes wiggle {
+        @keyframes spin {
             0% { transform: rotate(0deg); }
-            25% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
-            75% { transform: rotate(-2deg); }
-            100% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* สำหรับปรับปรุงตามขนาดหน้าจอ (Responsive) */
-        @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: 1fr; /* หน้าจอมือถือเรียงกันลงมาเหมือนเดิม */
-            }
+        /* --- ไอคอนพิกเซลธีมแคนดี้ --- */
+        .candy-icon {
+            font-size: 2em;
+            color: var(--candy-pink);
+            margin-right: 10px;
         }
 
+        /* --- สไตล์เพิ่มเติม --- */
+        .section-title {
+            color: var(--purple);
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .package-card {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .package-price {
+            font-size: 2.5em;
+            color: var(--candy-pink);
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
+    <div class="candy-background"></div>
 
-<div class="container">
-    <div class="header">
-        <span class="heart-icon">💖</span>
-        <h1>PIXEL RENT</h1>
-        <p style="font-size: 12px; margin-top: 10px; color: var(--dark-grey);">เว็บเช่าระบบ ธีมฟ้า-ชมพู (Cutie Edition)</p>
+    <div class="banner">
+        <h1><i class="fas fa-candy-cane candy-icon"></i>Candy Web Rental</h1>
+        <p>เช่าเว็บน่ารักๆ สไตล์เมืองแคนดี้ เริ่มต้นเพียง 129 บาท!</p>
     </div>
 
-    <div class="grid">
-        <div class="pixel-card">
-            <h3>Standard Shop</h3>
-            <p style="font-size: 10px; color: #777;">เหมาะสำหรับเริ่มต้น</p>
-            <div class="price">150 THB / Month</div>
-            <a href="#" class="pixel-btn">เช่าตอนนี้</a>
-            <div class="banner-icon">🐱</div> </div>
+    <div class="container">
+        <h2 class="section-title">แพ็คเกจเช่าเว็บ</h2>
 
-        <div class="pixel-card" style="background: #e6f7ff; border-color: var(--pixel-blue);">
-            <h3>Pro Gaming</h3>
-            <p style="font-size: 10px; color: #777;">ระบบครบวงจร</p>
-            <div class="price" style="color: #219ebc;">300 THB / Month</div>
-            <a href="#" class="pixel-btn" style="background: var(--pixel-blue); border-color: var(--pixel-blue);">เช่าตอนนี้</a>
-            <div class="banner-icon">🎮</div> </div>
-
+        <div class="package-card">
+            <h3><i class="fas fa-ice-cream candy-icon"></i>แพ็คเกจ Sweet Start</h3>
+            <p class="package-price">129 บาท/เดือน</p>
+            <p>เหมาะสำหรับเว็บเริ่มต้น พื้นที่ 1GB</p>
+            <a href="#" class="btn" onclick="showLoader()">เช่าเลย!</a>
         </div>
-</div>
 
+        <div class="package-card">
+            <h3><i class="fas fa-lollipop candy-icon"></i>แพ็คเกจ Candy Pro</h3>
+            <p class="package-price">299 บาท/เดือน</p>
+            <p>พื้นที่ 5GB รองรับคนเข้าชมเยอะขึ้น</p>
+            <a href="#" class="btn" onclick="showLoader()">เช่าเลย!</a>
+        </div>
+
+        <div class="package-card">
+            <h3><i class="fas fa-birthday-cake candy-icon"></i>แพ็คเกจ Sugar Rush</h3>
+            <p class="package-price">499 บาท/เดือน</p>
+            <p>พื้นที่ 10GB ฟีเจอร์ครบครัน</p>
+            <a href="#" class="btn" onclick="showLoader()">เช่าเลย!</a>
+        </div>
+    </div>
+
+    <div class="loader-container" id="loaderContainer">
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        function showLoader() {
+            document.getElementById('loaderContainer').style.display = 'flex';
+            setTimeout(function() {
+                document.getElementById('loaderContainer').style.display = 'none';
+                alert('ขอบคุณที่สนใจเช่าเว็บกับเรา! ทางเราจะติดต่อกลับโดยเร็วที่สุดค่ะ');
+            }, 2000); // แสดงหน้าโหลด 2 วินาที
+        }
+    </script>
 </body>
 </html>
