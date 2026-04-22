@@ -3,62 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candy Market Replica</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Candy Market - Replica</title>
     <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base & Reset --- */
+        * {
+            box-sizing: border-box;
+            font-family: 'Mitr', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px 10px;
+            /* พื้นหลังไล่สีพาสเทล ชมพู -> ฟ้า -> เขียว */
+            background: linear-gradient(180deg, #FFDEE9 0%, #B5FFFC 50%, #E2FFC1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.3); /* โปร่งแสงเล็กน้อยให้เห็นพื้นหลัง */
+            border-radius: 40px;
+            padding: 15px;
+            position: relative;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #FFB7C5;
+            border-radius: 20px;
+            padding: 10px;
+            margin-bottom: 20px;
+            color: #444;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: #5D4037;
+            text-shadow: 2px 2px 0 #fff;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            margin: 5px 0;
+            color: #6D4C41;
+            font-size: 0.9rem;
+        }
+
+        /* --- Main Categories --- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .cat-item {
+            background: white;
+            border: 3px solid #6D4C41;
+            border-radius: 20px;
+            padding: 10px 5px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6D4C41;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #6D4C41;
+            transition: transform 0.1s;
+        }
+
+        .cat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        /* --- Status Bar --- */
+        .status-section {
+            background: #FFF9F9;
+            border: 3px solid #6D4C41;
+            border-radius: 25px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0 #6D4C41;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #6D4C41;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 24px;
+            background: #eee;
+            border: 3px solid #6D4C41;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                #FFADAD,
+                #FFADAD 10px,
+                #FFD1D1 10px,
+                #FFD1D1 20px
+            );
+            border-right: 3px solid #6D4C41;
+        }
+
+        /* --- Info Grid (How to / Notes) --- */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: white;
+            border: 3px solid #6D4C41;
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 4px 4px 0 #6D4C41;
+        }
+
+        .info-box h3 {
+            font-size: 0.9rem;
+            margin: 0 0 10px 0;
+            color: #5D4037;
+        }
+
+        .info-box ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            font-size: 0.7rem;
+            line-height: 1.6;
+        }
+
+        .note-badge {
+            background: #FFF9C4;
+            border: 2px dashed #FBC02D;
+            padding: 5px;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* --- Pricing Section --- */
+        .pricing-box {
+            background: white;
+            border: 3px solid #6D4C41;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 4px 4px 0 #6D4C41;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ccc;
+            font-size: 0.8rem;
+        }
+
+        /* --- Footer Button --- */
+        .order-button {
+            width: 100%;
+            background: #FF8A80;
+            border: 4px solid #6D4C41;
+            border-radius: 20px;
+            padding: 15px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #6D4C41;
+            box-shadow: 0 6px 0 #6D4C41;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        .order-button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #6D4C41;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <header>
-            <div class="logo">🍭 CandyMarket</div>
-            <nav>
-                <span>หน้าแรก</span>
-                <span>ผลงาน</span>
-                <span>วิธีการสั่ง</span>
-                <span>ติดต่อเรา</span>
-            </nav>
-        </header>
+<div class="container">
+    <div class="navbar">
+        <span>หน้าแรก</span>
+        <span>ผลงาน</span>
+        <span>วิธีการสั่ง</span>
+        <span>ติดต่อเรา</span>
+    </div>
 
-        <section class="hero">
-            <h1>CandyMarket</h1>
-            <p>Welcome to my shop ✨</p>
-            <div class="service-cards">
-                <div class="card">เว็บครบวงจร</div>
-                <div class="card">เว็บเรทราคา/เติมเกม</div>
-                <div class="card">เว็บไบโอ (Bio)</div>
-            </div>
-        </section>
+    <div class="hero">
+        <p>🍭 CandyMarket</p>
+        <h1>CandyMarket</h1>
+        <p>✨ บริการเว็บไซต์น่ารักๆ สไตล์พิกเซล... ✨</p>
+    </div>
 
-        <section class="status-box">
-            <div class="progress-container">
-                <div class="label">กำลังลงโค้ด 💻 75%</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 75%;"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="info-grid">
-            <div class="how-to-order">
-                <h3>📝 How to Order</h3>
-                <ul>
-                    <li>🎨 เลือกแบบที่ใช่</li>
-                    <li>💰 ล็อคคิว/โอนมัดจำ</li>
-                    <li>🕒 รอรับความปัง (4-6 ชม.)</li>
-                </ul>
-            </div>
-            <div class="important-notes">
-                <h3>⚠️ Important Notes</h3>
-                <div class="free-badge">แก้ฟรี 1 ครั้ง!</div>
-                <p>ค่าบริการเพิ่มเติม...</p>
-            </div>
-        </section>
-
-        <div class="footer-action">
-            <button class="order-btn">📝 กดสั่งทำ & ระบุรายละเอียดบรีฟ</button>
+    <div class="category-grid">
+        <div class="cat-item">
+            <div class="cat-icon">🏠</div>
+            เว็บครบวงจร
+        </div>
+        <div class="cat-item">
+            <div class="cat-icon">💰</div>
+            เรทราคา/เติมเกม
+        </div>
+        <div class="cat-item">
+            <div class="cat-icon">📱</div>
+            เว็บไบโอ (Bio)
         </div>
     </div>
+
+    <div class="status-section">
+        <div class="status-header">
+            <span>Q: A01 กำลังลงโค้ด 💻</span>
+            <span>75%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 75%;"></div>
+        </div>
+    </div>
+
+    <div class="info-row">
+        <div class="info-box">
+            <h3>📝 How to Order</h3>
+            <ul>
+                <li>🎨 เลือกแบบที่ชอบ</li>
+                <li>💰 ล็อคคิว/โอนมัดจำ</li>
+                <li>🕒 รอรับความปัง (4-6 ชม.)</li>
+                <li>🔎 ตรวจเช็คความเรียบร้อย</li>
+            </ul>
+        </div>
+        <div class="info-box" style="background: #FFFDE7;">
+            <h3>⚠️ Important</h3>
+            <div class="note-badge">✨ แก้ฟรี 1 ครั้ง!</div>
+            <ul style="font-size: 0.65rem;">
+                <li>• แก้ชื่อ/ข้อความ 5฿</li>
+                <li>• เปลี่ยนรูป/โลโก้ 29฿</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pricing-box">
+        <div class="price-item">
+            <span>📌 เว็บไซต์ขนาดเล็ก (ไม่เกิน 200 บรรทัด)</span>
+            <span style="color: #E57373;">129.-</span>
+        </div>
+        <div class="price-item">
+            <span>📌 เว็บไซต์ขนาดกลาง (400-600 บรรทัด)</span>
+            <span style="color: #E57373;">179.-</span>
+        </div>
+        <div class="price-item" style="border:none;">
+            <span>💻 บริการเสริม (Add-ons)</span>
+            <span style="color: #81C784;">เริ่มต้น 29.-</span>
+        </div>
+    </div>
+
+    <button class="order-button">📝 กดสั่งทำ & ระบุรายละเอียดบรีฟ</button>
+
+</div>
 
 </body>
 </html>
