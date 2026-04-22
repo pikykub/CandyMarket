@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CandyMarket - Pixel Shop</title>
+    <title>CandyMarket - Pixel Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* สไตล์พื้นฐานและตัวแปรสีพาสเทล */
         :root {
             --pink-bg: #ffe6f2;
             --blue-bg: #dcf2f5;
-            --white: #ffffff;
-            --candy-pink: #ff99cc;
-            --candy-pink-border: #f4a2c1;
-            --candy-blue: #ade8f4;
-            --candy-yellow: #fff3cd;
+            --yellow-bg: #fffbe6;
+            --border-pink: #f4a2c1;
             --text-dark: #4a4a4a;
-            --text-pink-dark: #d66089;
+            --text-pink: #d66089;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            image-rendering: pixelated; /* สำคัญ: ทำให้ไอคอนพิกเซลคมชัด */
+            /* ทำให้ภาพพิกเซลคมชัด ไม่เบลอ */
+            image-rendering: pixelated;
         }
 
         body {
@@ -33,55 +30,47 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
         }
 
-        /* Container หลัก */
-        .page-container {
-            max-width: 1200px;
+        /* Container หลัก - ปรับให้กว้างขึ้นบนคอม */
+        .container {
+            max-width: 900px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(5px);
-            border-radius: 20px;
-            padding: 20px;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
             position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding-bottom: 100px;
         }
 
-        /* ของตกแต่งลอยไปมาแบบพิกเซล (จำลองจาก SVG/DataURI เพื่อไม่ให้มีไฟล์ภาพนอก) */
-        .decor { position: absolute; opacity: 0.6; animation: float decor-float infinite; }
-        @keyframes decor-float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        /* ของตกแต่งลอยไปมา */
+        .floating-item {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0.7;
         }
-        
-        /* จำลอง Candy พิกเซล */
-        .decor.candy-1 {
-            top: 10%; left: 5%; width: 32px; height: 32px;
-            background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVRYR+2VwREAMAjDUvdfu0F6E5VzLMAfP/EAVbNidYwDqAbEAVQD4gCqAYfGAXQDjMc9L1w8r28AAAAASUVORK5CYII=;
-            animation-duration: 4s;
-        }
-        .decor.star-1 {
-            top: 15%; right: 5%; width: 24px; height: 24px;
-            background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAN0lEQVRIx2NgoA34//8/AxZMbvD////P4w4w/B8G4f8IAnYfhuG4A+w+DMORP8DuwzAc+QMPAAB+E0sIqN6o1AAAAABJRU5ErkJggg==;
-            animation-duration: 3s;
+        .float-1 { top: 5%; left: 2%; animation-delay: 0s; }
+        .float-2 { top: 2%; right: 5%; animation-delay: 1s; }
+        .float-3 { bottom: 20%; left: 5%; animation-delay: 0.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(8deg); }
         }
 
-        /* Navbar: Responsive */
+        /* Navbar */
         .navbar {
-            background-color: var(--white);
-            padding: 10px 20px;
+            background-color: #fff;
+            padding: 12px 20px;
             border-radius: 15px;
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            border: 3px solid var(--candy-pink-border);
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 30px;
+            border: 3px solid var(--border-pink);
+            margin-bottom: 20px;
+            position: relative;
             z-index: 10;
         }
         .logo-nav {
@@ -89,331 +78,248 @@
             font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 5px;
-            white-space: nowrap;
+            gap: 8px;
         }
-        .pixel-logo-small { width: 24px; height: 24px; background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAATklEQVRIx2P8//8/AzUxAxdgYfA/DMOhAZv/IRjODNj8D8FwZsDmfwiGMwM2/0MwnBmw+R+C4cyAzf8QDIdhwA9I84FvHwD9+0sIqN6o1AAAAABJRU5ErkJggg==; }
-
         .nav-links {
             display: flex;
             gap: 10px;
             font-size: 0.85rem;
         }
+        
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; gap: 10px; text-align: center; }
+            .nav-links { font-size: 0.75rem; flex-wrap: wrap; justify-content: center; }
+        }
+
         .nav-links span {
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 10px;
+            padding: 5px 8px;
+            border-radius: 8px;
             transition: 0.3s;
-            white-space: nowrap;
         }
         .nav-links span.active, .nav-links span:hover {
             background-color: var(--pink-bg);
-            color: var(--text-pink-dark);
+            color: var(--text-pink);
             font-weight: 600;
         }
 
-        /* Title */
+        /* Title Section */
         .header-title {
             text-align: center;
-            margin: 20px 0;
-            width: 100%;
-            max-width: 600px;
+            margin: 40px 0;
+            position: relative;
+            z-index: 10;
         }
-        .pixel-text-shadow {
+        .header-title h1 {
             font-family: 'Press Start 2P', cursive;
-            font-size: 2.2rem;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             color: white;
-            text-shadow: 
-                3px 3px 0 #5c5c5c,
-                -1px -1px 0 #5c5c5c,
-                1px -1px 0 #5c5c5c,
-                -1px 1px 0 #5c5c5c,
-                1px 1px 0 #5c5c5c;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+            text-shadow: 4px 4px 0 #5c5c5c;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
         }
         .header-title p {
             font-size: 1rem;
             font-weight: 500;
+            background: rgba(255,255,255,0.5);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
         }
 
-        /* -----------------------------------------------------------
-           SECTION 1: ไอคอนบริการพิกเซลแบบจัดองค์ประกอบ (Responsive Grid)
-           ----------------------------------------------------------- */
-        .pixel-services {
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Services Pixel Icons */
+        .services-row {
             display: grid;
-            grid-template-columns: repeat(3, minmax(150px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-            margin: 30px 0;
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            z-index: 10;
+            position: relative;
         }
-
         .service-box {
-            background: var(--white);
-            border: 3px solid var(--candy-pink-border);
+            background: white;
+            padding: 20px;
             border-radius: 15px;
+            border: 3px solid var(--border-pink);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-dark);
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 0 rgba(244, 162, 193, 0.3);
-            position: relative;
+            transition: 0.3s;
         }
-        .service-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 0 rgba(244, 162, 193, 0.3);
-        }
+        .service-box:hover { transform: translateY(-5px) scale(1.03); }
 
-        /* -----------------------------------------------------------------------------------
-           จำลอง ไอคอนพิกเซล (จำลองจาก SVG/DataURI เพราะเราไม่เอาสติ๊กเกอร์ และต้องการพิกเซลแท้ๆ)
-           ----------------------------------------------------------------------------------- */
+        /* Custom Pixel Icons using Data URIs (Sharp & Clean) */
         .pixel-icon {
             width: 64px;
             height: 64px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            image-rendering: pixelated;
+            margin-bottom: 10px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
-        
-        /* จำลอง บ้านพิกเซล (Web ครบวงจร) */
-        .icon-house {
-            background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAALUlEQVRYR+2VwREAIAjDUvdfK1Yf4X5G5VgI4M8Tf4CqWbE6xgFUA+IAqgFxANWAQ+MBun8BOf/GPC+s588AAAAASUVORK5CYII=;
-            /* เพิ่มลูกเล่นพิกเซลลอย: Candy-1 */
-            position: relative;
-        }
-        .icon-house::after {
-            content: '';
-            position: absolute; bottom: 10px; right: 10px;
-            width: 16px; height: 16px;
-            background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAN0lEQVRIx2NgoA34//8/AxZMbvD////P4w4w/B8G4f8IAnYfhuG4A+w+DMORP8DuwzAc+QMPAAB+E0sIqN6o1AAAAABJRU5ErkJggg==;
+        /* จำลองรูปบ้านพิกเซล */
+        .icon-web { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23ff99cc" shape-rendering="crispEdges"><path d="M7 1h2v1h1v1h1v1h1v1h1v6h1v4h-1v1H3v-1H2v-4h1V5h1V4h1V3h1V2h1V1zM5 8h2v2H5V8zm4 0h2v2H9V8z"/></svg>'); }
+        /* จำลองหีบสมบัติพิกเซล */
+        .icon-rate { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23f4a2c1" shape-rendering="crispEdges"><path d="M1 4h14v2H1V4zm0 3h1v7h12V7h1v8H0V7h1zm3 2h2v2H4V9zm6 0h2v2h-2V9z"/></svg>'); }
+        /* จำลองบัตรพิกเซล */
+        .icon-bio { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23ade8f4" shape-rendering="crispEdges"><path d="M2 3h12v10H2V3zm2 2v2h8V5H4zm0 3v1h5V8H4zm0 2v1h3v-1H4z"/></svg>'); }
+
+        .service-label {
+            background: var(--pink-bg);
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-pink);
         }
 
-        /* จำลอง กล่องสมบัติพิกเซล (เรทราคา) */
-        .icon-treasure {
-            background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAV0lEQVRYR+2VQQrAIAwEV+ev9K2+40f+Wv+C9QY9lC4tFAW6f5CgEw/D6DCAKkD6CqALgP4C6IcA+XMC5M8JkD8nQP6cAOfOCdB/Z484q3M/xNidw5FwGEYDoAMp4CofX8K/XwAAAABJRU5ErkJggg==;
-        }
-
-        /* จำลอง การ์ดพิกเซล (Bio) */
-        .icon-card {
-            background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAYklEQVRYR+2VQQ7AIAwDc/dfM5/lE1/5m99XgY5IuNCSG2u+DURXPh7HwwCqAOmLAN0A9B9APwTInxMgf06A/DkB8ucEOHdOgP67dcSzzmEIdY4P4XEYDoAMpIDrX/4vBfgB/9fDPw8XfD8AAAAASUVORK5CYII=;
-        }
-
-        /* -----------------------------------------------------------
-           SECTION 2: ปุ่มและสถานะพิกเซล (Responsive)
-           ----------------------------------------------------------- */
-        .main-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 80px; /* เว้นที่ให้ปุ่มขอบจอ */
-            z-index: 10;
-        }
-
-        /* ปุ่มพิกเซลดุ๊กดิ๊ก */
-        .pixel-btn-order {
-            background-color: #ff8fa3;
-            color: white;
-            border: 3px solid white;
-            padding: 15px;
-            border-radius: 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            transition: 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 0 rgba(255, 143, 163, 0.5);
-            animation: btn-shake 2s infinite;
-            text-decoration: none;
-        }
-        .pixel-btn-order:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 0 rgba(255, 143, 163, 0.6);
-        }
-        @keyframes btn-shake {
-            0%, 90% { transform: rotate(0); }
-            92% { transform: rotate(2deg); }
-            94% { transform: rotate(-2deg); }
-            96% { transform: rotate(1deg); }
-            98% { transform: rotate(-1deg); }
-            100% { transform: rotate(0); }
-        }
-        .btn-icon { font-size: 1.5rem; }
-
-        /* การ์ดสถานะแบบ Grid-2 */
-        .grid-status {
+        /* Status Boards - Responsive Grid */
+        .status-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+            margin-bottom: 20px;
         }
+        @media (max-width: 768px) { .status-container { grid-template-columns: 1fr; } }
+
         .card {
-            background: var(--white);
-            border: 3px solid var(--candy-pink-border);
+            background: white;
+            border: 3px solid var(--border-pink);
             border-radius: 15px;
             padding: 15px;
             box-shadow: 0 4px 0 rgba(244, 162, 193, 0.3);
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 500;
+            position: relative;
+        }
+        
+        .status-main { display: flex; align-items: center; gap: 15px; }
+        .q-circle {
+            width: 50px; height: 50px;
+            background-color: #ff8fa3;
+            border-radius: 50%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; font-weight: bold; border: 2px solid white;
+            box-shadow: 0 0 0 2px #ff8fa3;
+        }
+        
+        .progress-bar-container {
+            height: 14px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .progress-candy {
+            height: 100%; width: 75%;
+            background: repeating-linear-gradient(45deg, #ff6b81, #ff6b81 10px, #ffffff 10px, #ffffff 20px);
+            animation: moveCandy 1s linear infinite;
         }
 
-        /* -----------------------------------------------------------
-           SECTION 3: ปุ่มขอบจอ (Responsive & Responsive Buttons)
-           ----------------------------------------------------------- */
-        .floating-controls {
-            width: 100%;
-            max-width: 600px;
+        @keyframes moveCandy { 100% { background-position: 28px 0; } }
+
+        /* Two columns Info - Responsive */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) { .info-grid { grid-template-columns: 1fr; } }
+        
+        .how-to-order li { 
+            margin-bottom: 10px; font-size: 0.85rem; 
+            display: flex; align-items: flex-start; gap: 8px;
+        }
+        .num-icon {
+            background: #ffe0e9; color: var(--text-pink);
+            width: 20px; height: 20px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 0.7rem; font-weight: bold; flex-shrink: 0;
+        }
+
+        .highlight-banner {
+            background: #fff8cc; border: 2px dashed #ffe066;
+            text-align: center; padding: 8px; border-radius: 10px;
+            font-weight: bold; color: #d4a000; margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
+        /* Bottom Actions - Fixed and Responsive */
+        .bottom-actions {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 700px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            z-index: 10;
+            gap: 10px;
+            z-index: 100;
+        }
+        @media (max-width: 500px) {
+            .bottom-actions { flex-direction: column; bottom: 10px; }
+            .btn-main { width: 100%; order: -1; }
+            .action-side-wrap { display: flex; width: 100%; gap: 10px; }
+            .btn-side, .chat-bubble { flex: 1; text-align: center; justify-content: center; }
         }
 
-        .pixel-chat-bubble {
-            background: var(--white);
-            border: 2px solid var(--candy-pink-border);
+        .btn-main {
+            background-color: #ff8fa3;
+            color: white;
+            border: 3px solid white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 143, 163, 0.5);
+            transition: 0.2s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-main:hover { transform: translateY(-3px) scale(1.02); }
+        
+        .chat-bubble {
+            background: white;
+            border: 2px solid var(--border-pink);
             padding: 10px 15px;
             border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            display: flex; align-items: center; gap: 5px;
+            font-size: 0.8rem; font-weight: 600;
+            box-shadow: 0 4px 0 var(--border-pink);
             cursor: pointer;
-            box-shadow: 0 4px 0 var(--candy-pink-border);
-            transition: 0.3s;
-        }
-        .pixel-chat-bubble:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 var(--candy-pink-border);
-        }
-        .chat-icon-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: chat-bounce 3s infinite;
-        }
-        @keyframes chat-bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
-            60% { transform: translateY(-3px); }
-        }
-        /* จำลอง Chat Icon พิกเซล */
-        .pixel-chat-icon { width: 24px; height: 24px; background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAKElEQVRIx2NgoA34//8/AxZMbvD////P4w4w/B8G4f8IAnYfhuG4AwcDAAAPp0sIqN6o1AAAAABJRU5ErkJggg==; }
-
-        .pixel-btn-link {
-            background-color: var(--white);
-            border: 2px solid var(--candy-pink-border);
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-pink-dark);
-            cursor: pointer;
-            box-shadow: 0 4px 0 var(--candy-pink-border);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-        .pixel-btn-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 var(--candy-pink-border);
-        }
-        /* จำลอง Link Icon พิกเซล */
-        .pixel-link-icon { width: 16px; height: 16px; background: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAK0lEQVQ4T2NgoAr4//8/AxZMbvD////P4w4w/B8G4f8IAmIfhuG4w8AFAAASd0sIqN6o1AAAAABJRU5ErkJggg==; }
-
-        /* -----------------------------------------------------------
-           Media Queries: ปรับให้เข้ากับคอมหน้าจอกว้าง
-           ----------------------------------------------------------- */
-        @media (min-width: 900px) {
-            .page-container {
-                padding: 40px;
-                flex-direction: column;
-                justify-content: center;
-            }
-            
-            .header-title {
-                margin: 40px 0;
-            }
-            .pixel-text-shadow {
-                font-size: 3rem;
-            }
-
-            .pixel-services {
-                grid-template-columns: repeat(3, minmax(200px, 1fr));
-                gap: 40px;
-                margin: 60px 0;
-            }
-
-            .main-controls {
-                flex-direction: row; /* เปลี่ยนเป็นแนวนอนบนคอม */
-                justify-content: center;
-                align-items: center;
-                max-width: 800px;
-                gap: 30px;
-            }
-            .pixel-btn-order {
-                flex: 2; /* ปุ่มสั่งใหญ่กว่า */
-                order: 1;
-            }
-            .grid-status {
-                flex: 1; /* แผงสถานะเล็กกว่า */
-                order: 2;
-                grid-template-columns: 1fr; /* แผงสถานะซ้อนกันแนวตั้งบนคอม */
-            }
-
-            .floating-controls {
-                max-width: 800px;
-                margin-top: 40px;
-            }
+            animation: float 2.5s ease-in-out infinite;
         }
 
-        /* -----------------------------------------------------------
-           Media Queries: ปรับให้เข้ากับมือถือหน้าจอเล็ก
-           ----------------------------------------------------------- */
-        @media (max-width: 600px) {
-            .pixel-services {
-                grid-template-columns: 1fr; /* ไอคอนซ้อนกันแนวตั้งบนมือถือเล็ก */
-                gap: 15px;
-            }
-            .navbar {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
+        .hanging-robot {
+            position: absolute; bottom: -15px; right: -10px;
+            width: 40px; height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%235c7cfa" shape-rendering="crispEdges"><path d="M5 2h6v1H5V2zm-1 2h8v7H4V4zm2 2h1v1H6V6zm3 0h1v1H9V6zm-5 6h8v1H4v-1z"/></svg>');
+            background-size: contain;
+            animation: swing 2s ease-in-out infinite alternate;
+            transform-origin: top center;
         }
+        @keyframes swing { 0% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
+
     </style>
 </head>
 <body>
 
-    <div class="page-container">
-        <div class="decor candy-1"></div>
-        <div class="decor star-1"></div>
+    <div class="container">
+        <div class="floating-item float-1" style="color: #ff99cc;">✦</div>
+        <div class="floating-item float-2" style="color: #ade8f4;">✦</div>
+        <div class="floating-item float-3" style="color: #fff3cd;">✦</div>
 
         <nav class="navbar">
             <div class="logo-nav">
-                <div class="pixel-logo-small"></div>
+                <div style="width:24px; height:24px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;%23ff99cc&quot; shape-rendering=&quot;crispEdges&quot;><path d=&quot;M4 4h8v8H4V4z&quot;/></svg>'); background-size: contain;"></div>
                 CandyMarket
             </div>
             <div class="nav-links">
@@ -425,52 +331,84 @@
         </nav>
 
         <div class="header-title">
-            <h1 class="pixel-text-shadow">CandyMarket</h1>
-            <p>Welcome to my shop <span style="animation:decor-float 1s infinite alternate">✨</span><br>บริการเว็บไซต์น่ารักๆ สไตล์พิกเซล...</p>
+            <h1>CandyMarket</h1>
+            <p>✨ Welcome to my shop ✨</p>
         </div>
 
-        <section class="pixel-services">
+        <div class="services-row">
             <div class="service-box">
-                <div class="pixel-icon icon-house"></div>
-                เว็บครบวงจร
-            </div>
-            <div class="service-box">
-                <div class="pixel-icon icon-treasure"></div>
-                เว็บเรทราคา/เติมเกม
+                <div class="pixel-icon icon-web"></div>
+                <div class="service-label">เว็บครบวงจร</div>
             </div>
             <div class="service-box">
-                <div class="pixel-icon icon-card"></div>
-                เว็บไบโอ (Bio)
+                <div class="pixel-icon icon-rate"></div>
+                <div class="service-label">เว็บเรทราคา</div>
             </div>
-        </section>
-
-        <section class="main-controls">
-            <a href="#" class="pixel-btn-order">
-                <span class="btn-icon">📝</span>
-                กดสั่งทำ & ระบุรายละเอียดบรีฟ
-            </a>
-
-            <div class="grid-status">
-                <div class="card card-smallA">A01</div>
-                <div class="card card-smallQ">กำลังรอ...</div>
+            <div class="service-box">
+                <div class="pixel-icon icon-bio"></div>
+                <div class="service-label">เว็บไบโอ (Bio)</div>
             </div>
-        </section>
+        </div>
 
-        <section class="floating-controls">
-            <button class="pixel-btn-link">
-                <div class="pixel-link-icon"></div>
-                🌐 ช่องทางอื่นๆ
-            </button>
-            
-            <div class="pixel-chat-bubble">
-                <div class="chat-icon-box">
-                    <div class="pixel-chat-icon"></div>
+        <div class="status-container">
+            <div class="card status-main">
+                <div class="q-circle"><span>Q:</span>A01</div>
+                <div style="flex-grow:1;">
+                    <div style="display:flex; justify-content:space-between; font-size: 0.9rem; font-weight: 600;">
+                        <span>กำลังลงโค้ด...</span>
+                        <span style="color:var(--text-pink)">75%</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-candy"></div></div>
                 </div>
-                ติดต่อสอบถาม
             </div>
-        </section>
+            <div class="card" style="display:flex; align-items:center; justify-content:center; gap:10px;">
+                <div style="width:30px; height:30px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;%234a4a4a&quot; shape-rendering=&quot;crispEdges&quot;><path d=&quot;M2 4h12v8H2V4zm2 2v4h8V6H4z&quot;/></svg>'); background-size:contain;"></div>
+                <div style="font-size:0.85rem; font-weight:600;">กำลังรอรับบรีฟ ✨</div>
+            </div>
+        </div>
 
+        <div class="info-grid">
+            <div class="card how-to-order">
+                <h3 style="color:var(--text-pink); margin-bottom:15px; display:flex; align-items:center; gap:5px;">📝 How to Order</h3>
+                <ul style="list-style:none;">
+                    <li><div class="num-icon">1</div> <span><b>เลือกแบบ:</b> เลือกสไตล์ที่ชอบ</span></li>
+                    <li><div class="num-icon">2</div> <span><b>ล๊อคคิว:</b> โอนมัดจำเริ่มต้น 129.-</span></li>
+                    <li><div class="num-icon">3</div> <span><b>รอรับงาน:</b> ใช้เวลา 4-6 ชม.</span></li>
+                </ul>
+            </div>
+
+            <div class="card" style="background-color: var(--yellow-bg); border-color: #ffe066;">
+                <h3 style="color:#d4a000; margin-bottom:10px;">⚠️ Notes</h3>
+                <div class="highlight-banner">✨ แก้ฟรี 1 ครั้ง! ✨</div>
+                <p style="font-size:0.75rem; line-height:1.6;">• แก้ไขข้อความ: 5 ฿ / จุด<br>• เปลี่ยนรูป/โลโก้: 29 ฿ / จุด</p>
+                <div class="hanging-robot"></div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+            <h3 style="margin-bottom:15px;">📋 เลือกรายการสั่งทำ</h3>
+            <div style="background: #fffafa; border: 1px solid #ffe0e9; border-radius: 10px; padding: 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-size:0.85rem;">📱 มัดจำทำเว็บ (เรทเริ่มต้น)</div>
+                <div style="color:var(--text-pink); font-weight:bold;">129 ฿</div>
+            </div>
+        </div>
     </div>
 
+    <div class="bottom-actions">
+        <div class="action-side-wrap">
+            <button class="btn-side">🌐 ลิงก์อื่นๆ</button>
+            <div class="chat-bubble">💬 ติดต่อ</div>
+        </div>
+        <button class="btn-main">📝 กดสั่งทำ & ส่งบรีฟ</button>
+    </div>
+
+    <script>
+        function updateCount(btn, change) {
+            let span = btn.parentElement.querySelector('.count-val');
+            let currentVal = parseInt(span.innerText);
+            let newVal = currentVal + change;
+            if (newVal >= 0) span.innerText = newVal;
+        }
+    </script>
 </body>
 </html>
