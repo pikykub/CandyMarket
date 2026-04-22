@@ -3,335 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CandyMarket | Pixel Web Service ✦ Kawaii Embedded</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --pink-main: #ffb7ce;
-            --pink-light: #ffe6f2;
-            --blue-light: #e0f7fa;
-            --yellow-light: #fffde7;
-            --text-dark: #4a4a4a;
-            --text-pink: #ff6b81;
-            /* ปรับขอบให้นุ่มนวลขึ้น แต่น่ารักแบบพิกเซล */
-            --pixel-border: 4px solid #fff; 
-            --box-shadow: 4px 4px 0 var(--pink-main);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Kanit', sans-serif;
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            /* พื้นหลังลายหมากรุกพิกเซลสีพาสเทล (เหมือนรูป) */
-            background-color: var(--pink-light);
-            background-image: linear-gradient(45deg, var(--blue-light) 25%, transparent 25%), 
-                              linear-gradient(-45deg, var(--blue-light) 25%, transparent 25%), 
-                              linear-gradient(45deg, transparent 75%, var(--blue-light) 75%), 
-                              linear-gradient(-45deg, transparent 75%, var(--blue-light) 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-        }
-
-        .container {
-            max-width: 650px;
-            width: 100%;
-            position: relative;
-            padding-bottom: 120px; /* เพิ่มพื้นที่ด้านล่าง */
-        }
-
-        /* === ส่วน SVG และ CSS Pixel Icon Style === */
-        /* ทำให้ SVG ดูแตกแบบพิกเซล */
-        .px-icon {
-            image-rendering: pixelated;
-        }
-        /* ของตกแต่งลอย (สร้างด้วยโค้ด) */
-        .decor-star { position: absolute; fill: var(--text-pink); filter: drop-shadow(2px 2px 0 var(--pink-main)); animation: float-star 5s ease-in-out infinite; }
-        @keyframes float-star { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(15deg); } }
-
-        /* === ส่วนหัวและโลโก้ === */
-        .navbar {
-            background-color: #fff;
-            padding: 12px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: var(--pixel-border);
-            box-shadow: 4px 4px 0 #b2ebf2; /* สีขอบเงาเป็นสีฟ้าพาสเทล */
-            margin-bottom: 25px;
-            position: sticky;
-            top: 10px;
-            z-index: 100;
-        }
-        .logo-nav {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
-            color: var(--text-pink);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .nav-links { display: none; }
-        @media (min-width: 600px) {
-            .nav-links { display: flex; gap: 15px; font-size: 0.85rem; }
-            .nav-links span { cursor: pointer; transition: 0.3s; padding: 5px 8px;}
-            .nav-links span.active { color: white; background-color: var(--pink-main); border-radius: 10px; font-weight: 600; }
-        }
-
-        /* === หัวข้อหลักที่มีประกาย === */
-        .header-title {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        .header-title h1 {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 2rem;
-            color: #fff;
-            text-shadow: 4px 4px 0 var(--text-pink), 6px 6px 0 var(--text-dark);
-            margin-bottom: 15px;
-            animation: sparkle-glow 1.5s infinite;
-        }
-        @media (max-width: 480px) { .header-title h1 { font-size: 1.5rem; } }
-        @keyframes sparkle-glow { 0%, 100% { text-shadow: 4px 4px 0 var(--text-pink), 6px 6px 0 var(--text-dark); } 50% { text-shadow: 4px 4px 0 #fff, 6px 6px 0 var(--text-dark), 0 0 10px var(--pink-main); color: #fff; } }
-        .header-title p { font-size: 0.95rem; font-weight: 500; color: #5c5c5c; line-height: 1.6;}
-        .px-vibe { font-family: 'Press Start 2P', cursive; font-size: 0.6rem; margin-top: 10px; color: var(--pink-main); }
-
-        /* === ส่วนบริการหลัก (3 กล่อง) === */
-        .services-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 35px;
-        }
-        .service-box {
-            background: white;
-            padding: 20px 10px;
-            border: var(--pixel-border);
-            border-radius: 18px;
-            text-align: center;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 6px 0 rgba(0,0,0,0.05);
-            cursor: pointer;
-        }
-        .service-box:hover { transform: scale(1.05) rotate(3deg); background-color: var(--yellow-light); }
-        .service-icon {
-            display: block;
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 10px auto;
-            image-rendering: pixelated;
-        }
-        .service-label { font-size: 0.85rem; font-weight: 600; color: #5c5c5c; }
-
-        /* === กล่องข้อมูลและสถานะ (Status) === */
-        .card {
-            background: white;
-            border: var(--pixel-border);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 20px;
-        }
-        .status-section { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 600px) { .status-section { grid-template-columns: 3fr 1.2fr; } }
-
-        /* กล่องสถานะ 'กำลังลงโค้ด' (เหมือนรูป) */
-        .status-card-full { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 15px; }
-        /* คิว 'Q:A01' */
-        .q-badge { background: var(--pink-main); color: white; padding: 12px; border: 3px solid #fff; border-radius: 12px; font-family: 'Press Start 2P'; font-size: 10px; box-shadow: 2px 2px 0 #f8bbd0; }
-        
-        /* === แถบความคืบหน้าแบบ 'อมยิ้มก้าน' (เหมือนรูป) === */
-        .progress-candy-container { position: relative; height: 25px; background: #fff; border: 3px solid var(--text-dark); border-radius: 15px; overflow: hidden; margin-top: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
-        .progress-candy-bar { height: 100%; width: 75%; background: repeating-linear-gradient(45deg, #81d4fa, #81d4fa 10px, #b2ebf2 10px, #b2ebf2 20px); animation: move-progress 1s linear infinite; }
-        .progress-candy-container::before { content: ''; position: absolute; left: -5px; top: 0; bottom: 0; width: 25px; height: 25px; background: #ff8fa3; border: 3px solid var(--text-dark); border-radius: 50%; z-index: 2; }
-        @keyframes move-progress { 0% {background-position: 0 0;} 100% {background-position: 28px 0;} }
-
-        /* กล่องสถานะเล็ก 'รอรับบรีฟ' (เหมือนรูป) */
-        .status-card-mini { text-align: center; background-color: var(--blue-light); border-color: #b2ebf2; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-
-        /* === ส่วน 'ตัวอย่างผลงานเว็บ' (เหมือนรูป) === */
-        .portfolio-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 15px 0; }
-        .portfolio-item { min-width: 160px; height: 110px; background: white; border: var(--pixel-border); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: #81d4fa; cursor: pointer; transition: 0.2s; box-shadow: 4px 4px 0 #b2ebf2; }
-        .portfolio-item:hover { transform: translateY(-5px) rotate(2deg); border-color: var(--text-pink); color: var(--text-pink); }
-        
-        /* ส่วนย่อหน้าผลงาน */
-        .screenshot-frame { width: 90%; height: 85%; border-radius: 10px; position: relative; overflow: hidden; }
-        .portfolio-item-cafe .screenshot-frame { background-color: #ffedeb; }
-        .portfolio-item-cafe .screenshot-frame::after { content: 'CAFE'; position: absolute; font-family: 'Press Start 2P'; font-size: 10px; color: #ff8fa3; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        /* === ส่วนข้อมูลวิธีการสั่งซื้อ (How to Order) และ Note === */
-        .info-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 25px; }
-        @media (min-width: 600px) { .info-grid { grid-template-columns: 1.3fr 1fr; } }
-        .how-to-list { list-style: none; }
-        .how-to-list li { font-size: 0.9rem; line-height: 1.8; color: #5c5c5c; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .how-to-list li svg { width: 18px; height: 18px; fill: var(--pink-main); }
-
-        /* กล่อง Note สีเหลือง (เหมือนรูป) */
-        .important-notes { background-color: var(--yellow-light); border-color: #fff9c4; }
-        .highlight-banner { background: #fff; color: #fbc02d; border: 3px dashed #fff9c4; padding: 10px; text-align: center; font-weight: bold; font-size: 0.85rem; margin-bottom: 15px; border-radius: 12px; animation: pulse-banner 1s infinite alternate; }
-        @keyframes pulse-banner { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
-
-        /* === เรทราคาและแอดออน === */
-        .price-card { background-color: #fff; border-color: var(--blue-light); }
-        .order-row { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 12px 0; border-bottom: 2px dashed #eee; }
-        .price-label-full { font-weight: bold; color: var(--text-pink); font-family: 'Press Start 2P'; font-size: 0.7rem; }
-
-        /* === ปุ่มสั่งทำด้านล่างที่ 'หนุบหนิบ' และ 'เด้ง' (เหมือนรูป) === */
-        .bottom-actions { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px); padding: 15px; display: flex; gap: 15px; border-top: 4px solid var(--pink-main); z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .btn-main { flex: 2; background: var(--pink-main); color: white; border: 4px solid #fff; padding: 18px; font-weight: bold; font-family: 'Kanit'; font-size: 1rem; border-radius: 18px; box-shadow: 4px 4px 0 #f8bbd0; cursor: pointer; transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: bounce-wiggle-btn 3s infinite ease-in-out; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .btn-main:hover { transform: scale(1.05) translateY(-3px) rotate(1deg); box-shadow: 6px 6px 0 #f8bbd0; animation-play-state: paused;}
-        @keyframes bounce-wiggle-btn { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } 75% { transform: translateY(-3px) rotate(1deg); } }
-        .btn-chat { flex: 1; background: var(--blue-light); color: #4dd0e1; border: 4px solid #fff; padding: 18px; border-radius: 18px; display: flex; justify-content: center; align-items: center; box-shadow: 4px 4px 0 #b2ebf2; cursor: pointer; }
-
-    </style>
+    <title>Candy Market Replica</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <svg class="decor-star" width="30" height="30" viewBox="0 0 10 10" style="top: 10%; left: 5%; animation-delay: 1s;"><rect x="4" y="0" width="2" height="10" /><rect x="0" y="4" width="10" height="2" /></svg>
-    <svg class="decor-star" width="25" height="25" viewBox="0 0 10 10" style="bottom: 20%; right: 7%; animation-delay: 2s;"><rect x="4" y="0" width="2" height="10" /><rect x="0" y="4" width="10" height="2" /></svg>
-    <svg class="decor-star" width="35" height="35" viewBox="0 0 10 10" style="top: 15%; right: 3%; animation-delay: 0.5s; fill: var(--blue-light);"><rect x="4" y="0" width="2" height="10" /><rect x="0" y="4" width="10" height="2" /></svg>
+    <div class="main-container">
+        <header>
+            <div class="logo">🍭 CandyMarket</div>
+            <nav>
+                <span>หน้าแรก</span>
+                <span>ผลงาน</span>
+                <span>วิธีการสั่ง</span>
+                <span>ติดต่อเรา</span>
+            </nav>
+        </header>
 
-    <div class="container">
-        
-        <nav class="navbar">
-            <div class="logo-nav">
-                <svg class="px-icon" width="24" height="24" viewBox="0 0 16 16"><path d="M4 4h8v2H4zM2 6h12v6H2z" fill="#fbc02d"/><path d="M5 0h6v2H5z" fill="#f57f17"/><path d="M6 10h4v2H6z" fill="#fff"/></svg>
-                CANDY MARKET
+        <section class="hero">
+            <h1>CandyMarket</h1>
+            <p>Welcome to my shop ✨</p>
+            <div class="service-cards">
+                <div class="card">เว็บครบวงจร</div>
+                <div class="card">เว็บเรทราคา/เติมเกม</div>
+                <div class="card">เว็บไบโอ (Bio)</div>
             </div>
-            <div class="nav-links">
-                <span class="active">HOME</span>
-                <span>WORKS</span>
-                <span>ORDER</span>
-            </div>
-        </nav>
+        </section>
 
-        <div class="header-title">
-            <h1>CANDY MARKET</h1>
-            <p>✦ สั่งทำเว็บไซต์พิกเซลสุดคิ้วท์ นุบนิบหัวใจ ✦<br>บริการเว็บไซต์น่ารักๆ สไตล์พิกเซล...</p>
-            <div class="px-vibe">PIXEL KAWAII SERVICE</div>
-        </div>
-
-        <div class="services-row">
-            <div class="service-box">
-                <svg class="service-icon" viewBox="0 0 16 16"><path d="M8 1l7 7h-2v7H3V8H1l7-7z" fill="#ffb7ce"/><rect x="6" y="9" width="4" height="6" fill="#f8bbd0"/><rect x="7" y="5" width="2" height="2" fill="#fff"/></svg>
-                <div class="service-label">เว็บครบวงจร</div>
-            </div>
-            <div class="service-box">
-                <svg class="service-icon" viewBox="0 0 16 16"><rect x="1" y="4" width="14" height="10" fill="#fbc02d"/><rect x="2" y="5" width="12" height="4" fill="#f9a825"/><rect x="6" y="8" width="4" height="2" fill="#fff"/></svg>
-                <div class="service-label">เติมเกม/เรทราคา</div>
-            </div>
-            <div class="service-box">
-                <svg class="service-icon" viewBox="0 0 16 16"><circle cx="8" cy="6" r="4" fill="#81d4fa"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6H2z" fill="#4dd0e1"/><rect x="5" y="4" width="2" height="2" fill="#fff"/></svg>
-                <div class="service-label">เว็บไบโอ (Bio)</div>
-            </div>
-        </div>
-
-        <div class="status-section">
-            <div class="card status-card-full">
-                <div class="q-badge">Q:A01</div>
-                
-                <div style="flex-grow: 1; padding: 0 10px;">
-                    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: #5c5c5c;">
-                        <span>กำลังลงโค้ดดุ๊กดิ๊ก...💻</span>
-                        <span style="color: var(--text-pink);">75%</span>
-                    </div>
-                    <div class="progress-candy-container">
-                        <div class="progress-candy-bar"></div>
-                    </div>
+        <section class="status-box">
+            <div class="progress-container">
+                <div class="label">กำลังลงโค้ด 💻 75%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
                 </div>
+            </div>
+        </section>
 
-                <svg class="px-icon" width="60" height="60" viewBox="0 0 16 16"><rect x="3" y="2" width="10" height="8" fill="#4dd0e1"/><rect x="4" y="3" width="8" height="6" fill="#fff"/><circle cx="6" cy="5" r="1" fill="#ff6b81"/><circle cx="10" cy="5" r="1" fill="#ff6b81"/><rect x="6" y="10" width="4" height="5" fill="#81d4fa"/><rect x="1" y="11" width="2" height="3" fill="#ffb7ce"/><rect x="13" y="11" width="2" height="3" fill="#ffb7ce"/></svg>
-            </div>
-
-            <div class="card status-card-mini">
-                <svg class="px-icon" width="50" height="50" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="10" fill="#ffb7ce"/><path d="M1 3l7 5 7-5" fill="none" stroke="#fff" stroke-width="2"/></svg>
-                <div style="font-size: 0.8rem; font-weight: 600; margin-top: 5px; color: #4dd0e1;">รอรับบรีฟค่าา</div>
-            </div>
-        </div>
-
-        <div style="font-weight: 600; margin: 20px 0; display: flex; align-items: center; gap: 10px; color: #5c5c5c;">
-            <svg class="decor-star" width="24" height="24" viewBox="0 0 10 10"><rect x="4" y="0" width="2" height="10" /><rect x="0" y="4" width="10" height="2" /></svg>
-            ตัวอย่างผลงานสุดปัง
-        </div>
-        
-        <div class="portfolio-scroll">
-            <div class="portfolio-item portfolio-item-cafe">
-                <div class="screenshot-frame"></div>
-            </div>
-            <div class="portfolio-item" style="background-color: #e3f2fd;">
-                <div class="screenshot-frame"></div>
-            </div>
-            <div class="portfolio-item" style="background-color: #fffde7;">
-                <div class="screenshot-frame"></div>
-            </div>
-        </div>
-
-        <div class="info-grid">
-            <div class="card">
-                <h3 style="color: var(--text-pink); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-                    <svg viewBox="0 0 16 16"><path d="M14 1l1 1-2 2-1-1 2-2zM0 16h4L13 7l-4-4L0 12v4z" fill="#ffb7ce"/></svg>
-                    วิธีการสั่งทำเว็บ
-                </h3>
-                <ul class="how-to-list">
-                    <li><svg viewBox="0 0 16 16"><path d="M1 8l7-7 7 7-7 7-7-7z"/></svg> เลือกแบบที่ใช่ & เตรียมบรีฟ</li>
-                    <li><svg viewBox="0 0 16 16"><path d="M1 8l7-7 7 7-7 7-7-7z"/></svg> โอนมัดจำคนเก่ง เริ่มต้น 129.-</li>
-                    <li><svg viewBox="0 0 16 16"><path d="M1 8l7-7 7 7-7 7-7-7z"/></svg> รอรับความปังภายใน 4-6 ชม.</li>
-                    <li><svg viewBox="0 0 16 16"><path d="M1 8l7-7 7 7-7 7-7-7z"/></svg> ตรวจงาน (แก้ฟรีได้ 1 รอบน้า)</li>
-                    <li><svg viewBox="0 0 16 16"><path d="M1 8l7-7 7 7-7 7-7-7z"/></svg> ชำระส่วนที่เหลือ & รับลิงก์เย้!</li>
+        <section class="info-grid">
+            <div class="how-to-order">
+                <h3>📝 How to Order</h3>
+                <ul>
+                    <li>🎨 เลือกแบบที่ใช่</li>
+                    <li>💰 ล็อคคิว/โอนมัดจำ</li>
+                    <li>🕒 รอรับความปัง (4-6 ชม.)</li>
                 </ul>
             </div>
-            <div class="card important-notes">
-                <h3 style="color: #fbc02d; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-                    <svg viewBox="0 0 16 16"><path d="M8 1l7 14H1L8 1zM7 5v5h2V5H7zm0 6v2h2v-2H7z" fill="#ffeb3b"/></svg>
-                    Note สำคัญน้า
-                </h3>
-                <div class="highlight-banner">แก้ฟรี 1 ครั้งก่อนส่งงาน!</div>
-                <div style="font-size: 0.8rem; color: #5c5c5c; line-height: 1.6;">
-                    • แก้ข้อความ: 5฿ / จุด<br>
-                    • เปลี่ยนรูป: 29฿ / จุด<br>
-                    • แก้โครงสร้าง: 39฿ / จุด
-                </div>
+            <div class="important-notes">
+                <h3>⚠️ Important Notes</h3>
+                <div class="free-badge">แก้ฟรี 1 ครั้ง!</div>
+                <p>ค่าบริการเพิ่มเติม...</p>
             </div>
-        </div>
+        </section>
 
-        <div class="card price-card">
-            <h3 style="margin-bottom: 20px; font-size: 1.1rem; color: #4dd0e1; display: flex; align-items: center; gap: 8px;">
-                <svg viewBox="0 0 16 16" style="fill: #81d4fa; width: 28px; height: 28px;"><rect x="1" y="1" width="14" height="14"/><rect x="3" y="3" width="10" height="2"/><rect x="3" y="6" width="10" height="2"/><rect x="3" y="9" width="10" height="2"/></svg>
-                เรทราคาทำเว็บไซต์
-            </h3>
-            <div class="order-row">
-                <span>ไม่เกิน 200 บรรทัด</span>
-                <span class="price-label-full">129.-</span>
-            </div>
-            <div class="order-row">
-                <span>ขนาด 400+ บรรทัด</span>
-                <span class="price-label-full">179.-</span>
-            </div>
-            <div class="order-row" style="border-bottom: none;">
-                <span>ขนาด 600+ บรรทัด</span>
-                <span class="price-label-full">200.-</span>
-            </div>
+        <div class="footer-action">
+            <button class="order-btn">📝 กดสั่งทำ & ระบุรายละเอียดบรีฟ</button>
         </div>
-    </div>
-
-    <div class="bottom-actions">
-        <button class="btn-chat">
-            💬
-        </button>
-        <button class="btn-main">
-            <svg class="px-icon" width="20" height="20" viewBox="0 0 16 16"><path d="M4 4h8v2H4zM2 6h12v6H2z" fill="#fff"/><path d="M5 0h6v2H5z" fill="#fff9c4"/></svg>
-            กดสั่งทำ & ระบุรายละเอียดบรีฟ
-        </button>
     </div>
 
 </body>
