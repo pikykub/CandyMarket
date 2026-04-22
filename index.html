@@ -5,183 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CandyMarket | ระบบเช่าเว็บไซต์</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&family=Itim&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #fff5f7; font-family: 'Kanit', sans-serif; color: #5a5a5a; overflow-x: hidden; }
+        body { background-color: #fff5f7; font-family: 'Kanit', sans-serif; overflow-x: hidden; color: #5a5a5a; }
         .grid-bg { background-image: radial-gradient(#ffcad4 1.5px, transparent 1.5px); background-size: 25px 25px; }
         .candy-text { background: linear-gradient(to right, #ff8da1, #8ec5fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .user-name-animate { background: linear-gradient(-45deg, #7db9f9, #f07ab0, #ffffff, #bfe9ff); background-size: 300% 300%; animation: gradientMove 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
-
-        .banner-wrapper { display: flex; overflow-x: auto; gap: 10px; padding: 5px 0; scrollbar-width: none; }
-        .mini-banner-item { flex: 0 0 110px; height: 75px; background: white; border-radius: 18px; border: 2px solid #fff; box-shadow: 0 5px 15px rgba(240, 122, 176, 0.1); position: relative; overflow: hidden; }
-        .demo-view-btn { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.9); color: #f07ab0; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 20px; white-space: nowrap; cursor: pointer; }
-
-        .contact-overlay, .auth-overlay { position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4); backdrop-filter: blur(8px); z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .pop-card { background: white; width: 100%; max-width: 350px; border-radius: 3rem; padding: 30px; border: 5px solid #fff; box-shadow: 0 20px 40px rgba(240, 122, 176, 0.2); transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .animate-rainbow { background: linear-gradient(to right, #ff2400, #e8b71d, #1de840, #1ddde8, #dd1de8, #ff2400); background-size: 400%; animation: move 3s linear infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        @keyframes move { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .overlay { position: fixed; inset: 0; background: rgba(255, 182, 193, 0.4); backdrop-filter: blur(8px); z-index: 10005; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .pop-card { background: white; width: 100%; max-width: 350px; border-radius: 3rem; padding: 30px; border: 5px solid #fff; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: scale(0.8); }
         .pop-card.show { transform: scale(1); }
-        .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; background: #fffafa; margin-bottom: 12px; outline: none; font-size: 14px; }
-        .control-panel { position: absolute; top: 75px; right: 20px; width: 280px; background: white; border-radius: 2.5rem; padding: 20px; box-shadow: 0 15px 35px rgba(240, 122, 176, 0.2); border: 4px solid #fff; display: none; z-index: 10000; }
-        
-        #process-loader, #loader { position: fixed; inset: 0; background: #fff5f7; z-index: 99999; display: flex; justify-content: center; align-items: center; }
-        .cookie-spin i { font-size: 60px; color: #f07ab0; animation: spin 1s infinite linear; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .auth-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 2px solid #fff0f3; margin-bottom: 12px; outline: none; }
+        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; cursor: pointer; transition: 0.2s; }
+        .menu-item:hover { background: #fff0f3; transform: translateX(5px); }
+        .loader-full { position: fixed; inset: 0; background: #fff5f7; z-index: 99999; display: flex; justify-content: center; align-items: center; }
+        .spin-icon { animation: fa-spin 2s infinite linear; color: #f07ab0; font-size: 50px; }
     </style>
 </head>
 <body class="grid-bg pb-20">
 
-    <div id="loader"><div class="cookie-spin"><i class="fa-solid fa-cookie-bite"></i></div></div>
+    <div id="loader" class="loader-full"><i class="fa-solid fa-cookie-bite spin-icon"></i></div>
+    <div id="process-loader" class="overlay" style="z-index: 20002;"><i class="fa-solid fa-cookie-bite spin-icon"></i></div>
+
+    <div id="candy-toast" class="fixed top-5 left-1/2 -translate-x-1/2 -translate-y-40 w-[90%] max-w-[350px] bg-white rounded-[25px] p-4 shadow-xl border-2 border-white z-[20001] transition-all duration-500 flex items-center gap-4">
+        <div id="toast-icon-bg" class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0"></div>
+        <div><h4 id="toast-title" class="font-black text-sm"></h4><p id="toast-msg" class="text-xs text-gray-500"></p></div>
+    </div>
 
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
         <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
         <div id="auth-section"></div>
-
-        <div id="user-panel" class="control-panel">
-            <div class="px-2 py-3 border-b border-pink-50 mb-2">
-                <div class="flex items-center gap-2">
-                    <div class="w-10 h-10 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-cookie text-xl"></i></div>
-                    <div>
-                        <h4 id="menu-nickname" class="user-name-animate leading-tight text-lg">Guest</h4>
-                        <div class="text-[9px] font-black text-pink-400">UID: <span id="menu-uid">--------</span></div>
-                    </div>
-                </div>
+        <div id="user-panel" class="fixed top-20 right-5 w-72 bg-white rounded-[2.5rem] p-5 shadow-2xl border-4 border-white hidden z-[10000]">
+            <div class="border-b pb-3 mb-3">
+                <h4 id="menu-nickname" class="animate-rainbow text-lg font-black">Guest</h4>
+                <p class="text-[9px] text-gray-300 font-bold uppercase">UID: <span id="menu-uid" class="text-pink-300">---</span></p>
             </div>
-            <div class="bg-yellow-50 rounded-2xl p-3 mb-4 border border-yellow-100">
-                <p class="text-[9px] font-black text-yellow-500 uppercase tracking-widest">Balance: ฿<span id="menu-balance">0</span></p>
+            <div class="bg-yellow-50 p-3 rounded-2xl mb-3 flex justify-between items-center border border-yellow-100">
+                <div><p class="text-[9px] font-black text-yellow-500 uppercase">Balance</p><h4 class="text-xl font-black text-yellow-600">฿<span id="menu-balance">0</span></h4></div>
+                <button onclick="toggleModal('topup-modal', true)" class="w-8 h-8 rounded-xl bg-yellow-400 text-white shadow-md">+</button>
             </div>
-            <div onclick="openProfile()" class="flex items-center gap-3 p-2 hover:bg-pink-50 rounded-xl cursor-pointer transition">
-                <i class="fa-solid fa-user-gear text-pink-400"></i> <span class="text-sm font-bold">จัดการโปรไฟล์</span>
-            </div>
-            <button onclick="signOut(auth).then(()=>location.reload())" class="w-full mt-4 py-2 text-[10px] font-black text-gray-300 uppercase">Logout</button>
+            <div onclick="toggleModal('profile-modal', true)" class="menu-item"><i class="fa-solid fa-user-gear text-pink-400"></i><span>จัดการโปรไฟล์</span></div>
+            <div onclick="toggleModal('status-modal', true)" class="menu-item"><i class="fa-solid fa-desktop text-blue-400"></i><span>สถานะเว็บ</span></div>
+            <button onclick="signOutUser()" class="w-full mt-3 text-[10px] font-black text-gray-400 hover:text-pink-400 uppercase tracking-widest">Logout</button>
         </div>
     </header>
 
-    <div class="bg-white border-2 border-pink-50 rounded-3xl p-4 mx-5 mt-4 flex items-center gap-4 shadow-sm">
-        <div class="w-10 h-10 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-500 shrink-0"><i class="fa-solid fa-bullhorn"></i></div>
-        <marquee class="text-sm font-bold text-gray-500" id="announce-text">ยินดีต้อนรับสู่ CandyMarket แหล่งรวมเว็บที่สดใสที่สุด! ✨</marquee>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 px-5 mt-6 mb-4">
-        <div class="bg-white p-5 rounded-[2.5rem] border-2 border-pink-50 shadow-sm text-center">
-            <p class="text-pink-300 text-[9px] font-black uppercase mb-1">ลูกค้าที่น่ารัก</p>
-            <h4 class="text-2xl font-black text-[#f07ab0]" id="stat-users">0</h4>
+    <main class="p-5">
+        <div class="rounded-[3rem] bg-gradient-to-br from-blue-100 via-pink-100 to-pink-200 p-10 shadow-xl border-4 border-white mb-6">
+            <h3 class="text-5xl font-black italic text-white drop-shadow-md">CANDY RENTAL</h3>
         </div>
-        <div class="bg-white p-5 rounded-[2.5rem] border-2 border-blue-50 shadow-sm text-center">
-            <p class="text-blue-300 text-[9px] font-black uppercase mb-1">จำนวนสินค้า</p>
-            <h4 class="text-2xl font-black text-[#7db9f9]" id="stat-prods">0</h4>
-        </div>
-    </div>
 
-    <div class="flex justify-center mb-6">
-        <div class="w-16 h-16 rounded-full border-4 border-pink-100 p-1 bg-white shadow-md">
-            <img src="https://i.ibb.co/3yk7vXm/cookie-icon.png" class="w-full h-full object-contain">
-        </div>
-    </div>
-
-    <div class="px-5 mb-8">
-        <h3 class="text-sm font-black text-gray-500 mb-3 flex items-center gap-2"><i class="fa-solid fa-star text-yellow-400"></i> รายการแนะนำ</h3>
-        <div class="banner-wrapper">
-            <div class="mini-banner-item"><img src="https://i.pinimg.com/736x/8a/0a/60/8a0a60424578508e80556c4293f019f6.jpg"><div class="demo-view-btn">มุมมองทดลอง</div></div>
-            <div class="mini-banner-item"><img src="https://i.pinimg.com/736x/21/72/71/2172718e874944d187768e1a6c420215.jpg"><div class="demo-view-btn">มุมมองทดลอง</div></div>
-            <div class="mini-banner-item"><img src="https://i.pinimg.com/736x/b2/80/7e/b2807e36618e7e17c917228a6f87f61e.jpg"><div class="demo-view-btn">มุมมองทดลอง</div></div>
-        </div>
-    </div>
-
-    <div id="profile-modal" class="auth-overlay">
-        <div class="pop-card">
-            <h2 class="text-2xl font-black text-center mb-6 candy-text italic uppercase">My Profile</h2>
-            <div class="flex flex-col items-center mb-4">
-                <img id="profile-img-view" src="https://i.pinimg.com/736x/8b/11/d8/8b11d886f68c3746c87f607c3c2e6f4a.jpg" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover bg-pink-50">
-                <p class="text-[10px] text-gray-400 mt-2 font-black">UID: <span id="profile-uid-val" class="text-pink-400">--------</span></p>
+        <div class="grid grid-cols-2 gap-4 mb-10">
+            <div class="bg-white p-5 rounded-[2.5rem] text-center border-2 border-pink-50">
+                <p class="text-[9px] font-black text-pink-300 uppercase">Customers</p>
+                <h4 class="text-3xl font-black text-pink-500" id="stat-users">0</h4>
             </div>
-            <div class="space-y-2">
-                <label class="text-[9px] font-black text-pink-400 ml-3">Username (ดั้งเดิม)</label>
-                <input type="text" id="profile-user-static" class="auth-input opacity-50" readonly>
-                
-                <label class="text-[9px] font-black text-pink-400 ml-3">ชื่อเล่นใหม่</label>
-                <input type="text" id="edit-nickname" class="auth-input" placeholder="Nickname...">
-                
-                <label class="text-[9px] font-black text-pink-400 ml-3">รหัสเดิม (เพื่อเปลี่ยนรหัสใหม่)</label>
-                <input type="password" id="old-password" class="auth-input" placeholder="Old Password...">
-                <input type="password" id="new-password" class="auth-input" placeholder="New Password...">
-                
-                <button id="save-profile" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white w-full py-4 rounded-2xl font-black shadow-lg">บันทึกข้อมูล</button>
+            <div class="bg-white p-5 rounded-[2.5rem] text-center border-2 border-blue-50">
+                <p class="text-[9px] font-black text-blue-300 uppercase">Products</p>
+                <h4 class="text-3xl font-black text-blue-500" id="stat-prods">0</h4>
             </div>
-            <button onclick="closeModal('profile-modal')" class="block mx-auto mt-4 text-gray-300 text-[10px] font-black uppercase">Close</button>
         </div>
-    </div>
+
+        <h3 class="font-black text-gray-600 mb-6 px-2"><i class="fa-solid fa-gift text-pink-400"></i> รายการแนะนำ</h3>
+        <div id="product-container" class="grid grid-cols-2 gap-4"></div>
+    </main>
+
+    <div id="auth-modal" class="overlay"><div class="pop-card">
+        <h2 id="auth-title" class="text-2xl font-black text-center mb-6 candy-text italic">SIGN IN</h2>
+        <input type="text" id="user-input" class="auth-input" placeholder="Username">
+        <input type="password" id="pass-input" class="auth-input" placeholder="Password">
+        <button id="auth-btn" class="w-full py-4 bg-gradient-to-r from-pink-400 to-yellow-400 text-white rounded-2xl font-black shadow-lg">ยืนยัน</button>
+        <p id="toggle-auth" class="text-center mt-4 text-xs text-pink-400 cursor-pointer">สลับโหมด สมัคร/เข้าสู่ระบบ</p>
+    </div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyBJEO4o365sI4XFZD4IRIaDjetIMNtCMwU",
-            authDomain: "candy-market-system.firebaseapp.com",
-            databaseURL: "https://candy-market-system-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "candy-market-system",
-            storageBucket: "candy-market-system.firebasestorage.app",
-            messagingSenderId: "955686244672",
-            appId: "1:955686244672:web:484fdc3d7192d3074c2aa5"
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const conf = { /* ...ใส่ Config เดิมของคุณ... */ };
+        const app = initializeApp(conf); const auth = getAuth(app); const db = getDatabase(app);
+        let userData = null;
+
+        // UI Helpers
+        const $ = id => document.getElementById(id);
+        window.toggleModal = (id, show) => {
+            const m = $(id); m.style.display = show ? 'flex' : 'none';
+            setTimeout(() => m.querySelector('.pop-card').classList.toggle('show', show), 10);
+            if(show) $('user-panel').classList.add('hidden');
         };
 
-        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
+        window.showAlert = (title, msg, type = 'success') => {
+            const t = $('candy-toast');
+            $('toast-title').innerText = title; $('toast-msg').innerText = msg;
+            $('toast-icon-bg').className = `w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${type === 'success' ? 'bg-green-100 text-green-500' : 'bg-red-100 text-red-500'}`;
+            t.classList.remove('-translate-y-40'); setTimeout(() => t.classList.add('-translate-y-40'), 3000);
+        };
 
-        // ดึงสถิติจริง
-        onValue(ref(db, 'users'), (s) => document.getElementById('stat-users').innerText = s.exists() ? Object.keys(s.val()).length : 0);
-        onValue(ref(db, 'products'), (s) => document.getElementById('stat-prods').innerText = s.exists() ? Object.keys(s.val()).length : 0);
-        onValue(ref(db, 'settings/announcement'), (s) => { if(s.exists()) document.getElementById('announce-text').innerText = s.val(); });
+        // Auth Logic
+        let isLogin = true;
+        $('toggle-auth').onclick = () => { isLogin = !isLogin; $('auth-title').innerText = isLogin ? "SIGN IN" : "REGISTER"; };
+        $('auth-btn').onclick = async () => {
+            const u = $('user-input').value, p = $('pass-input').value;
+            $('process-loader').style.display = 'flex';
+            try {
+                const email = u.includes('@') ? u : `${u}@candymarket.com`;
+                if(isLogin) await signInWithEmailAndPassword(auth, email, p);
+                else {
+                    const res = await createUserWithEmailAndPassword(auth, email, p);
+                    await set(ref(db, `users/${res.user.uid}`), { username: u, balance: 0, uid: Date.now() });
+                }
+                toggleModal('auth-modal', false);
+            } catch(e) { showAlert("Error", "ข้อมูลไม่ถูกต้อง", "error"); }
+            $('process-loader').style.display = 'none';
+        };
 
-        onAuthStateChanged(auth, (user) => {
-            const section = document.getElementById('auth-section');
+        onAuthStateChanged(auth, user => {
             if(user) {
-                onValue(ref(db, `users/${user.uid}`), (snap) => {
-                    const data = snap.val() || {};
-                    document.getElementById('menu-nickname').innerText = data.nickname || data.username || "Guest";
-                    document.getElementById('menu-uid').innerText = data.uid || "--------";
-                    document.getElementById('menu-balance').innerText = data.balance || 0;
-                    
-                    // ดึงข้อมูลใส่ Modal
-                    document.getElementById('profile-uid-val').innerText = data.uid || "N/A";
-                    document.getElementById('profile-user-static').value = data.username || "";
-                    document.getElementById('edit-nickname').value = data.nickname || "";
+                onValue(ref(db, `users/${user.uid}`), snap => {
+                    userData = snap.val();
+                    $('auth-section').innerHTML = `<button onclick="$('user-panel').classList.toggle('hidden')" class="w-12 h-12 rounded-full border-2 border-pink-200 bg-white text-pink-400 shadow-md flex items-center justify-center"><i class="fa-solid fa-cookie-bite"></i></button>`;
+                    $('menu-nickname').innerText = userData.username;
+                    $('menu-balance').innerText = userData.balance;
                 });
-                section.innerHTML = `<button onclick="togglePanel()" class="w-12 h-12 rounded-full bg-white border-2 border-pink-200 text-pink-400 flex items-center justify-center shadow-md"><i class="fa-solid fa-cookie-bite text-2xl"></i></button>`;
             } else {
-                section.innerHTML = `<button onclick="openModal('auth-modal')" class="bg-gradient-to-r from-[#f07ab0] to-[#ffb347] text-white px-7 py-2.5 rounded-full text-xs font-black shadow-lg">Sign In</button>`;
+                $('auth-section').innerHTML = `<button onclick="toggleModal('auth-modal', true)" class="bg-pink-400 text-white px-6 py-2 rounded-full font-black shadow-lg">Sign In</button>`;
             }
         });
 
-        // ระบบบันทึกแบบบังคับใส่รหัสเดิม
-        document.getElementById('save-profile').onclick = async () => {
-            const user = auth.currentUser;
-            const newNick = document.getElementById('edit-nickname').value;
-            const oldPass = document.getElementById('old-password').value;
-            const newPass = document.getElementById('new-password').value;
+        // Load Products
+        onValue(ref(db, 'products'), snap => {
+            const cont = $('product-container'); cont.innerHTML = '';
+            snap.forEach(c => {
+                const p = c.val();
+                cont.innerHTML += `
+                <div class="bg-white rounded-[2.5rem] p-4 shadow-sm border-2 border-pink-50">
+                    <img src="${p.image}" class="rounded-3xl mb-3 aspect-square object-cover">
+                    <h4 class="font-black text-sm truncate">${p.name}</h4>
+                    <p class="text-pink-500 font-black text-xl mb-3">฿${p.price}</p>
+                    <button onclick="rent('${c.key}', ${p.price})" class="w-full py-2 bg-pink-50 text-pink-500 rounded-xl font-black text-[10px]">เช่าเว็บ</button>
+                </div>`;
+            });
+        });
 
-            try {
-                await update(ref(db, `users/${user.uid}`), { nickname: newNick });
-                if(newPass && oldPass) {
-                    const cred = EmailAuthProvider.credential(user.email, oldPass);
-                    await reauthenticateWithCredential(user, cred);
-                    await updatePassword(user, newPass);
-                    alert("บันทึกชื่อและเปลี่ยนรหัสผ่านสำเร็จ!");
-                } else {
-                    alert("บันทึกชื่อเรียบร้อย!");
-                }
-                closeModal('profile-modal');
-            } catch (e) { alert("Error: " + (e.code === 'auth/wrong-password' ? "รหัสเดิมผิดนะก๊ะ" : e.message)); }
-        };
-
-        window.openModal = (id) => { document.getElementById(id).style.display = 'flex'; setTimeout(() => document.getElementById(id).querySelector('.pop-card').classList.add('show'), 10); };
-        window.closeModal = (id) => { document.getElementById(id).querySelector('.pop-card').classList.remove('show'); setTimeout(() => document.getElementById(id).style.display = 'none', 300); };
-        window.togglePanel = () => { const p = document.getElementById('user-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; };
-        window.openProfile = () => { document.getElementById('user-panel').style.display = 'none'; window.openModal('profile-modal'); };
-
-        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.display='none'; }, 600); };
+        window.signOutUser = () => signOut(auth).then(() => location.reload());
+        window.onload = () => setTimeout(() => $('loader').style.display='none', 500);
     </script>
 </body>
 </html>
