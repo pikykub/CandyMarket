@@ -3,837 +3,674 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CandyMarket - Pixel Shop</title>
+    <title>CandyMarket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* Base Styles - Use a Pixelated Font */
-        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-        
-        body {
+        :root {
+            --pink-bg: #ffe6f2;
+            --blue-bg: #dcf2f5;
+            --yellow-bg: #fffbe6;
+            --border-pink: #f4a2c1;
+            --text-dark: #4a4a4a;
+            --text-pink: #d66089;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'VT323', monospace;
-            background-color: #ffe0f0; /* Pastel Pink background from image */
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(180deg, var(--pink-bg) 0%, var(--blue-bg) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Float background candy patterns */
-        .background-candy {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(#ffb3e6 1px, transparent 1px),
-                radial-gradient(#b3e0ff 1px, transparent 1px);
-            background-size: 50px 50px;
-            background-position: 0 0, 25px 25px;
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        /* Fake Browser Window */
-        .browser-window {
-            width: 90%;
-            max-width: 1200px;
-            border: 6px solid #ffb3e6;
-            border-radius: 12px;
-            background-color: #fff;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Fake Browser Bar */
-        .browser-bar {
-            background-color: #eee;
-            padding: 10px;
-            border-bottom: 2px solid #ccc;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .browser-controls {
-            display: flex;
-            gap: 5px;
-        }
-
-        .browser-control {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background-color: #ccc;
-        }
-
-        .browser-control.red { background-color: #ff5f57; }
-        .browser-control.yellow { background-color: #ffbd2e; }
-        .browser-control.green { background-color: #28c940; }
-
-        .browser-url {
-            flex-grow: 1;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: #555;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        .browser-actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .browser-action {
-            color: #777;
-            font-size: 18px;
-        }
-
-        /* Page Content */
-        .page-content {
             padding: 20px;
-            color: #333;
-            text-align: center;
         }
 
-        /* Animation Keyframes */
+        /* Container หลัก */
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        /* ของตกแต่งลอยไปมา */
+        .floating-item {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+            z-index: 0;
+        }
+        .float-1 { top: 10%; left: 5%; animation-delay: 0s; font-size: 2.5rem; }
+        .float-2 { top: 8%; right: 10%; animation-delay: 1s; font-size: 2rem; }
+        .float-3 { top: 15%; left: 15%; animation-delay: 0.5s; font-size: 1.5rem; }
+        .float-4 { top: 18%; right: 5%; animation-delay: 1.5s; font-size: 1.8rem; }
+        .float-5 { top: 40%; left: 2%; animation-delay: 0.2s; font-size: 1.2rem; }
+        .float-6 { top: 60%; right: 2%; animation-delay: 0.8s; font-size: 1.5rem; }
+
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
         }
 
-        @keyframes sparkling {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-
-        @keyframes progress-fill {
-            from { width: 0%; }
-        }
-
-        @keyframes hover-grow {
-            to { transform: scale(1.05); }
-        }
-
-        /* Header Section */
-        header {
+        /* Navbar */
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #ffb3e6;
+            border: 3px solid var(--border-pink);
             margin-bottom: 20px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .logo-icon {
-            font-size: 36px;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        .logo-text {
-            font-size: 28px;
-            color: #ff70b0;
-            font-weight: bold;
-        }
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 15px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-size: 18px;
-            border: 2px solid transparent;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        nav a:hover, nav a.active {
-            border-color: #ffb3e6;
-            background-color: #ffe0f0;
-            animation: hover-grow 0.3s forwards;
-        }
-
-        /* Hero Section */
-        .hero {
             position: relative;
-            padding: 40px 0;
-            background-color: #ffe0f0;
-            border: 4px solid #ffb3e6;
+            z-index: 10;
+        }
+        .logo-nav {
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+        .nav-links span {
+            cursor: pointer;
+            padding: 5px 10px;
             border-radius: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
+            transition: 0.3s;
+        }
+        .nav-links span.active, .nav-links span:hover {
+            background-color: var(--pink-bg);
+            color: var(--text-pink);
+            font-weight: 600;
         }
 
-        .hero h1 {
-            font-size: 32px;
-            color: #333;
+        /* Title Section */
+        .header-title {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            z-index: 10;
+        }
+        .header-title h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.2rem;
+            color: white;
+            text-shadow: 
+                3px 3px 0 #5c5c5c,
+                -1px -1px 0 #5c5c5c,
+                1px -1px 0 #5c5c5c,
+                -1px 1px 0 #5c5c5c,
+                1px 1px 0 #5c5c5c;
             margin-bottom: 10px;
+            letter-spacing: 2px;
+            animation: bounce 2s infinite;
+        }
+        .header-title p {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 500;
         }
 
-        .hero p {
-            font-size: 18px;
-            color: #555;
-            margin-top: 0;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
-        .hero-sparkle {
-            color: #ffdf00;
-            animation: sparkling 1s infinite;
-        }
-
-        .hero-floating {
-            position: absolute;
-            font-size: 24px;
-            animation: float 2.5s ease-in-out infinite;
-        }
-
-        .hero-service-cards {
+        /* Services Icons */
+        .services-row {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
         }
-
-        .service-card {
-            background-color: #fff;
-            border: 3px solid #ffb3e6;
-            padding: 15px;
-            border-radius: 8px;
+        .service-box {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: transform 0.2s;
         }
-
-        .service-card:hover {
-            animation: hover-grow 0.3s forwards;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        .service-box:hover {
+            transform: scale(1.1);
         }
-
         .service-icon {
-            font-size: 30px;
+            font-size: 4rem;
+            margin-bottom: 5px;
+            filter: drop-shadow(0px 4px 0px rgba(0,0,0,0.1));
+        }
+        .service-label {
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--border-pink);
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
         }
 
-        .service-name {
-            font-size: 16px;
-            color: #333;
-        }
-
-        /* Progress Section */
-        .progress-container {
-            display: flex;
-            justify-content: space-around;
+        /* Status Boards */
+        .status-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
             gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .progress-card {
-            flex: 1;
-            background-color: #fff;
-            border: 3px solid #ffb3e6;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-        }
-
-        .progress-icon {
-            font-size: 24px;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        .progress-details {
-            flex-grow: 1;
-            text-align: left;
-        }
-
-        .progress-tag {
-            background-color: #ffe0f0;
-            color: #ff70b0;
-            padding: 3px 6px;
-            border-radius: 5px;
-            font-size: 12px;
-            border: 1px solid #ffb3e6;
-        }
-
-        .progress-status {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            overflow: hidden;
-            border: 1px solid #ccc;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #ff70b0;
-            width: 75%;
-            animation: progress-fill 2s ease-out;
-        }
-
-        .progress-info {
-            font-size: 14px;
-            color: #777;
-        }
-
-        /* Portfolio Section */
-        .portfolio h2 {
-            font-size: 24px;
-            color: #333;
             margin-bottom: 20px;
         }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+        .card {
+            background: white;
+            border: 3px solid var(--border-pink);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 0 rgba(244, 162, 193, 0.3);
+            position: relative;
         }
-
-        .portfolio-item {
-            background-color: #fff;
-            border: 3px solid #ffb3e6;
-            padding: 10px;
-            border-radius: 8px;
+        
+        .status-main {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .q-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #ff8fa3;
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .portfolio-item:hover {
-            animation: hover-grow 0.3s forwards;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-        }
-
-        .portfolio-thumb {
-            width: 100%;
-            height: 120px;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: flex;
             justify-content: center;
             align-items: center;
-            color: #777;
-            font-size: 14px;
+            color: white;
+            font-weight: bold;
+            line-height: 1.1;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #ff8fa3;
         }
-
-        .portfolio-title {
-            font-size: 16px;
-            color: #333;
+        .q-circle span { font-size: 0.7rem; }
+        
+        .status-info {
+            flex-grow: 1;
         }
-
-        /* Order & Notes Section */
-        .order-notes-container {
+        .status-title {
+            font-weight: 600;
             display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .how-to-order, .important-notes {
-            flex: 1;
-            background-color: #fff;
-            border: 3px solid #ffb3e6;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: left;
-        }
-
-        .how-to-order h3, .important-notes h3 {
-            font-size: 20px;
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-
-        .how-to-order ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .how-to-order li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .how-to-order .step-icon {
-            font-size: 18px;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        .how-to-order .step-text {
-            font-size: 16px;
-        }
-
-        .important-notes .notes-box {
-            background-color: #ffe0f0;
-            border: 2px dashed #ffb3e6;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .important-notes .notes-item {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        .notes-sparkle {
-            color: #ffdf00;
-            animation: sparkling 1s infinite;
-        }
-
-        .robot-character {
-            float: right;
-            font-size: 30px;
-            margin-left: 10px;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        /* Service List Section */
-        .service-list {
-            background-color: #fff;
-            border: 3px solid #ffb3e6;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: left;
-            margin-bottom: 30px;
-        }
-
-        .service-list h3 {
-            font-size: 20px;
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-
-        .service-list .clipboard-icon {
-            font-size: 20px;
-            margin-right: 5px;
-        }
-
-        .service-list h4 {
-            font-size: 18px;
-            color: #ff70b0;
-            margin-top: 10px;
+            justify-content: space-between;
             margin-bottom: 5px;
         }
+        .progress-bar-container {
+            height: 12px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            overflow: hidden;
+        }
+        .progress-candy {
+            height: 100%;
+            width: 75%;
+            background: repeating-linear-gradient(
+                45deg,
+                #ff6b81,
+                #ff6b81 10px,
+                #ffffff 10px,
+                #ffffff 20px
+            );
+            background-size: 28px 28px;
+            animation: moveCandy 1s linear infinite;
+        }
 
+        @keyframes moveCandy {
+            0% { background-position: 0 0; }
+            100% { background-position: 28px 0; }
+        }
+
+        .status-mini {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .sleep-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #5c7cfa;
+            font-weight: 600;
+        }
+        .wait-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .progress-pink {
+            height: 100%;
+            width: 10%;
+            background-color: #ff8fa3;
+            border-radius: 10px;
+        }
+
+        /* Portfolio */
+        .portfolio-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .portfolio-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .portfolio-item {
+            min-width: 150px;
+            height: 100px;
+            background-color: #ffdce6;
+            border: 3px solid var(--border-pink);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-pink);
+            font-weight: 600;
+        }
+
+        /* Two columns Info */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .how-to-order h3 { margin-bottom: 15px; color: var(--text-pink); display: flex; align-items: center; gap:5px;}
+        .how-to-order ul { list-style: none; }
+        .how-to-order li { 
+            margin-bottom: 12px; 
+            font-size: 0.85rem; 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 8px;
+        }
+        .num-icon {
+            background: #ffe0e9;
+            color: var(--text-pink);
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 0.75rem; font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .important-notes {
+            background-color: var(--yellow-bg);
+            border-color: #ffe066;
+        }
+        .important-notes h3 { margin-bottom: 15px; color: #d4a000; display: flex; align-items: center; gap:5px;}
+        .highlight-banner {
+            background: #fff8cc;
+            border: 2px dashed #ffe066;
+            text-align: center;
+            padding: 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #d4a000;
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .price-list {
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
         .price-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            border-bottom: 1px dotted #ccc;
             margin-bottom: 5px;
-            font-size: 16px;
         }
 
-        .add-on-item {
+        /* Order Section */
+        .order-section h3 { margin-bottom: 15px; }
+        .order-group { margin-bottom: 20px; }
+        .order-group-title {
+            font-size: 0.9rem;
+            color: var(--text-pink);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .order-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+        
+        .addon-box {
+            background: #fffafa;
+            border: 1px solid #ffe0e9;
+            border-radius: 10px;
+            padding: 10px;
             margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .add-on-item:last-child {
-            border-bottom: none;
-        }
-
-        .add-on-details {
+        .addon-left { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+        .counter {
             display: flex;
             align-items: center;
             gap: 10px;
+            background: white;
+            border: 1px solid var(--border-pink);
+            border-radius: 20px;
+            padding: 2px 10px;
         }
-
-        .add-on-icon {
-            font-size: 20px;
-        }
-
-        .quantity-control {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-
-        .quantity-btn {
-            background-color: #ffe0f0;
-            border: 2px solid #ffb3e6;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .counter button {
+            border: none;
+            background: none;
+            font-size: 1.2rem;
+            color: var(--text-pink);
             cursor: pointer;
-            color: #333;
-            transition: all 0.3s;
+        }
+        .price-tag {
+            color: var(--text-pink);
+            font-weight: 600;
         }
 
-        .quantity-btn:hover {
-            background-color: #ffb3e6;
-            border-color: #ff70b0;
-        }
-
-        /* Footer & Chat Section */
-        footer {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .footer-btn {
-            background-color: #fff;
-            border: 3px solid #ffb3e6;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s;
-        }
-
-        .footer-btn:hover {
-            animation: hover-grow 0.3s forwards;
-            background-color: #ffe0f0;
-        }
-
-        .order-btn {
-            color: #ff70b0;
-            font-weight: bold;
-        }
-
-        .other-btn {
-            color: #333;
-        }
-
-        .chat-container {
+        /* Floating Action Buttons */
+        .bottom-actions {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+        }
+        .btn-main {
+            background-color: #ff8fa3;
+            color: white;
+            border: 3px solid white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 143, 163, 0.5);
+            transition: 0.2s;
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+        .btn-main:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 15px rgba(255, 143, 163, 0.6);
+        }
+        
+        .btn-side {
+            background-color: white;
+            border: 2px solid var(--border-pink);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-pink);
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .chat-icon {
-            font-size: 36px;
-            animation: float 2s ease-in-out infinite;
+        .chat-bubble {
+            background: white;
+            border: 2px solid var(--border-pink);
+            padding: 10px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 0 var(--border-pink);
+            cursor: pointer;
+            animation: float 2.5s ease-in-out infinite;
         }
 
-        .chat-text {
-            background-color: #fff;
-            border: 3px solid #ffb3e6;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 16px;
-            display: none; /* Hidden initially */
+        /* -------------------------------------
+           เพิ่มลูกเล่นตัวละครห้อยขอบ (Robot)
+           ------------------------------------- */
+        .hanging-robot {
+            position: absolute;
+            bottom: -20px;
+            right: -15px;
+            font-size: 2.5rem;
+            animation: swing 2s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+        @keyframes swing {
+            0% { transform: rotate(5deg); }
+            100% { transform: rotate(-5deg); }
         }
 
-        .chat-container:hover .chat-text {
-            display: block;
+        /* ซ่อน Scrollbar สำหรับ Portfolio */
+        .portfolio-scroll::-webkit-scrollbar {
+            height: 6px;
         }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .progress-container, .order-notes-container, .hero-service-cards {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .progress-card, .how-to-order, .important-notes {
-                width: 100%;
-            }
+        .portfolio-scroll::-webkit-scrollbar-thumb {
+            background-color: var(--border-pink);
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="background-candy"></div>
 
-    <div class="browser-window">
-        <div class="browser-bar">
-            <div class="browser-controls">
-                <div class="browser-control red"></div>
-                <div class="browser-control yellow"></div>
-                <div class="browser-control green"></div>
+    <div class="container">
+        <div class="floating-item float-1">🍭</div>
+        <div class="floating-item float-2">🍬</div>
+        <div class="floating-item float-3">🎀</div>
+        <div class="floating-item float-4">🧸</div>
+        <div class="floating-item float-5">🍬</div>
+        <div class="floating-item float-6">✨</div>
+
+        <nav class="navbar">
+            <div class="logo-nav">🧺 CandyMarket</div>
+            <div class="nav-links">
+                <span class="active">หน้าแรก</span>
+                <span>ผลงาน</span>
+                <span>วิธีการสั่ง</span>
+                <span>ติดต่อเรา</span>
             </div>
-            <div class="browser-url">candymarket.shop</div>
-            <div class="browser-actions">
-                <div class="browser-action">🏠</div>
-                <div class="browser-action">⬇️</div>
-                <div class="browser-action">👤</div>
+        </nav>
+
+        <div class="header-title">
+            <h1>CandyMarket</h1>
+            <p>✨ Welcome to my shop ✨<br>บริการเว็บไซต์น่ารักๆ สไตล์พิกเซล...</p>
+        </div>
+
+        <div class="services-row">
+            <div class="service-box">
+                <div class="service-icon">🏠</div>
+                <div class="service-label">เว็บครบวงจร</div>
+            </div>
+            <div class="service-box">
+                <div class="service-icon">🧰</div>
+                <div class="service-label">เว็บเรทราคา/เติมเกม</div>
+            </div>
+            <div class="service-box">
+                <div class="service-icon">🪪</div>
+                <div class="service-label">เว็บไบโอ (Bio)</div>
             </div>
         </div>
 
-        <div class="page-content">
-            <header>
-                <div class="logo-container">
-                    <div class="logo-icon">🧺🍬</div>
-                    <div class="logo-text">CandyMarket</div>
+        <div class="status-section">
+            <div class="card status-main">
+                <div class="q-circle">
+                    <span>Q:</span>
+                    A01
                 </div>
-                <nav>
-                    <ul>
-                        <li><a href="#" class="active">หน้าแรก</a></li>
-                        <li><a href="#">ผลงาน</a></li>
-                        <li><a href="#">วิธีการสั่ง</a></li>
-                        <li><a href="#">ติดต่อเรา</a></li>
-                    </ul>
-                </nav>
-            </header>
+                <div class="status-info">
+                    <div class="status-title">
+                        <span>กำลังลงโค้ด 💻</span>
+                        <span style="color:var(--text-pink)">75%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-candy"></div>
+                    </div>
+                </div>
+                <div style="font-size: 2.5rem; animation: float 2s infinite;">🤖</div>
+            </div>
+            <div class="card status-mini">
+                <div style="font-size: 2rem; margin-bottom: 5px;">💻</div>
+                <div>กำลัง<br>รอรับบรีฟ</div>
+            </div>
+        </div>
 
-            <section class="hero">
-                <div class="hero-floating" style="top: 10px; left: 10px;">🍭</div>
-                <div class="hero-floating" style="top: 10px; right: 10px;">🍬</div>
-                <div class="hero-floating" style="bottom: 10px; left: 30px;">⭐️</div>
-                <div class="hero-floating" style="bottom: 30px; right: 20px;">🐻</div>
+        <div class="grid-2">
+            <div class="card sleep-box">
+                <div style="font-size: 2rem;">💤</div>
+                <div>รอคิวต่อไป</div>
+            </div>
+            <div class="card wait-box">
+                <div class="status-title">
+                    <span style="color:var(--text-pink)">10%</span>
+                    <span>รอรับบรีฟ ✨</span>
+                </div>
+                <div class="progress-bar-container" style="margin-bottom: 10px;">
+                    <div class="progress-pink"></div>
+                </div>
+                <div style="text-align: right; font-size: 1.5rem; position: absolute; right: 15px; bottom: 10px;">📮</div>
+            </div>
+        </div>
 
-                <h1>Welcome to my shop <span class="hero-sparkle">✨</span></h1>
-                <p>บริการเว็บไซต์น่ารักๆ สไตล์พิกเซล...</p>
+        <div class="portfolio-title">✨ ตัวอย่างผลงานเว็บ</div>
+        <div class="portfolio-scroll">
+            <div class="portfolio-item" style="background:#fff3cd;">[ CAFE ]</div>
+            <div class="portfolio-item">[ cute cafe ]</div>
+            <div class="portfolio-item" style="background:#e0f7fa;">[ Profile ]</div>
+            <div class="portfolio-item">[ Shop ]</div>
+        </div>
 
-                <div class="hero-service-cards">
-                    <div class="service-card">
-                        <div class="service-icon">🏠💻</div>
-                        <div class="service-name">เว็บครบวงจร</div>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">💰💰</div>
-                        <div class="service-name">เว็บเรทราคา/เติมเกม</div>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">👤🔗</div>
-                        <div class="service-name">เว็บไบโอ (Bio)</div>
-                    </div>
-                </div>
-            </section>
+        <div class="info-grid">
+            <div class="card how-to-order">
+                <h3>📝 How to Order</h3>
+                <ul>
+                    <li><div class="num-icon">1</div> <div><b>เลือกแบบที่ใช่:</b> เลือกสไตล์เว็บที่ชอบ แล้วกรอกรายละเอียดบรีฟให้ครบถ้วน</div></li>
+                    <li><div class="num-icon">2</div> <div><b>ล๊อคคิวคนเก่ง:</b> โอนมัดจำเรทเริ่มต้น 129.-</div></li>
+                    <li><div class="num-icon">3</div> <div><b>รอรับความปัง:</b> ปกติใช้เวลาทำ 4-6 ชม.</div></li>
+                    <li><div class="num-icon">4</div> <div><b>ตรวจเช็คความเรียบร้อย:</b> ส่งงานให้ตรวจแล้ว แก้ฟรีได้ 1 รอบ</div></li>
+                    <li><div class="num-icon">5</div> <div><b>รับลิงก์เว็บ:</b> ชำระยอดส่วนเกิน (ถ้ามี) แล้วรับลิงก์ใช้งานได้เลย</div></li>
+                </ul>
+            </div>
 
-            <section class="progress-container">
-                <div class="progress-card">
-                    <div class="progress-icon">💻💻</div>
-                    <div class="progress-details">
-                        <span class="progress-tag">Q: A01</span>
-                        <div class="progress-status">กำลังลงโค้ด 💻</div>
-                        <div class="progress-bar">
-                            <div class="progress-bar-fill"></div>
-                        </div>
-                        <div class="progress-info">75% พร้อมทำงาน</div>
-                    </div>
+            <div class="card important-notes">
+                <h3>⚠️ Important Notes</h3>
+                <div class="highlight-banner">✨ แก้ฟรี 1 ครั้ง! (ก่อนส่งลิงก์) ✨</div>
+                <div style="font-size: 0.85rem; font-weight: bold; margin-bottom: 5px;">ค่าบริการเพิ่มเติมหลังส่งงาน:</div>
+                <div class="price-list">
+                    <div class="price-item"><span>• แก้ไขข้อความ (ตำแหน่งเดิม)</span> <span>5 ฿ / จุด</span></div>
+                    <div class="price-item"><span>• เปลี่ยนรูปแบนเนอร์ / โลโก้</span> <span>29 ฿ / จุด</span></div>
+                    <div class="price-item"><span>• ย้ายตำแหน่ง / แก้โครงสร้าง</span> <span>39 ฿ / จุด</span></div>
                 </div>
-                <div class="progress-card">
-                    <div class="progress-icon">📮✨</div>
-                    <div class="progress-details">
-                        <span class="progress-tag">Q: รอรับบรีฟ <span class="hero-sparkle">✨</span></span>
-                        <div class="progress-status">10% ...</div>
-                        <div class="progress-bar" style="background-color: #f0f0f0;">
-                            <div class="progress-bar-fill" style="width: 10%; background-color: #ffb3e6;"></div>
-                        </div>
-                        <div class="progress-info">รอคิวต่อไป Zzz</div>
-                    </div>
-                </div>
-            </section>
+                <div class="hanging-robot">👾</div>
+            </div>
+        </div>
 
-            <section class="portfolio">
-                <h2>ตัวอย่างผลงานเว็บ</h2>
-                <div class="portfolio-grid">
-                    <div class="portfolio-item">
-                        <div class="portfolio-thumb">ร้านกาแฟ</div>
-                        <div class="portfolio-title">ตัวอย่าง 1</div>
-                    </div>
-                    <div class="portfolio-item">
-                        <div class="portfolio-thumb">Cafe น่ารัก</div>
-                        <div class="portfolio-title">ตัวอย่าง 2</div>
-                    </div>
-                    <div class="portfolio-item">
-                        <div class="portfolio-thumb">โปรไฟล์ส่วนตัว</div>
-                        <div class="portfolio-title">ตัวอย่าง 3</div>
-                    </div>
-                </div>
-            </section>
+        <div class="card order-section">
+            <h3>📋 เลือกรายการสั่งทำเว็บ</h3>
+            
+            <div class="order-group">
+                <div class="order-group-title">📌 เรทราคาทำเว็บไซต์ (จ่ายส่วนเกินหลังงานเสร็จ)</div>
+                <div class="order-row"><span>• ไม่เกิน 200 บรรทัด :</span> <span>129.- (ราคาบัดจำ)</span></div>
+                <div class="order-row"><span>• ขนาด 400+ บรรทัด :</span> <span style="color:var(--text-pink)">179.-</span></div>
+                <div class="order-row"><span>• ขนาด 600+ บรรทัด :</span> <span style="color:var(--text-pink)">200.-</span></div>
+            </div>
 
-            <section class="order-notes-container">
-                <div class="how-to-order">
-                    <h3>How to Order</h3>
-                    <ul>
-                        <li>
-                            <div class="step-icon">🎨</div>
-                            <div class="step-text">เลือกแบบที่ต้องการ</div>
-                        </li>
-                        <li>
-                            <div class="step-icon">🔒</div>
-                            <div class="step-text">ล็อคคิวและมัดจำ</div>
-                        </li>
-                        <li>
-                            <div class="step-icon">🕒</div>
-                            <div class="step-text">รอรับผลงานสุดปัง!</div>
-                        </li>
-                        <li>
-                            <div class="step-icon">✅</div>
-                            <div class="step-text">ตรวจสอบและปรับปรุง</div>
-                        </li>
-                        <li>
-                            <div class="step-icon">💖</div>
-                            <div class="step-text">รับลิงก์และใช้งานได้เลย</div>
-                        </li>
-                    </ul>
+            <div class="order-group">
+                <div class="order-group-title">💻 ทำเว็บไซต์ (ชำระมัดจำเริ่มต้น)</div>
+                <div class="addon-box" style="border-color: #ddd;">
+                    <div class="addon-left">📱 มัดจำทำเว็บ (เรทเริ่มต้น 129.-)</div>
+                    <div class="price-tag">129 ฿</div>
                 </div>
-                <div class="important-notes">
-                    <div class="robot-character">🤖💖</div>
-                    <h3>Important Notes</h3>
-                    <div class="notes-box">
-                        <div class="notes-item"><span class="notes-sparkle">✨</span> แก้ฟรี 1 ครั้ง! <span class="notes-sparkle">✨</span></div>
-                    </div>
-                    <div class="notes-item">ค่าบริการเพิ่มเติม:</div>
-                    <div class="notes-item">- แก้ไขข้อความ (เดิม)</div>
-                    <div class="notes-item">- เพิ่มรูปภาพ / แบนเนอร์</div>
-                    <div class="notes-item">- เพิ่มฟังก์ชันพิเศษ</div>
-                </div>
-            </section>
+            </div>
 
-            <section class="service-list">
-                <h3><span class="clipboard-icon">📋</span> เลือกรายการสั่งทำเว็บ</h3>
-                <h4>เรทราคาทำเว็บไซต์ (จ่ายส่วนเกินหลังงานเสร็จ)</h4>
-                <div class="price-item">
-                    <span>- ไม่เกิน 200 บรรทัด</span>
-                    <span>129 ฿</span>
-                </div>
-                <div class="price-item">
-                    <span>- ไม่เกิน 400 บรรทัด</span>
-                    <span>... ฿</span>
-                </div>
-                <div class="price-item">
-                    <span>- ไม่เกิน 600 บรรทัด</span>
-                    <span>... ฿</span>
-                </div>
+            <div class="order-group" style="margin-bottom: 0;">
+                <div class="order-group-title">✨ บริการเสริมอื่นๆ (Add-ons)</div>
                 
-                <h4>ทำเว็บไซต์ (ชำระมัดจำเริ่มต้น)</h4>
-                <div class="price-item">
-                    <span>มัดจำทำเว็บ (เรทเริ่มต้น 129.-)</span>
-                    <span>129 ฿</span>
+                <div class="addon-box">
+                    <div class="addon-left">🎨 ออกแบบเว็บใหม่ / มีแบบร่างมาให้ทำ</div>
+                    <div class="counter">
+                        <button onclick="updateCount(this, -1)">-</button>
+                        <span class="count-val">2</span>
+                        <button onclick="updateCount(this, 1)">+</button>
+                    </div>
                 </div>
 
-                <h4>บริการเสริมอื่นๆ (Add-ons)</h4>
-                <div class="add-on-item">
-                    <div class="add-on-details">
-                        <div class="add-on-icon">🎨</div>
-                        <span>ออกแบบเว็บใหม่ / ...</span>
-                    </div>
-                    <div class="quantity-control">
-                        <div class="quantity-btn subtract">-</div>
-                        <span class="quantity">1</span>
-                        <div class="quantity-btn add">+</div>
-                    </div>
+                <div class="addon-box">
+                    <div class="addon-left">🖼️ เพิ่มรูป Banner (เซตละ 1-2 รูป)</div>
+                    <div class="price-tag">29 ฿</div>
                 </div>
-                <div class="add-on-item">
-                    <div class="add-on-details">
-                        <div class="add-on-icon">🖼️</div>
-                        <span>เพิ่มรูป Banner</span>
-                    </div>
-                    <div class="quantity-control">
-                        <div class="quantity-btn subtract">-</div>
-                        <span class="quantity">2</span>
-                        <div class="quantity-btn add">+</div>
-                    </div>
-                </div>
-                <div class="add-on-item">
-                    <div class="add-on-details">
-                        <div class="add-on-icon">⚙️</div>
-                        <span>เพิ่มฟังก์ชันอื่นๆ</span>
-                    </div>
-                    <div class="quantity-control">
-                        <div class="quantity-btn subtract">-</div>
-                        <span class="quantity">1</span>
-                        <div class="quantity-btn add">+</div>
-                    </div>
-                </div>
-            </section>
 
-            <footer>
-                <button class="footer-btn order-btn">กดสั่งทำ & ระบุรายละเอียดบรีฟ</button>
-                <button class="footer-btn other-btn">ช่องทางอื่นๆ</button>
-            </footer>
-
-            <div class="chat-container">
-                <div class="chat-icon">💬</div>
-                <div class="chat-text">ติดต่อสอบถาม</div>
+                <div class="addon-box">
+                    <div class="addon-left">⚙️ เพิ่มฟังก์ชันการใช้งานอื่นๆ</div>
+                    <div class="price-tag">99 ฿</div>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="bottom-actions">
+        <button class="btn-side">🌐 ช่องทางอื่นๆ</button>
+        <button class="btn-main">📝 กดสั่งทำ & ระบุรายละเอียดบรีฟ</button>
+        <div class="chat-bubble">💬 ติดต่อสอบถาม</div>
+    </div>
+
     <script>
-        // Quantity Controls for Add-ons
-        const addOnItems = document.querySelectorAll('.add-on-item');
-
-        addOnItems.forEach(item => {
-            const subtractBtn = item.querySelector('.subtract');
-            const addBtn = item.querySelector('.add');
-            const quantitySpan = item.querySelector('.quantity');
-            let quantity = parseInt(quantitySpan.textContent);
-
-            subtractBtn.addEventListener('click', () => {
-                if (quantity > 0) {
-                    quantity--;
-                    quantitySpan.textContent = quantity;
-                }
-            });
-
-            addBtn.addEventListener('click', () => {
-                quantity++;
-                quantitySpan.textContent = quantity;
-            });
-        });
-
-        // Simulating Order Button
-        const orderBtn = document.querySelector('.order-btn');
-        orderBtn.addEventListener('click', () => {
-            alert('คุณต้องการสั่งทำเว็บ CandyMarket! กรุณาเตรียมรายละเอียดบรีฟ!');
-        });
-
-        // Hover Effect on Service Cards
-        const serviceCards = document.querySelectorAll('.service-card');
-        serviceCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'scale(1.05)';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'scale(1)';
-            });
-        });
+        // ฟังก์ชันตัวเลขเพิ่ม/ลด สำหรับ Add-ons
+        function updateCount(btn, change) {
+            let span = btn.parentElement.querySelector('.count-val');
+            let currentVal = parseInt(span.innerText);
+            let newVal = currentVal + change;
+            if (newVal >= 0) {
+                span.innerText = newVal;
+            }
+        }
     </script>
 </body>
 </html>
