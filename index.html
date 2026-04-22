@@ -102,78 +102,52 @@
     <header class="flex justify-between items-center px-6 py-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-pink-100">
         <h1 class="text-2xl font-black candy-text">CandyMarket.</h1>
         <div id="auth-section" class="relative"></div>
-                <div id="user-panel" class="control-panel custom-scrollbar">
-            <div class="px-2 py-4 border-b border-pink-50 mb-3 bg-gradient-to-b from-pink-50/30 to-transparent rounded-t-[2rem]">
-                <p class="text-[10px] font-black text-pink-400 uppercase tracking-[0.2em] mb-3 text-center">User Profile</p>
-                <div class="flex flex-col items-center gap-3">
-                    <div class="relative">
-                        <img id="menu-avatar" src="" class="w-20 h-20 rounded-[2rem] border-4 border-white shadow-md object-cover hidden">
-                        <div id="menu-avatar-temp" class="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-pink-100 to-blue-100 text-pink-400 flex items-center justify-center shadow-sm border-4 border-white">
-                            <i class="fa-solid fa-user text-3xl"></i>
-                        </div>
-                        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 border-4 border-white rounded-full"></div>
-                    </div>
-                    <div class="text-center">
-                        <h4 id="menu-nickname" class="user-name-animate text-xl leading-tight">Guest</h4>
-                        <div id="menu-badge" class="level-badge mt-1 justify-center mx-auto">
-                            <i class="fa-solid fa-shield-halved text-[8px]"></i> MEMBER
-                        </div>
+
+        <div id="user-panel" class="control-panel custom-scrollbar">
+            <div class="px-2 py-3 border-b border-pink-50 mb-2">
+                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Welcome back!</p>
+                <div class="flex items-center gap-2">
+                    <img id="menu-avatar" src="" class="w-10 h-10 rounded-full border-2 border-pink-100 object-cover hidden">
+                    <div id="menu-avatar-temp" class="w-10 h-10 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-cookie text-xl"></i></div>
+                    <div>
+                        <h4 id="menu-nickname" class="user-name-animate text-lg leading-tight">Guest</h4>
+                        <div id="menu-badge" class="level-badge mt-0.5"><i class="fa-solid fa-crown text-[8px]"></i> MEMBER</div>
                     </div>
                 </div>
-                <div class="mt-4 bg-white/50 py-2 px-4 rounded-2xl border border-pink-50 flex justify-between items-center">
-                    <span class="text-[9px] text-gray-400 font-black uppercase tracking-widest">ID Card</span>
-                    <span id="menu-uid" class="text-[11px] font-mono font-bold text-pink-300">--------</span>
-                </div>
+                <p class="text-[9px] text-gray-300 font-bold mt-2 tracking-widest uppercase">UID: <span id="menu-uid" class="text-pink-300">--------</span></p>
             </div>
 
-            <div onclick="openProfile()" class="menu-item">
-                <div class="w-9 h-9 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center shadow-sm">
-                    <i class="fa-solid fa-address-card"></i>
+            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-3 mb-2 flex justify-between items-center border border-yellow-100 shadow-sm mt-2 mx-1">
+                <div>
+                    <p class="text-[9px] font-black text-yellow-500 uppercase tracking-widest"><i class="fa-solid fa-coins"></i> My Balance</p>
+                    <h4 class="text-xl font-black text-yellow-600 leading-none mt-1">฿<span id="menu-balance">0</span></h4>
                 </div>
-                <span>จัดการโปรไฟล์</span>
+                <button onclick="openTopUp()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-[#ffd166] to-[#ffb347] text-white flex items-center justify-center shadow-md active:scale-95 transition hover:scale-105"><i class="fa-solid fa-plus"></i></button>
             </div>
 
-            <div onclick="openStatus()" class="menu-item">
-                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm">
-                    <i class="fa-solid fa-server"></i>
-                </div>
-                <span>สถานะเว็บ</span>
-            </div>
-
+            <div onclick="openProfile()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-gear"></i></div><span>จัดการโปรไฟล์</span></div>
+            <div onclick="openStatus()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-desktop"></i></div><span>สถานะเว็บ</span></div>
+            <div onclick="openTopUp()" class="menu-item"><div class="w-9 h-9 rounded-xl bg-yellow-50 text-yellow-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-wallet"></i></div><span>เติมเงิน</span></div>
             <div onclick="openHistory()" class="menu-item">
-                <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm">
-                    <i class="fa-solid fa-receipt"></i>
-                </div>
-                <span>ประวัติการชำระเงิน</span>
-            </div>
-
-            <div onclick="openContact()" class="menu-item">
-                <div class="w-9 h-9 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center shadow-sm">
-                    <i class="fa-solid fa-box-open"></i>
-                </div>
-                <span>ติดตามสินค้า / แจ้งปัญหา</span>
-            </div>
+            <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm">
+        <i class="fa-solid fa-history"></i>
+    </div>
+    <span>ประวัติการเติมเงิน</span>
+</div>
             
             <div id="admin-menu" style="display: none;">
                 <hr class="my-2 border-pink-50/50">
                 <div onclick="location.href='/admin'" class="menu-item text-blue-600 font-bold">
                     <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        <i class="fa-solid fa-hammer"></i>
                     </div>
-                    <span>หลังบ้าน (Admin)</span>
+                    <span>จัดการหลังบ้าน (Admin)</span>
                 </div>
             </div>
 
-            <hr class="my-3 border-pink-50/50">
-
-            <div onclick="openContact()" class="menu-item bg-red-500 !text-white shadow-lg shadow-red-200 hover:bg-red-600 active:scale-95 transition-all">
-                <div class="w-9 h-9 rounded-xl bg-white/20 text-white flex items-center justify-center">
-                    <i class="fa-solid fa-headset"></i>
-                </div>
-                <span class="font-black italic">ติดต่อแอดมินด่วน (ชำระเงิน)</span>
-            </div>
-
-            <button onclick="handleLogout()" class="w-full mt-4 py-2 text-[10px] font-black text-gray-300 uppercase tracking-widest hover:text-red-400 transition">Logout Account</button>
+            <hr class="my-2 border-pink-50/50">
+            <div onclick="openContact()" class="menu-item text-red-400"><div class="w-9 h-9 rounded-xl bg-red-50 text-red-400 flex items-center justify-center shadow-sm"><i class="fa-solid fa-circle-exclamation text-sm"></i></div><span>ติดต่อด่วน</span></div>
+            <button onclick="handleLogout()" class="w-full mt-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-pink-400 transition">Logout</button>
         </div>
     </header>
 
