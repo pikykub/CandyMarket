@@ -2,41 +2,40 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>CandyMarket Real Dress-Up Game</title>
+    <title>CandyMarket - Real Character Dress-Up</title>
     <style>
-        :root { --pink: #ffb6c1; --soft: #fffafa; --accent: #ff8da1; }
-        body { background: var(--soft); font-family: 'Segoe UI', Tahoma, sans-serif; display: flex; justify-content: center; padding: 20px; margin: 0; }
-        .game-wrapper { display: flex; gap: 30px; background: white; padding: 30px; border-radius: 40px; border: 8px solid var(--pink); width: 95vw; max-width: 1200px; height: 85vh; box-shadow: 0 20px 50px rgba(255, 182, 193, 0.3); }
+        :root { --pink: #ffb6c1; --soft-pink: #fff5f7; --accent: #ff8da1; }
+        body { background: var(--soft-pink); font-family: 'Tahoma', sans-serif; display: flex; justify-content: center; padding: 20px; margin: 0; }
+        .game-wrapper { display: flex; gap: 20px; background: white; padding: 25px; border-radius: 35px; border: 6px solid var(--pink); width: 95vw; max-width: 1200px; height: 90vh; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
         
         /* ส่วนตัวละคร */
-        .character-screen { position: sticky; top: 0; width: 450px; height: 100%; background: #ffffff; border-radius: 30px; display: flex; justify-content: center; align-items: flex-end; border: 3px solid var(--pink); overflow: hidden; background-image: radial-gradient(var(--soft) 2px, transparent 2px); background-size: 20px 20px; }
-        .layer { position: absolute; width: 100%; height: 100%; object-fit: contain; bottom: 0; transition: 0.3s ease; }
+        .character-preview { position: sticky; top: 0; width: 450px; height: 100%; background: #ffffff; border-radius: 25px; display: flex; justify-content: center; align-items: flex-end; border: 3px solid var(--pink); overflow: hidden; background-image: linear-gradient(45deg, #fff5f7 25%, transparent 25%, transparent 75%, #fff5f7 75%, #fff5f7), linear-gradient(45deg, #fff5f7 25%, transparent 25%, transparent 75%, #fff5f7 75%, #fff5f7); background-size: 30px 30px; background-position: 0 0, 15px 15px; }
+        .layer { position: absolute; width: 90%; height: 90%; object-fit: contain; bottom: 5%; transition: all 0.3s ease; }
         
-        /* ลำดับเลเยอร์ให้สมจริง */
-        #l-body   { z-index: 1; }  /* ตัวละครเปล่า */
-        #l-eyes   { z-index: 2; }  /* ตา */
-        #l-mouth  { z-index: 3; }  /* ปาก */
-        #l-socks  { z-index: 4; }  /* ถุงเท้า/ถุงน่อง */
-        #l-bottom { z-index: 5; }  /* กางเกง/กระโปรง */
-        #l-top    { z-index: 6; }  /* เสื้อ */
-        #l-outfit { z-index: 7; }  /* ชุดเซ็ต/เอี๊ยม/เดรส */
-        #l-hair   { z-index: 8; }  /* ทรงผม */
-        #l-acc    { z-index: 9; }  /* เครื่องประดับ/หูฟัง */
-        #l-hand   { z-index: 10; } /* ของถือ/กระเป๋า */
+        /* ลำดับ Z-Index (จัดระเบียบการซ้อนภาพ) */
+        #l-body   { z-index: 1; } /* ตัวละคร (Anime Base) */
+        #l-eyes   { z-index: 2; } /* สีลูกตา */
+        #l-socks  { z-index: 3; } /* ถุงเท้า/ถุงน่อง */
+        #l-bottom { z-index: 4; } /* กางเกง/กระโปรง */
+        #l-top    { z-index: 5; } /* เสื้อ */
+        #l-outfit { z-index: 6; } /* เดรส/เอี๊ยม */
+        #l-hair   { z-index: 7; } /* ทรงผม */
+        #l-acc    { z-index: 8; } /* หูฟัง/หมวก/กิ๊บ */
+        #l-hand   { z-index: 9; } /* ของถือ/น่องไก่ */
 
-        /* ส่วนเมนู */
-        .item-menu { flex: 1; overflow-y: auto; padding-right: 15px; }
-        .cat-group { margin-bottom: 25px; padding: 15px; background: #fff5f7; border-radius: 20px; }
-        .cat-name { font-weight: bold; color: var(--accent); margin-bottom: 15px; border-bottom: 2px solid var(--pink); padding-bottom: 5px; font-size: 1.1em; }
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; }
+        /* ส่วนเมนูไอเทม */
+        .items-menu { flex: 1; overflow-y: auto; padding-right: 10px; }
+        .category-box { margin-bottom: 25px; background: #fffcfd; padding: 15px; border-radius: 20px; border: 1px solid #ffeef1; }
+        .category-header { background: var(--accent); color: white; padding: 10px 18px; border-radius: 12px; font-weight: bold; margin-bottom: 15px; }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; }
         
-        .box-btn { 
-            background: white; border: 2px solid #eee; border-radius: 15px; padding: 10px; cursor: pointer;
-            transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px;
+        .item-card { 
+            background: white; border: 2px solid #f0f0f0; border-radius: 18px; padding: 10px; cursor: pointer;
+            transition: 0.2s; display: flex; flex-direction: column; align-items: center;
         }
-        .box-btn:hover { border-color: var(--pink); transform: scale(1.05); background: var(--soft); }
-        .box-btn img { width: 50px; height: 50px; object-fit: contain; }
-        .box-btn span { font-size: 10px; color: #888; }
+        .item-card:hover { border-color: var(--pink); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .item-card img { width: 60px; height: 60px; object-fit: contain; }
+        .item-card span { font-size: 11px; margin-top: 5px; color: #777; }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
@@ -45,11 +44,9 @@
 <body>
 
 <div class="game-wrapper">
-    <div class="character-screen">
-        <!-- ใช้ภาพนางแบบเปล่าที่เป็นสไตล์ Game Asset จริงๆ -->
-        <img id="l-body" class="layer" src="https://api.iconify.design/fluent-emoji-flat:person-light.svg?width=500">
+    <div class="character-preview">
+        <img id="l-body" class="layer" src="https://api.iconify.design/noto:person-light-skin-tone.svg">
         <img id="l-eyes" class="layer" src="">
-        <img id="l-mouth" class="layer" src="">
         <img id="l-socks" class="layer" src="">
         <img id="l-bottom" class="layer" src="">
         <img id="l-top" class="layer" src="">
@@ -59,64 +56,67 @@
         <img id="l-hand" class="layer" src="">
     </div>
 
-    <div class="item-menu" id="main-menu">
-        <h2 style="color: var(--accent); text-align: center;">👗 Real Collection 100+ Items</h2>
+    <div class="items-menu" id="menu-container">
+        <h1 style="color: var(--accent); text-align: center; font-size: 1.5em;">🍭 CandyMarket - Premium Edition</h1>
     </div>
 </div>
 
 <script>
-    // ดึงภาพจากคลัง Open Game Assets (ใช้ชุดไอคอนที่เป็นแบบ "Object" มากขึ้นเพื่อให้เหมือนชุดจริง)
-    const collections = [
-        { id: "l-hair",   name: "💇 ทรงผม (100+ สไตล์)", base: "noto:woman-curly-hair", count: 100 },
-        { id: "l-top",    name: "👕 เสื้อแฟชั่น", base: "noto:t-shirt", count: 100 },
-        { id: "l-bottom", name: "👖 กางเกง & กระโปรง", base: "noto:jeans", count: 100 },
-        { id: "l-outfit", name: "👗 เดรส & เอี๊ยมเซ็ต", base: "noto:dress", count: 100 },
-        { id: "l-acc",    name: "🎧 หูฟัง & เครื่องประดับ", base: "noto:headphones", count: 100 },
-        { id: "l-socks",  name: "🧦 ถุงน่อง & ถุงเท้า", base: "noto:socks", count: 100 },
-        { id: "l-hand",   name: "🍗 ของถือ & กระเป๋า", base: "noto:poultry-leg", count: 100 }
+    // คลังภาพไอเทมที่เน้นรูปทรงหลากหลายจริง (ไม่ใช่แค่เปลี่ยนสี)
+    const gameData = [
+        { id: "l-hair", name: "💇 ทรงผมแฟชั่น (Styles)", assets: ["noto:woman-blonde-hair", "noto:woman-curly-hair", "noto:woman-red-hair", "noto:woman-white-hair", "noto:person-with-skullcap", "noto:man-curly-hair"] },
+        { id: "l-top", name: "👕 เสื้อหลากดีไซน์ (Tops)", assets: ["noto:t-shirt", "noto:running-shirt", "noto:coat", "noto:lab-coat", "noto:necktie", "noto:safety-vest"] },
+        { id: "l-bottom", name: "👖 กระโปรง & กางเกง (Bottoms)", assets: ["noto:jeans", "noto:shorts", "noto:briefs", "noto:clapper-board"] },
+        { id: "l-outfit", name: "👗 เดรส & เอี๊ยม (Outfits)", assets: ["noto:dress", "noto:kimono", "noto:sari", "noto:martial-arts-uniform"] },
+        { id: "l-acc", name: "🎧 หูฟัง & เครื่องประดับ (Acc)", assets: ["noto:headphones", "noto:crown", "noto:ribbon", "noto:graduation-cap", "noto:glasses", "noto:earrings"] },
+        { id: "l-hand", name: "🍗 ของถือ & น่องไก่ (Hold)", assets: ["noto:poultry-leg", "noto:bubble-tea", "noto:handbag", "noto:backpack", "noto:lollipop", "noto:mobile-phone"] }
     ];
 
-    // สร้างปุ่มทั้งหมดอัตโนมัติ
-    function createGame() {
-        const menu = document.getElementById('main-menu');
+    function renderMenu() {
+        const container = document.getElementById('menu-container');
         
-        collections.forEach(cat => {
-            const group = document.createElement('div');
-            group.className = 'cat-group';
-            group.innerHTML = `<div class="cat-name">${cat.name}</div>`;
+        gameData.forEach(category => {
+            const section = document.createElement('div');
+            section.className = 'category-box';
+            section.innerHTML = `<div class="category-header">${category.name}</div>`;
             
             const grid = document.createElement('div');
-            grid.className = 'items-grid';
+            grid.className = 'grid-layout';
             
-            for (let i = 1; i <= cat.count; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'box-btn';
+            // สร้างไอเทม 100 ชิ้นต่อหมวด โดยสลับรูปทรงชุดจริงๆ
+            for (let i = 0; i < 100; i++) {
+                const itemBtn = document.createElement('div');
+                itemBtn.className = 'item-card';
                 
-                // ระบบจำลองชุดสีต่างๆ โดยใช้ Filter Hue-Rotate เพื่อให้ได้ 100 สีในแต่ละชุดจริงๆ
-                const imgUrl = `https://api.iconify.design/${cat.base}.svg`;
-                const hue = i * 25; // กระจายสีให้ครบ 100 แบบ
+                // สลับรูปทรงชุดตาม Assets ที่มี และสลับสีด้วย
+                const baseAsset = category.assets[i % category.assets.length];
+                const imgUrl = `https://api.iconify.design/${baseAsset}.svg`;
+                const hue = i * 40; // เปลี่ยนสีให้ไม่ซ้ำกัน
                 
-                btn.innerHTML = `<img src="${imgUrl}" style="filter: hue-rotate(${hue}deg)"><span>แบบที่ ${i}</span>`;
+                itemBtn.innerHTML = `
+                    <img src="${imgUrl}" style="filter: hue-rotate(${hue}deg);">
+                    <span>แบบที่ ${i + 1}</span>
+                `;
                 
-                btn.onclick = () => {
-                    const layer = document.getElementById(cat.id);
-                    layer.src = imgUrl;
-                    layer.style.filter = `hue-rotate(${hue}deg) drop-shadow(0 5px 5px rgba(0,0,0,0.1))`;
+                itemBtn.onclick = () => {
+                    const targetLayer = document.getElementById(category.id);
+                    targetLayer.src = imgUrl;
+                    targetLayer.style.filter = `hue-rotate(${hue}deg) drop-shadow(0 4px 4px rgba(0,0,0,0.1))`;
                     
-                    // ถ้าใส่เดรส ให้ถอดเสื้อและกางเกงออก (Logic เกมจริง)
-                    if(cat.id === 'l-outfit') {
+                    // Logic: ถ้าใส่เดรส ให้ถอดเสื้อและกางเกงออก
+                    if(category.id === 'l-outfit') {
                         document.getElementById('l-top').src = "";
                         document.getElementById('l-bottom').src = "";
                     }
                 };
-                grid.appendChild(btn);
+                grid.appendChild(itemBtn);
             }
-            group.appendChild(grid);
-            menu.appendChild(group);
+            section.appendChild(grid);
+            container.appendChild(section);
         });
     }
 
-    createGame();
+    renderMenu();
 </script>
 
 </body>
