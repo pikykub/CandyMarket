@@ -1,146 +1,153 @@
-import React from 'react';
-import { Monitor, Gamepad2, UserCircle, Settings, ClipboardList, AlertCircle, Plus, Minus, MessageCircle, ExternalLink } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EK ChaoLoey - เว็บเช่าคุณภาพ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .gradient-bg { background: linear-gradient(180deg, #E0F2FE 0%, #F8FAFC 100%); }
+    </style>
+</head>
+<body class="bg-[#F0F9FF] text-slate-700">
 
-const EKChaoLoeyWeb = () => {
-  return (
-    <div className="min-h-screen bg-blue-50 font-sans text-slate-800">
-      {/* Header */}
-      <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4 border-b border-blue-100">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">EK</div>
-            <span className="text-xl font-bold text-blue-900">EK ChaoLoey</span>
-          </div>
-          <div className="hidden md:flex gap-6 text-sm font-medium text-blue-700">
-            <a href="#" className="hover:text-blue-500">หน้าแรก</a>
-            <a href="#" className="hover:text-blue-500">ผลงาน</a>
-            <a href="#" className="hover:text-blue-500">วิธีการสั่ง</a>
-            <a href="#" className="hover:text-blue-500">ติดต่อเรา</a>
-          </div>
+    <nav class="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-blue-100 px-6 py-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-200">EK</div>
+                <span class="text-xl font-bold text-blue-900 uppercase tracking-tight">EK ChaoLoey</span>
+            </div>
+            <div class="hidden md:flex gap-6 text-sm font-semibold text-blue-800">
+                <a href="#" class="hover:text-blue-500">หน้าแรก</a>
+                <a href="#" class="hover:text-blue-500">ผลงาน</a>
+                <a href="#" class="hover:text-blue-500">วิธีการส่ง</a>
+                <a href="#" class="hover:text-blue-500">ติดต่อเรา</a>
+            </div>
         </div>
-      </nav>
+    </nav>
 
-      <main className="max-w-4xl mx-auto p-4 space-y-6">
+    <main class="max-w-4xl mx-auto p-4 space-y-6">
         
-        {/* Hero Section */}
-        <section className="text-center py-10 bg-gradient-to-b from-blue-100 to-transparent rounded-3xl">
-          <div className="w-32 h-32 bg-white rounded-full mx-auto mb-4 border-4 border-blue-400 flex items-center justify-center">
-             {/* ใส่รูปน้องเอโกะตรงนี้ */}
-             <span className="text-blue-400 text-xs text-center px-2">Eko Mascot Image</span>
-          </div>
-          <h1 className="text-4xl font-black text-blue-900 mb-2">Welcome to EK ChaoLoey</h1>
-          <p className="text-blue-600 font-medium">บริการเว็บไซต์ปล่อยเช่าสไตล์ Modern Clean โดยน้องเอโกะ</p>
+        <section class="text-center py-12 gradient-bg rounded-[3rem] border border-blue-50 shadow-inner">
+            <div class="w-32 h-32 bg-white rounded-full mx-auto mb-6 border-4 border-white shadow-xl flex items-center justify-center overflow-hidden">
+                <i data-lucide="smile" class="w-16 h-16 text-blue-400"></i>
+            </div>
+            <h1 class="text-4xl font-black text-blue-900 mb-2">Welcome to EK ChaoLoey</h1>
+            <p class="text-blue-500 font-medium tracking-wide">บริการเว็บไซต์ปล่อยเช่าสไตล์ Modern Clean โดยน้องเอโกะ</p>
         </section>
 
-        {/* Service Cards (Bento Style) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { title: 'เว็บครบวงจร', icon: <Monitor className="w-8 h-8" />, color: 'bg-blue-600' },
-            { title: 'เว็บเรทราคา/เติมเกม', icon: <Gamepad2 className="w-8 h-8" />, color: 'bg-blue-400' },
-            { title: 'เว็บไบโอ (Bio)', icon: <UserCircle className="w-8 h-8" />, color: 'bg-blue-300' },
-          ].map((item, i) => (
-            <div key={i} className="bg-white p-6 rounded-[2rem] shadow-sm border border-blue-50 flex flex-col items-center text-center hover:scale-105 transition-transform cursor-pointer">
-              <div className={`${item.color} text-white p-4 rounded-2xl mb-3 shadow-lg`}>
-                {item.icon}
-              </div>
-              <span className="font-bold text-blue-900">{item.title}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Progress Tracking */}
-        <div className="bg-white p-6 rounded-[2rem] border border-blue-100 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm font-bold text-blue-900">
-              <span>สถานะ: กำลังลงโค้ด</span>
-              <span>75%</span>
-            </div>
-            <div className="w-full bg-blue-50 h-6 rounded-full overflow-hidden border border-blue-100 p-1">
-              <div className="bg-blue-500 h-full rounded-full transition-all duration-500" style={{ width: '75%' }}></div>
-            </div>
-          </div>
-          <div className="flex items-center justify-center bg-blue-50 rounded-2xl p-4 border border-dashed border-blue-300">
-             <Settings className="w-5 h-5 text-blue-400 mr-2 animate-spin" />
-             <span className="text-blue-500 font-medium text-sm">กำลังรอรับบรีฟจากคุณลูกค้า</span>
-          </div>
-        </div>
-
-        {/* How to Order & Notes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white p-8 rounded-[2rem] border border-blue-100 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 mb-2 text-blue-900">
-              <ClipboardList className="w-6 h-6" />
-              <h2 className="text-xl font-bold">How to Order</h2>
-            </div>
-            <ul className="space-y-4 text-sm font-medium text-slate-600">
-              <li className="flex gap-3 items-start"><span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs shrink-0">1</span> เลือกแบบที่ใช่และแจ้งรหัสไอดีที่ชอบ</li>
-              <li className="flex gap-3 items-start"><span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs shrink-0">2</span> ชำระเงินมัดจำเพื่อเริ่มงาน</li>
-              <li className="flex gap-3 items-start"><span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs shrink-0">3</span> รอรับลิงก์สำหรับเข้าใช้งานเว็บไซต์</li>
-            </ul>
-          </div>
-
-          <div className="bg-blue-600 p-8 rounded-[2rem] text-white shadow-lg space-y-4 relative overflow-hidden">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertCircle className="w-6 h-6" />
-              <h2 className="text-xl font-bold">Important Notes</h2>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 text-center">
-              <span className="font-bold">แก้ฟรี 1 ครั้ง!</span>
-            </div>
-            <ul className="space-y-2 text-sm text-blue-50">
-              <li className="flex justify-between"><span>แก้ไขข้อความ</span> <span>5 บาท / จุด</span></li>
-              <li className="flex justify-between"><span>เพิ่มแบนเนอร์ / โลโก้</span> <span>29 บาท / จุด</span></li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Pricing Section */}
-        <div className="bg-white p-8 rounded-[2rem] border border-blue-100 shadow-sm">
-          <div className="flex items-center gap-2 mb-6 text-blue-900">
-            <ClipboardList className="w-6 h-6" />
-            <h2 className="text-xl font-bold">เลือกรายการสั่งเช่า</h2>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-blue-50 rounded-2xl border border-blue-100">
-              <div className="flex items-center gap-4">
-                <Monitor className="text-blue-600" />
-                <div>
-                  <p className="font-bold text-blue-900">ค่าบริการโฮสต์เว็บ</p>
-                  <p className="text-xs text-blue-500">(ชำระเปิดเครื่องเริ่มต้น)</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-blue-50 flex flex-col items-center text-center hover:translate-y-[-5px] transition-all">
+                <div class="bg-blue-600 text-white p-5 rounded-[1.5rem] mb-4 shadow-lg shadow-blue-200">
+                    <i data-lucide="monitor"></i>
                 </div>
-              </div>
-              <div className="bg-white px-4 py-2 rounded-xl border border-blue-200 font-bold text-blue-600">
-                129 ฿
-              </div>
+                <span class="font-bold text-blue-900 text-lg">เว็บครบวงจร</span>
             </div>
-            
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-              <div className="flex items-center gap-4">
-                <Plus className="text-slate-400" />
-                <span className="font-medium text-slate-600">เพิ่มรูป Banner</span>
-              </div>
-              <div className="flex items-center gap-3">
-                 <button className="p-1 bg-white border rounded-md"><Minus className="w-4 h-4 text-slate-400" /></button>
-                 <span className="font-bold text-slate-700">1</span>
-                 <button className="p-1 bg-white border rounded-md"><Plus className="w-4 h-4 text-slate-400" /></button>
-                 <span className="ml-2 text-slate-500 text-sm">29 ฿</span>
-              </div>
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-blue-50 flex flex-col items-center text-center hover:translate-y-[-5px] transition-all">
+                <div class="bg-blue-400 text-white p-5 rounded-[1.5rem] mb-4 shadow-lg shadow-blue-100">
+                    <i data-lucide="gamepad-2"></i>
+                </div>
+                <span class="font-bold text-blue-900 text-lg">เว็บเรทราคา/เติมเกม</span>
             </div>
-          </div>
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-blue-50 flex flex-col items-center text-center hover:translate-y-[-5px] transition-all">
+                <div class="bg-blue-300 text-white p-5 rounded-[1.5rem] mb-4 shadow-lg shadow-blue-100">
+                    <i data-lucide="user-circle"></i>
+                </div>
+                <span class="font-bold text-blue-900 text-lg">เว็บไบโอ (Bio)</span>
+            </div>
         </div>
 
-        {/* Footer Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 pb-10">
-          <button className="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg shadow-blue-200 shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-            <MessageCircle className="w-6 h-6" /> กดสั่งทำ & ระบุรายละเอียดบรีฟ
-          </button>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold border-2 border-blue-100 hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
-            <ExternalLink className="w-5 h-5" /> ช่องทางอื่นๆ
-          </button>
+        <div class="bg-white p-8 rounded-[2.5rem] border border-blue-50 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <div class="flex justify-between text-sm font-bold text-blue-900 uppercase tracking-widest">
+                    <span>สถานะ: กำลังลงโค้ด</span>
+                    <span>75%</span>
+                </div>
+                <div class="w-full bg-blue-50 h-8 rounded-full overflow-hidden border border-blue-100 p-1.5 shadow-inner">
+                    <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-full rounded-full transition-all duration-1000" style="width: 75%"></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center bg-blue-50/50 rounded-3xl p-4 border border-dashed border-blue-200">
+                <i data-lucide="loader-2" class="w-5 h-5 text-blue-400 mr-3 animate-spin"></i>
+                <span class="text-blue-500 font-semibold text-sm">กำลังรอรับบรีฟจากคุณลูกค้า</span>
+            </div>
         </div>
-      </main>
-    </div>
-  );
-};
 
-export default EKChaoLoeyWeb;
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-8 rounded-[2.5rem] border border-blue-50 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 text-blue-900">
+                    <i data-lucide="list-checks" class="w-7 h-7 text-blue-600"></i>
+                    <h2 class="text-xl font-bold">How to Order</h2>
+                </div>
+                <ul class="space-y-5 text-sm font-medium text-slate-600">
+                    <li class="flex gap-4 items-center">
+                        <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold shrink-0">1</span>
+                        <span>เลือกแบบที่ใช่และแจ้งรหัสไอดีที่ชอบ</span>
+                    </li>
+                    <li class="flex gap-4 items-center">
+                        <span class="w-8 h-8 bg-blue-400 text-white rounded-full flex items-center justify-center font-bold shrink-0">2</span>
+                        <span>ชำระเงินมัดจำเพื่อเริ่มงาน</span>
+                    </li>
+                    <li class="flex gap-4 items-center">
+                        <span class="w-8 h-8 bg-blue-200 text-blue-600 rounded-full flex items-center justify-center font-bold shrink-0">3</span>
+                        <span>รอรับลิงก์สำหรับเข้าใช้งานเว็บไซต์</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-900 p-8 rounded-[2.5rem] text-white shadow-2xl space-y-6 relative overflow-hidden">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="info" class="w-7 h-7 text-blue-300"></i>
+                    <h2 class="text-xl font-bold italic">Important Notes</h2>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-center shadow-inner">
+                    <span class="font-bold text-lg text-blue-100 italic underline underline-offset-4">แก้ฟรี 1 ครั้ง!</span>
+                </div>
+                <ul class="space-y-3 text-sm text-blue-100/80">
+                    <li class="flex justify-between border-b border-white/10 pb-2"><span>แก้ไขข้อความ</span> <span>5 บาท / จุด</span></li>
+                    <li class="flex justify-between"><span>เพิ่มแบนเนอร์ / โลโก้</span> <span>29 บาท / จุด</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] border border-blue-50 shadow-sm">
+            <div class="flex items-center gap-3 mb-8 text-blue-900">
+                <i data-lucide="shopping-cart" class="w-7 h-7 text-blue-600"></i>
+                <h2 class="text-xl font-bold">เลือกรายการสั่งเช่า</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-6 bg-blue-50/50 rounded-3xl border border-blue-100 shadow-sm">
+                    <div class="flex items-center gap-5">
+                        <div class="p-3 bg-white rounded-2xl shadow-sm"><i data-lucide="server" class="text-blue-600"></i></div>
+                        <div>
+                            <p class="font-bold text-blue-900 text-lg">ค่าบริการโฮสต์เว็บ</p>
+                            <p class="text-xs text-blue-400 font-medium uppercase tracking-tighter">ชำระเปิดเครื่องเริ่มต้น</p>
+                        </div>
+                    </div>
+                    <div class="bg-blue-600 px-6 py-3 rounded-2xl font-black text-white shadow-lg shadow-blue-200">
+                        129 ฿
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 pb-12">
+            <button class="flex-[2] bg-blue-600 text-white py-5 rounded-[2rem] font-bold text-xl shadow-xl shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                <i data-lucide="send" class="w-6 h-6"></i> กดสั่งทำ & ระบุรายละเอียดบรีฟ
+            </button>
+            <button class="flex-1 bg-white text-blue-600 px-8 py-5 rounded-[2rem] font-bold border-2 border-blue-50 shadow-sm hover:bg-blue-50 transition-all flex items-center justify-center gap-3">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i> ช่องทางอื่นๆ
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
